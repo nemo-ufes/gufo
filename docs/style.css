@@ -1,0 +1,232 @@
+#pylode {
+    position: fixed;
+    top: 90px;
+    left: -75px;
+    font-size: small;
+    transform: rotate(-90deg);
+    color: grey;
+}
+#pylode a {
+    font-size: 1.5em;
+    font-weight: bold;
+    text-decoration: none;
+    color: #005A9C;
+}
+#pylode a:hover {
+    color: #333;
+}
+
+.cardinality {
+    font-style: italic;
+    color: #aa00aa;
+}
+
+dt {
+    font-weight: bold;
+    padding: 5px 0 5px 0;
+}
+
+ul.hlist {
+    list-style-type: none;
+    border: 1px solid navy;
+    padding:5px;
+    background-color: #F4FFFF;
+}
+
+
+ul.hlist li {
+    display: inline;
+    margin-right: 10px;
+}
+
+.entity {
+    border: 1px solid lightgray;
+    margin:5px 0 5px 0;
+    padding: 5px;
+}
+
+.entity th {
+    width: 150px;
+    vertical-align: top;
+}
+
+.entity th,
+.entity td {
+    padding-bottom: 10px;
+}
+
+.entity table th {
+    text-align: left;
+    vertical-align: top;
+}
+
+section#overview img {
+    max-width: 1000px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    text-align: left
+}
+h1, h2, h3 {
+    color: #005A9C; background: white
+}
+h1 {
+    font: 170%;
+    line-height: 110%;
+}
+h2 {
+    font: 140%;
+    margin-top:40px;
+}
+h3 {
+    font: 120%;
+    margin-top: 30px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid lightgray;
+   
+}
+h4 { font: bold 100%;
+    margin-top: 30px;
+ }
+h5 { font: italic 100%  }
+h6 { font: small-caps 100% }
+
+
+body {
+    padding: 2em 70px 2em 70px;
+    margin: 0;
+    
+    color: rgb(36, 41, 46);
+    background: white;
+    background-position: top left;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    text-align: justify;
+
+    vertical-align: text-top;
+    line-height: 24px;
+
+    font-size: 1em;
+    font-family: -apple-system,system-ui,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji;
+}
+
+table p {
+    margin-top: 0px;
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+section {
+    max-width: 1500px;
+
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
+.figure {
+    margin-bottom: 20px;
+}
+
+:link { color: #00C; background: transparent }
+:visited { color: #609; background: transparent }
+a:active { color: #C00; background: transparent }
+
+.sup-c,
+.sup-op,
+.sup-fp,
+.sup-dp,
+.sup-ap,
+.sup-p,
+.sup-ni {
+/*   cursor:help; */
+    display: none; 
+    margin-left: 3px;
+}
+
+/*
+.sup-c {
+    color:orange;
+}
+
+.sup-op {
+    color:navy;
+}
+
+.sup-fp {
+    color:lightskyblue;
+}
+
+.sup-dp {
+    color:green;
+}
+
+.sup-ap {
+    color:darkred;
+}
+
+.sup-p {
+    color:black;
+}
+
+.sup-ni {
+    color:brown;
+} */
+
+code  {
+    font-size: 14px;
+    background-color: rgb(235, 235, 235);
+    box-sizing: border-box;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    list-style-type: circle;
+    display: inline;
+    padding-bottom: 2px;
+    padding-left: 5px; 
+    padding-right: 5px;
+    padding-top: 2px;
+}
+
+
+/* blocks of code */
+pre
+{
+    overflow: auto;
+    font-size: 14px;
+    line-height: 1.45;
+    border-radius: 3px;
+    border-left-width: 7px;
+    border-left-style: solid;
+    border-color: #e0cb52;
+    background: #fcfaee;
+    padding: 0.5em; 
+    margin: 1em 0;
+    position: relative;
+    clear: both;
+    padding-left: 15px;
+}
+
+/* code inside pre blocks needs different a background color */
+pre code
+{
+    padding-left: 0px;      /* and should not add padding */
+    background: #fcfaee;
+}
+
+/* green notes */
+blockquote {
+    padding-left: 16px;
+    padding-right: 16px;
+    overflow: auto;
+    font-size: 1em;
+    line-height: 1.45;
+    border-radius: 3px;
+    border-left-width: 7px;
+    border-left-style: solid;
+    border-color:  #52E052;
+    background: #E9FBE9;
+    margin: 1em 0;
+    position: relative;
+    clear: both;
+}
