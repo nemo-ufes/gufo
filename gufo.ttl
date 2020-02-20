@@ -95,7 +95,8 @@ gufo:broughtAbout rdf:type owl:ObjectProperty ;
                   rdfs:range gufo:Situation ;
                   rdfs:comment """Identifies a gufo:Situation that is brought about by the gufo:Event.
 
-Guizzardi et al. (2013) included a notion of \"brings-about\" that related events to a single (\"maximal\") situation, embodying all the effects of the event at the time it ends. This implementation of gufo:broughtAbout diverges from \"brings-about\" in that work because gufo:broughtAbout can be used to relate events to more than one gufo:Situation. Each gufo:Situation identified through gufo:broughtAbout should be understood as an (improper) part of the maximal situation."""@en .
+Guizzardi et al. (2013) included a notion of \"brings-about\" that related events to a single (\"maximal\") situation, embodying all the effects of the event at the time it ends. This implementation of gufo:broughtAbout diverges from \"brings-about\" in that work because gufo:broughtAbout can be used to relate events to more than one gufo:Situation. Each gufo:Situation identified through gufo:broughtAbout should be understood as an (improper) part of the maximal situation."""@en ;
+                  rdfs:label "broughtAbout"@en .
 
 
 ###  http://purl.org/nemo/gufo#categorizes
@@ -123,14 +124,16 @@ The domain is gufo:Type excluding gufo:AbstractIndividualType as well as gufo:Co
 
 For further details and formalization of \"categorization\", see Carvalho et al (2017) which combines UFO with MLT (a multi-level modeling theory).  
 
-V. A. Carvalho, J. P. A. Almeida, C. M. Fonseca, and G. Guizzardi, “Multi-level ontology-based conceptual modeling,” Data & Knowledge Engineering, vol. 109, p. 3–24, 2017. <http://dx.doi.org/10.1016/j.datak.2017.03.002>"""@en .
+V. A. Carvalho, J. P. A. Almeida, C. M. Fonseca, and G. Guizzardi, “Multi-level ontology-based conceptual modeling,” Data & Knowledge Engineering, vol. 109, p. 3–24, 2017. <http://dx.doi.org/10.1016/j.datak.2017.03.002>"""@en ;
+                 rdfs:label "categorizes"@en .
 
 
 ###  http://purl.org/nemo/gufo#concernsConstitutedEndurant
 gufo:concernsConstitutedEndurant rdf:type owl:ObjectProperty ;
                                  rdfs:domain gufo:TemporaryConstitutionSituation ;
                                  rdfs:range gufo:Endurant ;
-                                 rdfs:comment "Identifies the constituted gufo:Endurant in the gufo:TemporaryConstitutionSituation."@en .
+                                 rdfs:comment "Identifies the constituted gufo:Endurant in the gufo:TemporaryConstitutionSituation."@en ;
+                                 rdfs:label "concernsConstitutedEndurant"@en .
 
 
 ###  http://purl.org/nemo/gufo#concernsNonRigidType
@@ -138,7 +141,8 @@ gufo:concernsNonRigidType rdf:type owl:ObjectProperty ,
                                    owl:FunctionalProperty ;
                           rdfs:domain gufo:TemporaryInstantiationSituation ;
                           rdfs:range gufo:NonRigidType ;
-                          rdfs:comment "Identifies the gufo:NonRigidType that is instantiated by the endurant that stands in a gufo:TemporaryInstantiationSituation."@en .
+                          rdfs:comment "Identifies the gufo:NonRigidType that is instantiated by the endurant that stands in a gufo:TemporaryInstantiationSituation."@en ;
+                          rdfs:label "concernsNonRigidType"@en .
 
 
 ###  http://purl.org/nemo/gufo#concernsQualityType
@@ -146,7 +150,8 @@ gufo:concernsQualityType rdf:type owl:ObjectProperty ,
                                   owl:FunctionalProperty ;
                          rdfs:domain gufo:QualityValueAttributionSituation ;
                          rdfs:range gufo:EndurantType ;
-                         rdfs:comment "Identifies the quality type (a gufo:EndurantType subclassing gufo:Quality) whose value is attributed in the gufo:QualityValueAttributionSituation."@en .
+                         rdfs:comment "Identifies the quality type (a gufo:EndurantType subclassing gufo:Quality) whose value is attributed in the gufo:QualityValueAttributionSituation."@en ;
+                         rdfs:label "concernsQualityType"@en .
 
 
 ###  http://purl.org/nemo/gufo#concernsReifiedQualityValue
@@ -155,7 +160,8 @@ gufo:concernsReifiedQualityValue rdf:type owl:ObjectProperty ,
                                  rdfs:domain gufo:QualityValueAttributionSituation ;
                                  rdfs:range gufo:QualityValue ;
                                  rdfs:comment gufo:concernsQualityValue ,
-                                              "Identifies the gufo:QualityValue (i.e., the reified quality value) associated with the endurant that stands in the gufo:QualityValueAttributionSituation."@en .
+                                              "Identifies the gufo:QualityValue (i.e., the reified quality value) associated with the endurant that stands in the gufo:QualityValueAttributionSituation."@en ;
+                                 rdfs:label "concernsReifiedQualityValue"@en .
 
 
 ###  http://purl.org/nemo/gufo#concernsRelatedEndurant
@@ -163,7 +169,8 @@ gufo:concernsRelatedEndurant rdf:type owl:ObjectProperty ,
                                       owl:FunctionalProperty ;
                              rdfs:domain gufo:TemporaryRelationshipSituation ;
                              rdfs:range gufo:Endurant ;
-                             rdfs:comment "Identifies the related gufo:Endurant in the gufo:TemporaryRelationshipSituation."@en .
+                             rdfs:comment "Identifies the related gufo:Endurant in the gufo:TemporaryRelationshipSituation."@en ;
+                             rdfs:label "concernsRelatedEndurant"@en .
 
 
 ###  http://purl.org/nemo/gufo#concernsRelationshipType
@@ -171,7 +178,8 @@ gufo:concernsRelationshipType rdf:type owl:ObjectProperty ,
                                        owl:FunctionalProperty ;
                               rdfs:domain gufo:TemporaryRelationshipSituation ;
                               rdfs:range gufo:RelationshipType ;
-                              rdfs:comment "Identifies the gufo:RelationshipType instantiated in the gufo:TemporaryRelationshipSituation."@en .
+                              rdfs:comment "Identifies the gufo:RelationshipType instantiated in the gufo:TemporaryRelationshipSituation."@en ;
+                              rdfs:label "concernsRelationshipType"@en .
 
 
 ###  http://purl.org/nemo/gufo#concernsTemporaryWhole
@@ -179,7 +187,8 @@ gufo:concernsTemporaryWhole rdf:type owl:ObjectProperty ,
                                      owl:FunctionalProperty ;
                             rdfs:domain gufo:TemporaryParthoodSituation ;
                             rdfs:range gufo:Endurant ;
-                            rdfs:comment "Identifies the whole (a gufo:Endurant) of which the endurant that stands in the gufo:TemporaryParthoodSituation is part."@en .
+                            rdfs:comment "Identifies the whole (a gufo:Endurant) of which the endurant that stands in the gufo:TemporaryParthoodSituation is part."@en ;
+                            rdfs:label "concernsTemporaryWhole"@en .
 
 
 ###  http://purl.org/nemo/gufo#constitutes
@@ -191,6 +200,7 @@ gufo:constitutes rdf:type owl:ObjectProperty ;
 For example, the gufo:Collection of persons whose members are John, Paul, George, Ringo constituted the beatles, the gufo:Quantity of marble that constitutes the statue of Venus de Milo, and the gufo:Event of Paul raising his arm in a meeting that constitutes his voting (also a gufo:Event).
 
 In case constitution changes in time, see gufo:standsInQualifiedConstitution."""@en ;
+                 rdfs:label "constitutes"@en ;
                  rdfs:seeAlso gufo:standsInQualifiedConstitution .
 
 
@@ -200,7 +210,8 @@ gufo:contributedToTrigger rdf:type owl:ObjectProperty ;
                           rdfs:range gufo:Event ;
                           rdfs:comment """Identifies a gufo:Event that the gufo:Situation contributed to trigger.
 
-Guizzardi et al. (2013) defined a notion of \"triggers\" to relate the situation satisfying all the sufficient and necessary conditions with the triggered  event. This implementation differs from  \"triggers\" as defined in that work because gufo:contributedToTrigger can be used to relate more than one gufo:Situation to a gufo:Event. Each gufo:Situation identified through gufo:contributedToTrigger should be understood as an (improper) part of the situation that triggered the event."""@en .
+Guizzardi et al. (2013) defined a notion of \"triggers\" to relate the situation satisfying all the sufficient and necessary conditions with the triggered  event. This implementation differs from  \"triggers\" as defined in that work because gufo:contributedToTrigger can be used to relate more than one gufo:Situation to a gufo:Event. Each gufo:Situation identified through gufo:contributedToTrigger should be understood as an (improper) part of the situation that triggered the event."""@en ;
+                          rdfs:label "contributedToTrigger"@en .
 
 
 ###  http://purl.org/nemo/gufo#externallyDependsOn
@@ -212,7 +223,8 @@ gufo:externallyDependsOn rdf:type owl:ObjectProperty ,
 
 For example, John's duty to return the book he borrowed from Mary (a gufo:ExtrinsicMode) depends externally on Mary.
 
-The identifed gufo:Endurant should  be external to the bearer of the extrinsic mode (see Guizzardi, 2005, p. 239). In other words, the identified endurant should not be a part or an intrisic aspect of the bearer of the extrinsic mode."""@en .
+The identifed gufo:Endurant should  be external to the bearer of the extrinsic mode (see Guizzardi, 2005, p. 239). In other words, the identified endurant should not be a part or an intrisic aspect of the bearer of the extrinsic mode."""@en ;
+                         rdfs:label "externallyDependsOn"@en .
 
 
 ###  http://purl.org/nemo/gufo#hasAssociatedQualityValueType
@@ -225,7 +237,8 @@ For example, a \"Color\" quality type may be associated with a \"ColorValueInRGB
 
 It relates a specialization of gufo:Quality (an instance of gufo:EndurantType) to a specialization of gufo:QualityValue  (an instance of gufo:AbstractIndividualType).
 
-To be used only when quality values are reified."""@en .
+To be used only when quality values are reified."""@en ;
+                                   rdfs:label "hasAssociatedQualityValueType"@en .
 
 
 ###  http://purl.org/nemo/gufo#hasBeginPoint
@@ -237,6 +250,7 @@ gufo:hasBeginPoint rdf:type owl:ObjectProperty ;
 In the case of endurants, this identifies the time point when the endurant comes into existence. In the case of events, this identifies the time point when the event starts to take place. In the case of situation, this identifies the time point when the situation begins to hold.
 
 If time instants are not reified, use gufo:hasBeginPointInXSDDate or gufo:hasBeginPointInXSDDateTimeStamp."""@en ;
+                   rdfs:label "hasBeginPoint"@en ;
                    rdfs:seeAlso gufo:hasBeginPointInXSDDate ,
                                 gufo:hasBeginPointInXSDDateTimeStamp .
 
@@ -248,6 +262,7 @@ gufo:hasEndPoint rdf:type owl:ObjectProperty ;
                  rdfs:comment """Identifies the end point for a gufo:ConcreteIndividual, in the case in which time instants are reified.
 
 In the case of endurants, this identifies the time point when the endurant ceases to exist. In the case of events, this identifies the time point when the event ends. In the case of situation, this identifies the time point when the situation ceases to hold."""@en ;
+                 rdfs:label "hasEndPoint"@en ;
                  rdfs:seeAlso gufo:hasEndPointInXSDDate ,
                               gufo:hasEndPointInXSDDateTimeStamp .
 
@@ -263,6 +278,7 @@ Use this property only for quality values that are to be reified in the A-box an
 The full representation pattern for quality values involves first identifying a gufo:Quality that inheres in a concrete individual and then associating it with a reified quality value. For example, let us consider the color of Yves Klein's \"Blue Monochrome\" painting made in 1961 (MoMA's object with number 618.1967). In the full pattern, an instance of gufo:Quality that inheres in the physical object (the color of that painting) is associated with a gufo:QualityValue (say the triplet <0, 47, 167> for that painting) through gufo:hasReifiedQualityValue. The full pattern is recommended when different quality spaces are expected to be used for the same quality. For example, the color of that painting could also be associated with a quadruple <100, 72, 0, 35> representing the same color in a CMYK space.
 
 When the full pattern is not required, gufo:hasReifiedQualityValue can also be used to directly associate a concrete individual (without identifying the quality) with a quality value."""@en ;
+                            rdfs:label "hasReifiedQualityValue"@en ;
                             rdfs:seeAlso gufo:hasQualityValue .
 
 
@@ -279,7 +295,8 @@ When used between events, historical dependence encompasses causation (when the 
 
 For example, Real Madrid's goal in the 60th minute of the 2016 FIFA Club World Cup Final is historically dependent on (and in this case caused by) a penalty kick by Cristiano Ronaldo. The penalty kick itself is historically dependent on (but not caused by) a penalty (the occurrence of the penalty is necessary but not sufficient to cause the penalty kick as authorization of the referee is required). 
 
-Historical dependence is transitive. Hence, in the example above, Real Madrid's goal is historically dependent on the penalty."""@en .
+Historical dependence is transitive. Hence, in the example above, Real Madrid's goal is historically dependent on the penalty."""@en ;
+                           rdfs:label "historicallyDependsOn"@en .
 
 
 ###  http://purl.org/nemo/gufo#inheresIn
@@ -291,7 +308,8 @@ gufo:inheresIn rdf:type owl:ObjectProperty ,
                rdfs:range gufo:ConcreteIndividual ;
                rdfs:comment """Identifies the gufo:ConcreteIndividual in which the gufo:Aspect inheres. Inherence is a sort of existential dependence. The identified concrete individual is the \"bearer\" of the aspect.
 
-For example, the color of an object inheres in the object and the average speed of a flight inheres in the flight."""@en .
+For example, the color of an object inheres in the object and the average speed of a flight inheres in the flight."""@en ;
+               rdfs:label "inheresIn"@en .
 
 
 ###  http://purl.org/nemo/gufo#isAspectProperPartOf
@@ -306,7 +324,8 @@ For example, John's obligations towards Mary in the scope of their marriage is a
 
 This property can be used to represent the composition of a relator from extrisinc aspects, but also to represent complex extrisinc aspects.
 
-gufo:isAspectProperPartOf is transitive."""@en .
+gufo:isAspectProperPartOf is transitive."""@en ;
+                          rdfs:label "isAspectProperPartOf"@en .
 
 
 ###  http://purl.org/nemo/gufo#isCollectionMemberOf
@@ -321,6 +340,7 @@ This is the relation between John and a group of persons, and between a cow and 
 gufo:isCollectionMemberOf is intransitive (Guizzardi, 2005, p. 185).
 
 For membership in a gufo:VariableCollection, see gufo:standsInQualifiedParthood."""@en ;
+                          rdfs:label "isCollectionMemberOf"@en ;
                           rdfs:seeAlso gufo:standsInQualifiedParthood .
 
 
@@ -336,6 +356,7 @@ For example, the habitation module is a component of the International Space Sta
 gufo:isComponentOf is not transitive in the general case. Particular sub-properties may be transitive (Guizzardi, 2005, p. 183).
 
 When a component may change its relation to be whole, see gufo:standsInQualifiedParthood."""@en ;
+                   rdfs:label "isComponentOf"@en ;
                    rdfs:seeAlso gufo:standsInQualifiedParthood .
 
 
@@ -351,7 +372,8 @@ gufo:isDerivedFrom rdf:type owl:ObjectProperty ;
 
 For example, \"marriedWith\" can be derived from \"Marriage\", \"heavierThan\" can be derived from \"Weight\".
 
-See Fonseca et al. (2019)."""@en .
+See Fonseca et al. (2019)."""@en ;
+                   rdfs:label "isDerivedFrom"@en .
 
 
 ###  http://purl.org/nemo/gufo#isEventProperPartOf
@@ -366,7 +388,8 @@ For example, Cristiano Ronaldo's penalty kick is an event proper part of the 201
 
 The match can be decomposed in different ways. For example, we can identify the participation of each player in the match (instances of gufo:Participation that are proper parts of the match) or decomposed the match using some temporal segmentation (each minute of the match, each of which is a proper part of the match).
 
-gufo:isEventProperPartOf is transitive."""@en .
+gufo:isEventProperPartOf is transitive."""@en ;
+                         rdfs:label "isEventProperPartOf"@en .
 
 
 ###  http://purl.org/nemo/gufo#isObjectProperPartOf
@@ -377,7 +400,8 @@ gufo:isObjectProperPartOf rdf:type owl:ObjectProperty ;
                           rdfs:range gufo:Object ;
                           rdfs:comment """Identifies a gufo:Object of which the object is a part.
 
-This is a general parthood relation between objects. Use the various sub-properties provided in order to represent specific types of parthood, each of which has specialized semantics (and different formal properties in this implementation, in particular, transitivity (Guizzardi, 2005, section 5.6)."""@en .
+This is a general parthood relation between objects. Use the various sub-properties provided in order to represent specific types of parthood, each of which has specialized semantics (and different formal properties in this implementation, in particular, transitivity (Guizzardi, 2005, section 5.6)."""@en ;
+                          rdfs:label "isObjectProperPartOf"@en .
 
 
 ###  http://purl.org/nemo/gufo#isProperPartOf
@@ -391,7 +415,8 @@ gufo:isProperPartOf is the most generic parthood relation in this implementation
 
 Proper parthood (and each of its sub-properties) is asymmetric and irreflexive. Nevertheless, these characteristics are not declared in this implementation since that would violate rules of OWL 2 DL that guarantee decidability of reasoning. Instead, we have focused only on declaring transitivity where applicable.
 
-Note that gufo:isProperPartOf (as the most general notion of parthood) is transitive, although the various sub-properties may not be transitive."""@en .
+Note that gufo:isProperPartOf (as the most general notion of parthood) is transitive, although the various sub-properties may not be transitive."""@en ;
+                    rdfs:label "isProperPartOf"@en .
 
 
 ###  http://purl.org/nemo/gufo#isSituationProperPartOf
@@ -401,7 +426,8 @@ gufo:isSituationProperPartOf rdf:type owl:ObjectProperty ;
                              rdfs:range gufo:Situation ;
                              rdfs:comment """Identifies a gufo:Situation of which the situation is a part.
 
-Examples include: the situation in which John has influenza is part of the situation in which John has influenza and he is tired; the situation in which John is friends with Mary is part of the situation in which he is friends with Mary and Alice; the situation in which John is married to Alice is part of the situation in which John is married to Alice, while she works at the Free University of Bozen-Bolzano."""@en .
+Examples include: the situation in which John has influenza is part of the situation in which John has influenza and he is tired; the situation in which John is friends with Mary is part of the situation in which he is friends with Mary and Alice; the situation in which John is married to Alice is part of the situation in which John is married to Alice, while she works at the Free University of Bozen-Bolzano."""@en ;
+                             rdfs:label "isSituationProperPartOf"@en .
 
 
 ###  http://purl.org/nemo/gufo#isSubCollectionOf
@@ -415,6 +441,7 @@ gufo:isSubCollectionOf rdf:type owl:ObjectProperty ;
 gufo:isSubCollectionOf is transitive (Guizzardi, 2005, p. 186).
 
 For parthood involving one or more varied collections, see gufo:standsInQualifiedParthood."""@en ;
+                       rdfs:label "isSubCollectionOf"@en ;
                        rdfs:seeAlso gufo:standsInQualifiedParthood .
 
 
@@ -430,7 +457,8 @@ For example, the quantity of water in a wine glass is a sub-quantity of the wine
 
 gufo:isSubQuantityOf is transitive (Guizzardi, 2005, p. 184).
 
-Sub-quantities are always essential parts of their wholes. Thus, gufo:standsInQualifiedParthood is not applicable for sub-quantities."""@en .
+Sub-quantities are always essential parts of their wholes. Thus, gufo:standsInQualifiedParthood is not applicable for sub-quantities."""@en ;
+                     rdfs:label "isSubQuantityOf"@en .
 
 
 ###  http://purl.org/nemo/gufo#manifestedIn
@@ -439,7 +467,8 @@ gufo:manifestedIn rdf:type owl:ObjectProperty ;
                   rdfs:range gufo:Event ;
                   rdfs:comment """Identifies a gufo:Event in which the gufo:Aspect is manifested.
 
-For example, the passing of an electrical current in a conductor is an event that encompasses the manifestation of an aspect inhering in a copper wire (the wire's  electrical conductivity)."""@en .
+For example, the passing of an electrical current in a conductor is an event that encompasses the manifestation of an aspect inhering in a copper wire (the wire's  electrical conductivity)."""@en ;
+                  rdfs:label "manifestedIn"@en .
 
 
 ###  http://purl.org/nemo/gufo#mediates
@@ -450,7 +479,8 @@ gufo:mediates rdf:type owl:ObjectProperty ,
               rdfs:range gufo:Endurant ;
               rdfs:comment """Identifies the endurants mediated by a gufo:Relator.
 
-For example, John and Mary's marriage mediates John and Mary."""@en .
+For example, John and Mary's marriage mediates John and Mary."""@en ;
+              rdfs:label "mediates"@en .
 
 
 ###  http://purl.org/nemo/gufo#participatedIn
@@ -459,7 +489,8 @@ gufo:participatedIn rdf:type owl:ObjectProperty ;
                     rdfs:range gufo:Event ;
                     rdfs:comment """Identifies a gufo:Event in which the gufo:Object participated.
 
-Examples include the participation of Freddy Mercury in Queen's Live Aid Concert and the participation of an airplane in a flight."""@en .
+Examples include the participation of Freddy Mercury in Queen's Live Aid Concert and the participation of an airplane in a flight."""@en ;
+                    rdfs:label "participatedIn"@en .
 
 
 ###  http://purl.org/nemo/gufo#partitions
@@ -485,7 +516,8 @@ The partitioned type is termed the \"base type\" in the \"powertype pattern\" se
 
 For further details and formalization of \"partitioning\", see Carvalho et al (2017) which combines UFO with MLT (a multi-level modeling theory).  
 
-V. A. Carvalho, J. P. A. Almeida, C. M. Fonseca, and G. Guizzardi, “Multi-level ontology-based conceptual modeling,” Data & Knowledge Engineering, vol. 109, p. 3–24, 2017. <http://dx.doi.org/10.1016/j.datak.2017.03.002>"""@en .
+V. A. Carvalho, J. P. A. Almeida, C. M. Fonseca, and G. Guizzardi, “Multi-level ontology-based conceptual modeling,” Data & Knowledge Engineering, vol. 109, p. 3–24, 2017. <http://dx.doi.org/10.1016/j.datak.2017.03.002>"""@en ;
+                rdfs:label "partitions"@en .
 
 
 ###  http://purl.org/nemo/gufo#standsIn
@@ -494,7 +526,8 @@ gufo:standsIn rdf:type owl:ObjectProperty ;
               rdfs:range gufo:Situation ;
               rdfs:comment """Identifies a gufo:Situation in which the entity stands. 
 
-This implementation includes sub-properties of gufo:standsIn to identify situations concerning the attribution of (mutable) values to qualities, variable relationships, the instantiation of non-contingent types, temporary parthood and temporary constitution."""@en .
+This implementation includes sub-properties of gufo:standsIn to identify situations concerning the attribution of (mutable) values to qualities, variable relationships, the instantiation of non-contingent types, temporary parthood and temporary constitution."""@en ;
+              rdfs:label "standsIn"@en .
 
 
 ###  http://purl.org/nemo/gufo#standsInQualifiedAttribution
@@ -503,6 +536,7 @@ gufo:standsInQualifiedAttribution rdf:type owl:ObjectProperty ;
                                   rdfs:domain gufo:Endurant ;
                                   rdfs:range gufo:QualityValueAttributionSituation ;
                                   rdfs:comment "Identifies a gufo:QualityValueAttributionSituation in which the endurant stands. The identified gufo:QualityValueAttributionSituation is then used with the gufo:concernsQualityValue data property or the gufo:concernsReifiedQualityValue object property to indicate a quality value attributed to the gufo:Endurant standing in the situation. This forms a pattern to represent that quality values may differ in different situations."@en ;
+                                  rdfs:label "standsInQualifiedAttribution"@en ;
                                   rdfs:seeAlso gufo:QualityValueAttributionSituation .
 
 
@@ -514,6 +548,7 @@ gufo:standsInQualifiedConstitution rdf:type owl:ObjectProperty ;
                                    rdfs:comment """Identifies a gufo:TemporaryConstitutionSituation in which an endurant stands temporarily (as a constituent). The identified gufo:TemporaryConstitutionSituation is further related with an endurant (the whole) through the gufo:concernsConstitutedEndurant object property. This forms a pattern to represent temporary constitution, in which the relationships between constituents and constituted endurant vary in different situations.
 
 Consider, for example, a group of people (understood as a gufo:FixedCollection) constituting a band (understood as a gufo:FunctionalComplex). In this case, any change in the membership of the group (e.g., the replacement of one person) creates a different group of people. Therefore, the band's constitution can change in time, and the pattern using gufo:TemporaryConstitutionSituation is applicable."""@en ;
+                                   rdfs:label "standsInQualifiedConstitution"@en ;
                                    rdfs:seeAlso gufo:TemporaryConstitutionSituation .
 
 
@@ -523,6 +558,7 @@ gufo:standsInQualifiedInstantiation rdf:type owl:ObjectProperty ;
                                     rdfs:domain gufo:Endurant ;
                                     rdfs:range gufo:TemporaryInstantiationSituation ;
                                     rdfs:comment "Identifies a gufo:TemporaryInstantiationSituation in which the endurant stands. The identified gufo:TemporaryInstantiationSituation is further related with a gufo:NonRigidType through the gufo:concernsNonRigidType object property. This forms a pattern to represent the contigent instantiation of a non-rigid type by the endurant, in which case instantiation may vary in different situations."@en ;
+                                    rdfs:label "standsInQualifiedInstantiation"@en ;
                                     rdfs:seeAlso gufo:TemporaryInstantiationSituation .
 
 
@@ -532,6 +568,7 @@ gufo:standsInQualifiedParthood rdf:type owl:ObjectProperty ;
                                rdfs:domain gufo:Endurant ;
                                rdfs:range gufo:TemporaryParthoodSituation ;
                                rdfs:comment "Identifies a gufo:TemporaryParthoodSituation in which the endurant stands (as a temporary part). The identified gufo:TemporaryParthoodSituation is further related with an endurant (the whole) through the gufo:concernsTemporaryWhole object property. This forms a pattern to represent temporary parthood, in which the relationships between parts and wholes vary in different situations. In particular, this pattern is useful in case parts may be separated from their wholes, attached to other wholes, replaced."@en ;
+                               rdfs:label "standsInQualifiedParthood"@en ;
                                rdfs:seeAlso gufo:TemporaryParthoodSituation .
 
 
@@ -543,6 +580,7 @@ gufo:standsInQualifiedRelationship rdf:type owl:ObjectProperty ;
                                    rdfs:comment """Identifies a gufo:TemporaryRelationshipSituation in which the endurant stands. The identified gufo:TemporaryRelationshipSituation is then used with the gufo:concernsRelatedEndurant and the gufo:concernsRelationshipType object properties to indicate the related element and the type of relationship that applies. This forms a pattern to represent that relationships that may change in different situations. For example, \"heavierThan\" may change when the objects involved gain or lose weight.
 
 For material relations, prefer the use of gufo:Relator."""@en ;
+                                   rdfs:label "standsInQualifiedRelationship"@en ;
                                    rdfs:seeAlso gufo:Relator ,
                                                 gufo:TemporaryRelationshipSituation .
 
@@ -557,7 +595,8 @@ For example, a musical piece is created in an act of composition (or in an event
 
 Benevides et al. (2019) only discussed creation of objects; gufo:wasCreatedIn is extended to endurants in general. Further, in that work \"createdBy\" required the event to \"bring about\" a situation in which the created object is present. We relax this requirement here, such that the object may be created and terminated in the scope of the identified gufo:Event.
 
-A. B. Benevides, J. R. Bourguet, G. Guizzardi, R. Penãloza, and J. P. A. Almeida, “Representing a reference foundational ontology of events in SROIQ,” Applied ontology, vol. 14, iss. 3, p. 293–334, 2019. <http://dx.doi.org/10.3233/AO-190214>"""@en .
+A. B. Benevides, J. R. Bourguet, G. Guizzardi, R. Penãloza, and J. P. A. Almeida, “Representing a reference foundational ontology of events in SROIQ,” Applied ontology, vol. 14, iss. 3, p. 293–334, 2019. <http://dx.doi.org/10.3233/AO-190214>"""@en ;
+                  rdfs:label "wasCreatedIn"@en .
 
 
 ###  http://purl.org/nemo/gufo#wasTerminatedIn
@@ -570,7 +609,8 @@ For example, the Space Shuttle Challenger (OV-099) (a gufo:FunctionalComplex) wa
 
 Benevides et al. (2019) only discussed termination of objects; gufo:wasCreatedIn is extended to endurants in general. This means that a gufo:Relator (such as a marriage) can be declared terminated. Further, in that work \"terminatedBy\" required the event to be \"triggered\" by a situation in which the terminated object is present. We relax this requirement here, such that the object may be created and terminated in the scope of the identified gufo:Event.
 
-A. B. Benevides, J. R. Bourguet, G. Guizzardi, R. Penãloza, and J. P. A. Almeida, “Representing a reference foundational ontology of events in SROIQ,” Applied ontology, vol. 14, iss. 3, p. 293–334, 2019. <http://dx.doi.org/10.3233/AO-190214>"""@en .
+A. B. Benevides, J. R. Bourguet, G. Guizzardi, R. Penãloza, and J. P. A. Almeida, “Representing a reference foundational ontology of events in SROIQ,” Applied ontology, vol. 14, iss. 3, p. 293–334, 2019. <http://dx.doi.org/10.3233/AO-190214>"""@en ;
+                     rdfs:label "wasTerminatedIn"@en .
 
 
 #################################################################
@@ -585,6 +625,7 @@ gufo:concernsQualityValue rdf:type owl:DatatypeProperty ;
 Use gufo:concernsReifiedQualityValue instead when quality values are refied.
 
 It is recommended that subproperties of gufo:concernsQualityValue are created, possibly identifying the datatype to be used. For example, \"concernsTemperatureValue\" could be defined as a sub-property of gufo:concernsQualityValue with range xsd:double."""@en ;
+                          rdfs:label "concernsQualityValue"@en ;
                           rdfs:seeAlso gufo:concernsReifiedQualityValue .
 
 
@@ -598,6 +639,7 @@ gufo:hasBeginPointInXSDDate rdf:type owl:DatatypeProperty ,
 In the case of endurants, gufo:asBeginPointInXSDDate determines the time point when the endurant comes into existence. In the case of events, this data property determines the time point when the event starts to take place. In the case of situation, it determines the time point when the situation begins to hold.
 
 Use gufo:hasBeginPoint instead when temporal entities are reified."""@en ;
+                            rdfs:label "hasBeginPointInXSDDate"@en ;
                             rdfs:seeAlso gufo:hasBeginPoint ,
                                          gufo:hasBeginPointInXSDDateTimeStamp .
 
@@ -612,6 +654,7 @@ gufo:hasBeginPointInXSDDateTimeStamp rdf:type owl:DatatypeProperty ,
 In the case of endurants, gufo:hasBeginPointInXSDDateTimeStamp determines the time point when the endurant comes into existence. In the case of events, this data property determines the time point when the event starts to take place. In the case of situation, it determines the time point when the situation begins to hold.
 
 Use gufo:hasBeginPoint instead when temporal entities are reified."""@en ;
+                                     rdfs:label "hasBeginPointInXSDDateTimeStamp"@en ;
                                      rdfs:seeAlso gufo:hasBeginPoint ,
                                                   gufo:hasBeginPointInXSDDate .
 
@@ -626,6 +669,7 @@ gufo:hasEndPointInXSDDate rdf:type owl:DatatypeProperty ,
 In the case of endurants, gufo:hasEndPointInXSDDate determines the time point when the endurant ceases to exist. In the case of events, this data property determines the time point when the event ends. In the case of situation, it determines the time point when the situation ceases to hold.
 
 Use gufo:hasEndPoint instead when temporal entities are reified."""@en ;
+                          rdfs:label "hasEndPointInXSDDate"@en ;
                           rdfs:seeAlso gufo:hasEndPoint ,
                                        gufo:hasEndPointInXSDDateTimeStamp .
 
@@ -640,6 +684,7 @@ gufo:hasEndPointInXSDDateTimeStamp rdf:type owl:DatatypeProperty ,
 In the case of endurants, gufo:hasEndPointInXSDDateTimeStamp determines the time point when the endurant ceases to exist. In the case of events, this data property determines the time point when the event ends. In the case of situation, it determines the time point when the situation ceases to hold.
 
 Use gufo:hasEndPoint instead when temporal entities are reified."""@en ;
+                                   rdfs:label "hasEndPointInXSDDateTimeStamp"@en ;
                                    rdfs:seeAlso gufo:hasEndPoint ,
                                                 gufo:hasEndPointInXSDDate .
 
@@ -652,6 +697,7 @@ gufo:hasQualityValue rdf:type owl:DatatypeProperty ;
 Use gufo:hasReifiedQualityValue instead when quality values are reified.
 
 It is recommended that subproperties of gufo:hasQualityValue are created, possibly identifying the datatype to be used. For example, \"hasTemperatureValue\" could be defined as a sub-property of gufo:hasQualityValue whose domain is \"Temperature\" (specializing gufo:Quality) and whose range is xsd:double."""@en ;
+                     rdfs:label "hasQualityValue"@en ;
                      rdfs:seeAlso gufo:hasReifiedQualityValue .
 
 
@@ -660,7 +706,8 @@ gufo:hasValueComponent rdf:type owl:DatatypeProperty ;
                        rdfs:domain gufo:QualityValue ;
                        rdfs:comment """This property is used for quality values that are defined in terms of a multidimensional quality structure (such as color conceived in terms of hue, saturation and brightness). Each value component of a quality value (a particular value for hue, a particular value for saturation, a particular value for brightness) is determined with this property. 
 
-It is recommended that subproperties of gufo:hasValueComponent are created to indicate values for particular dimensions, possibly identifying the datatype to be used. For example \"hasHueComponent\", \"hasSaturationComponent\" and \"hasBrightnessComponent\" could be used as data properties specializing gufo:hasValueComponent with the xsd:double datatype."""@en .
+It is recommended that subproperties of gufo:hasValueComponent are created to indicate values for particular dimensions, possibly identifying the datatype to be used. For example \"hasHueComponent\", \"hasSaturationComponent\" and \"hasBrightnessComponent\" could be used as data properties specializing gufo:hasValueComponent with the xsd:double datatype."""@en ;
+                       rdfs:label "hasValueComponent"@en .
 
 
 #################################################################
@@ -675,7 +722,8 @@ gufo:AbstractIndividual rdf:type owl:Class ;
 
 Examples include the number ten, the null set, and the proposition that 'Obama was the president of the United States'.
 
-Rosen, Gideon, \"Abstract Objects\", The Stanford Encyclopedia of Philosophy (Winter 2018 Edition), Edward N. Zalta (ed.), <https://plato.stanford.edu/archives/win2018/entries/abstract-objects/>"""@en .
+Rosen, Gideon, \"Abstract Objects\", The Stanford Encyclopedia of Philosophy (Winter 2018 Edition), Edward N. Zalta (ed.), <https://plato.stanford.edu/archives/win2018/entries/abstract-objects/>"""@en ;
+                        rdfs:label "AbstractIndividual"@en .
 
 
 ###  http://purl.org/nemo/gufo#AbstractIndividualType
@@ -687,7 +735,8 @@ gufo:AbstractIndividualType rdf:type owl:Class ;
 
 Instances of gufo:AbstractIndividualType are subclasses of gufo:AbstractIndividual.
 
-Examples include the types \"NaturalNumber\", \"Set\", \"Proposition\"."""@en .
+Examples include the types \"NaturalNumber\", \"Set\", \"Proposition\"."""@en ;
+                            rdfs:label "AbstractIndividualType"@en .
 
 
 ###  http://purl.org/nemo/gufo#AntiRigidType
@@ -696,7 +745,8 @@ gufo:AntiRigidType rdf:type owl:Class ;
                    owl:disjointWith gufo:SemiRigidType ;
                    rdfs:comment """A gufo:NonRigidType that applies contingently to all its instances (see Guizzardi, 2005, chapter 4).
 
-Examples include the gufo:Phase \"Child\", the gufo:PhaseMixin \"InfantAnimal\", the gufo:Role \"Student\", and the gufo:RoleMixin \"Customer\"."""@en .
+Examples include the gufo:Phase \"Child\", the gufo:PhaseMixin \"InfantAnimal\", the gufo:Role \"Student\", and the gufo:RoleMixin \"Customer\"."""@en ;
+                   rdfs:label "AntiRigidType"@en .
 
 
 ###  http://purl.org/nemo/gufo#Aspect
@@ -714,7 +764,8 @@ The specific sort of existential dependence connecting aspects to their bearers 
 
 Corresponds to \"Moment\" in Guizzardi (2005). 
 
-Also termed \"property instance\", \"particularized property\", \"individual accident\", or \"(variable) trope\" in the philosophical literature."""@en .
+Also termed \"property instance\", \"particularized property\", \"individual accident\", or \"(variable) trope\" in the philosophical literature."""@en ;
+            rdfs:label "Aspect"@en .
 
 
 ###  http://purl.org/nemo/gufo#Category
@@ -723,7 +774,8 @@ gufo:Category rdf:type owl:Class ;
                               gufo:RigidType ;
               rdfs:comment """A gufo:EndurantType that is both non-sortal and rigid. It captures essential properties that apply to instances of different kinds.
 
-For example, \"PhysicalObject\" may be considered a gufo:Category, encompassing objects such as cars, planets, trees. \"Agent\" may be a gufo:Category that classifies both people and organizations."""@en .
+For example, \"PhysicalObject\" may be considered a gufo:Category, encompassing objects such as cars, planets, trees. \"Agent\" may be a gufo:Category that classifies both people and organizations."""@en ;
+              rdfs:label "Category"@en .
 
 
 ###  http://purl.org/nemo/gufo#Collection
@@ -738,7 +790,8 @@ Examples include a deck of cards, a pile of bricks, a forest (conceived as a col
 
 Collections in many cases constitute a functional complex. For example, a pile of bricks may constitute a wall, a group of people may constitute a football team.
 
-A gufo:Collection may be decomposed into \"smaller\" collections. For instance, a group of people may be decomposed into a group of English speakers and a group of Italian speakers. Sub collections may or may not share members among them."""@en .
+A gufo:Collection may be decomposed into \"smaller\" collections. For instance, a group of people may be decomposed into a group of English speakers and a group of Italian speakers. Sub collections may or may not share members among them."""@en ;
+                rdfs:label "Collection"@en .
 
 
 ###  http://purl.org/nemo/gufo#ComparativeRelationshipType
@@ -754,6 +807,7 @@ For a gufo:ComparativeRelationshipType it is recommended to identify the types o
 Note that, in the case of relationships that may change in different circumstances or times, the use of a qualified relation pattern enables indicating the period of time in which the relationship holds. See gufo:TemporaryRelationshipSituation.
 
 Corresponds to \"comparative formal relation\" in Guizzardi (2005) and \"Comparative Relation\" in Fonseca et al. (2019)."""@en ;
+                                 rdfs:label "ComparativeRelationshipType"@en ;
                                  rdfs:seeAlso gufo:isDerivedFrom .
 
 
@@ -766,7 +820,8 @@ gufo:ConcreteIndividual rdf:type owl:Class ;
                                             ) ;
                         rdfs:comment """A gufo:Individual that exists in space-time. 
 
-Concrete individuals comprise not only object-like entities (a car, a mountain, a person, a marriage, a belief), but also events (a business meeting, a soccer match) and situations (the situation in which a person weighs 80 kilograms, the situation in which a bank account is overdrawn)."""@en .
+Concrete individuals comprise not only object-like entities (a car, a mountain, a person, a marriage, a belief), but also events (a business meeting, a soccer match) and situations (the situation in which a person weighs 80 kilograms, the situation in which a bank account is overdrawn)."""@en ;
+                        rdfs:label "ConcreteIndividual"@en .
 
 
 ###  http://purl.org/nemo/gufo#ConcreteIndividualType
@@ -777,7 +832,8 @@ gufo:ConcreteIndividualType rdf:type owl:Class ;
 
 Instances of gufo:ConcreteIndividualType are subclasses of gufo:ConcreteIndividual.
 
-Examples include the gufo:Kind \"Person\", the gufo:Category \"Physical Object\", the gufo:EventType \"Business Meeting\"."""@en .
+Examples include the gufo:Kind \"Person\", the gufo:Category \"Physical Object\", the gufo:EventType \"Business Meeting\"."""@en ;
+                            rdfs:label "ConcreteIndividualType"@en .
 
 
 ###  http://purl.org/nemo/gufo#Endurant
@@ -790,7 +846,8 @@ gufo:Endurant rdf:type owl:Class ;
 
 Examples include: ordinary objects of everyday experience, such as a person, a house, and a car; reified relationships, such as a marriage, a rental contract, and a person's love for another; and existentially-dependent aspects of objects, such as a car's weight, a person's language skills, and a house's color. 
 
-Also termed \"continuant\" in the philosophical literature."""@en .
+Also termed \"continuant\" in the philosophical literature."""@en ;
+              rdfs:label "Endurant"@en .
 
 
 ###  http://purl.org/nemo/gufo#EndurantType
@@ -810,7 +867,8 @@ Instances of gufo:EndurantType are subclasses of gufo:Endurant.
 
 Examples include the object kind \"Person\", the phase \"Child\", the relator kind \"Marriage\".
 
-See Guizzardi et al. (2018) for details concerning the taxonomy of endurant types included here."""@en .
+See Guizzardi et al. (2018) for details concerning the taxonomy of endurant types included here."""@en ;
+                  rdfs:label "EndurantType"@en .
 
 
 ###  http://purl.org/nemo/gufo#Event
@@ -823,6 +881,7 @@ Examples include actions and processes, such as a business meeting, a communicat
 Also termed \"happening\", \"occurrence\", \"perdurant\" or \"occurrent\" in the philosophical literature.
 
 Casati, R. & Varzi, A. (2015). Events. In E.N. Zalta (Ed.), The Stanford Encyclopedia of Philosophy (Winter 2015 ed.). 19 Metaphysics Research Lab, Stanford University. https://plato.stanford.edu/archives/win2015/entries/events/"""@en ;
+           rdfs:label "Event"@en ;
            rdfs:seeAlso gufo:participatedIn .
 
 
@@ -834,7 +893,8 @@ gufo:EventType rdf:type owl:Class ;
 
 Instances of gufo:EventType are subclasses of gufo:Event.
 
-Examples include \"Business Meeting\", \"Birth\", \"Musical Performance\"."""@en .
+Examples include \"Business Meeting\", \"Birth\", \"Musical Performance\"."""@en ;
+               rdfs:label "EventType"@en .
 
 
 ###  http://purl.org/nemo/gufo#ExtrinsicAspect
@@ -848,7 +908,8 @@ gufo:ExtrinsicAspect rdf:type owl:Class ;
 
 Extrinsic (or \"relational\") aspects are reified relationships, e.g., John and Mary's marriage, Mary's employment contract at Nasa, or parts of those relationships, e.g., John's obligations towards Mary in the scope of the marriage, Mary's reciprocal claims, Mary's obligations towards John, John's reciprocal claims. Extrinsic aspects can also be reified one-sided relationships, e.g., John's admiration for Obama (which depends on Obama but does not characterize him).
 
-Corresponds to \"Extrinsic Moment\" in Fonseca et al (2019). Encompasses \"Externally Depedent Mode\", \"Qua Individual\" and \"Relator\" in Guizzardi (2005)."""@en .
+Corresponds to \"Extrinsic Moment\" in Fonseca et al (2019). Encompasses \"Externally Depedent Mode\", \"Qua Individual\" and \"Relator\" in Guizzardi (2005)."""@en ;
+                     rdfs:label "ExtrinsicAspect"@en .
 
 
 ###  http://purl.org/nemo/gufo#ExtrinsicMode
@@ -864,6 +925,7 @@ gufo:ExtrinsicMode rdf:type owl:Class ;
                                      owl:onClass gufo:ConcreteIndividual
                                    ] ;
                    owl:disjointWith gufo:Relator ;
+                   rdfs:label "ExtrinsicMode"@en ;
                    rdfs:seeAlso gufo:externallyDependsOn ,
                                 gufo:inheresIn ,
                                 """A gufo:ExtrinsicAspect that inheres in a concrete individual and depends on others for its existence.
@@ -882,6 +944,7 @@ gufo:FixedCollection rdf:type owl:Class ;
 Such a collection obeys an extensional principle of identity, i.e., two fixed collections are the same if, and only if, they have the same members.
 
 Consider, for example, a group of people understood as a gufo:FixedCollection. In this case, any change in the membership of the group (e.g., the addition of one person) would in fact create a different group of people. In this case, the gufo:FixedCollection may be contrasted with the complexes they constitute. For instance, The Beatles (the band conceived as a gufo:FunctionalComplex) was in a certain circumstance constituted by the collection {John, Paul, George, Pete} and in another one constituted by the collection {John, Paul, George, Ringo}. The replacement of Pete Best by Ringo Star does not alter the identity of the band, but creates a  different group of people."""@en ;
+                     rdfs:label "FixedCollection"@en ;
                      rdfs:seeAlso gufo:isCollectionMemberOf ,
                                   gufo:isSubCollectionOf .
 
@@ -895,6 +958,7 @@ gufo:FunctionalComplex rdf:type owl:Class ;
 For example, a person could be considered a gufo:FunctionalComplex with the various organs (heart, brain, lungs, etc.) playing different roles. Another example is a scrum team, which is composed by people playing the roles of scrum master, product owner, developer, etc.
 
 To explicitly capture temporary components, use gufo:TemporaryParthoodSituation."""@en ;
+                       rdfs:label "FunctionalComplex"@en ;
                        rdfs:seeAlso gufo:TemporaryParthoodSituation .
 
 
@@ -908,7 +972,8 @@ gufo:Individual rdf:type owl:Class ;
 
 Individuals may be either concrete (e.g., the Earth, Mick Jagger, Brazil, the 1985 Mexico City Earthquake) or abstract (e.g., the number two, the proposition that 'three is a prime number').
 
-Also known as \"particular\" in the philosophical literature."""@en .
+Also known as \"particular\" in the philosophical literature."""@en ;
+                rdfs:label "Individual"@en .
 
 
 ###  http://purl.org/nemo/gufo#IntrinsicAspect
@@ -929,6 +994,7 @@ Examples include intrinsic physical aspects, such as the Moon's mass, Lassie's f
 A gufo:IntrinsicAspect is classified as a gufo:Quality (e.g., an apple's weight, the height of the Statue of Liberty) if it is measurable by a certain value space, or as a gufo:IntrinsicMode (e.g. Bob's belief that the Eiffel Tower is in Paris) otherwise.
 
 Corresponds to \"Instrinsic Moment\" in Guizzardi (2005). Different from Guizzardi (2005), here we consider that aspects can inhere in concrete individuals in general, and not only in endurants."""@en ;
+                     rdfs:label "IntrinsicAspect"@en ;
                      rdfs:seeAlso gufo:inheresIn .
 
 
@@ -936,6 +1002,7 @@ Corresponds to \"Instrinsic Moment\" in Guizzardi (2005). Different from Guizzar
 gufo:IntrinsicMode rdf:type owl:Class ;
                    rdfs:subClassOf gufo:IntrinsicAspect ;
                    owl:disjointWith gufo:Quality ;
+                   rdfs:label "IntrinsicMode"@en ;
                    rdfs:seeAlso """A gufo:IntrinsicAspect that is not measurable.
 
 For example, Bob's belief that the Eiffel Tower is in Paris, his math skills, his headache.
@@ -950,7 +1017,8 @@ gufo:Kind rdf:type owl:Class ;
           owl:disjointWith gufo:SubKind ;
           rdfs:comment """A gufo:EndurantType that is both sortal and rigid. It provides a uniform principle of identity for its instances. Every gufo:Endurant instantiates one and only one gufo:Kind. 
 
-Examples include kinds of ordinary objects of everyday experience, such as: \"Person\", \"House\", \"Car\"; kinds of relators, such as \"Marriage\", \"RentalContract\"; kinds of existentially-dependent aspects of objects, such as \"Weight\", \"Belief\", \"Vulnerability\"."""@en .
+Examples include kinds of ordinary objects of everyday experience, such as: \"Person\", \"House\", \"Car\"; kinds of relators, such as \"Marriage\", \"RentalContract\"; kinds of existentially-dependent aspects of objects, such as \"Weight\", \"Belief\", \"Vulnerability\"."""@en ;
+          rdfs:label "Kind"@en .
 
 
 ###  http://purl.org/nemo/gufo#MaterialRelationshipType
@@ -963,6 +1031,7 @@ For example, \"marriedWith\", \"employedBy\", \"enrolledIn\", \"admires\".
 For a gufo:MaterialRelationshipType it is recommended to identify the type of extrinsic aspect from which the material relationship type is derived (see gufo:isDerivedFrom). For example \"marriedWith\" can be derived from the \"Marriage\" relator type, \"employedBy\" can be derived from the \"Employment\" relator type.
 
 Encompasses \"Material Relation\" in Guizzardi (2005) and corresponds to \"Material Relation\" in Fonseca et al. (2019)."""@en ;
+                              rdfs:label "MaterialRelationshipType"@en ;
                               rdfs:seeAlso gufo:isDerivedFrom .
 
 
@@ -972,7 +1041,8 @@ gufo:Mixin rdf:type owl:Class ;
                            gufo:SemiRigidType ;
            rdfs:comment """A gufo:EndurantType that is both non-sortal and semi-rigid. As a semi-rigid type, it applies necessarily to some of its instances and contingently to some others. As a non-sortal, it captures properties shared by instances of different kinds.
 
-For example, the type \"FemaleAnimal\" may be considered a gufo:Mixin as it applies necessarily to animals of certain species, e.g., lions and sharks, while it applies contingently to animals of other species such as clownfish and mushroom corals (which may change sex given certain conditions)."""@en .
+For example, the type \"FemaleAnimal\" may be considered a gufo:Mixin as it applies necessarily to animals of certain species, e.g., lions and sharks, while it applies contingently to animals of other species such as clownfish and mushroom corals (which may change sex given certain conditions)."""@en ;
+           rdfs:label "Mixin"@en .
 
 
 ###  http://purl.org/nemo/gufo#NonRigidType
@@ -984,7 +1054,8 @@ gufo:NonRigidType rdf:type owl:Class ;
                                       ) ;
                   rdfs:comment """A gufo:EndurantType that does not apply necessarily to at least one of its instances (see Guizzardi, 2005, chapter 4).
 
-Examples include anti-rigid types, such as the role \"Student\" and the phase \"Child\", and semi-rigid types, such as the mixin \"MusicalArtist\" (which necessarily characterizes bands, but contingently characterizes people) and the mixin \"FemaleAnimal\" (which is necessarily characterizes female dogs, but contigently characterizes clownfish)."""@en .
+Examples include anti-rigid types, such as the role \"Student\" and the phase \"Child\", and semi-rigid types, such as the mixin \"MusicalArtist\" (which necessarily characterizes bands, but contingently characterizes people) and the mixin \"FemaleAnimal\" (which is necessarily characterizes female dogs, but contigently characterizes clownfish)."""@en ;
+                  rdfs:label "NonRigidType"@en .
 
 
 ###  http://purl.org/nemo/gufo#NonSortal
@@ -995,7 +1066,8 @@ gufo:NonSortal rdf:type owl:Class ;
 
 Non-sortals do not provide a uniform principle of identity for their instances; instead, they just classify things that share common properties but which obey different principles of identity.
 
-Also termed \"dispersive\" types in the philosophical literature."""@en .
+Also termed \"dispersive\" types in the philosophical literature."""@en ;
+               rdfs:label "NonSortal"@en .
 
 
 ###  http://purl.org/nemo/gufo#Object
@@ -1005,7 +1077,8 @@ gufo:Object rdf:type owl:Class ;
 
 Examples of objects include ordinary physical entities, such as a dog, a house, a tomato, a car, Alan Turing, but also socially-defined entities such as The Rolling Stones, the European Union, the Brazilian 1988 Constitution.
 
-Guizzardi (2005) also included the more abstract notion of \"Substantial\", which generalizes both objects and amounts of matter. That notion was left out from this implementation, together with the notion of amount of matter. Support for the representation of maximally-self-connected amounts of matter is given by gufo:Quantity."""@en .
+Guizzardi (2005) also included the more abstract notion of \"Substantial\", which generalizes both objects and amounts of matter. That notion was left out from this implementation, together with the notion of amount of matter. Support for the representation of maximally-self-connected amounts of matter is given by gufo:Quantity."""@en ;
+            rdfs:label "Object"@en .
 
 
 ###  http://purl.org/nemo/gufo#Participation
@@ -1020,6 +1093,7 @@ gufo:Participation rdf:type owl:Class ;
                    rdfs:comment """A gufo:Event that depends on a single object. 
 
 Participations can be used to partition an event into portions, each of which depend exclusively on a single object. Consider a business meeting with multiple participants, including John and Mary. John's participation in the meeting encompasses all events that are part of the meeting and that depend solely on him. Likewise, Mary's participation encompasses all events that are part of the meeting and that depend solely on her. Similarly, in Brutus’ stabbing of Caesar, we may identify the participations of Brutus, of Caesar, and of the dagger."""@en ;
+                   rdfs:label "Participation"@en ;
                    rdfs:seeAlso gufo:participatedIn .
 
 
@@ -1030,7 +1104,8 @@ gufo:Phase rdf:type owl:Class ;
            owl:disjointWith gufo:Role ;
            rdfs:comment """A gufo:EndurantType that is both sortal and anti-rigid. It is defined by instrinsic but contingent instantiation conditions. Phases are relationally independent types that capturec instrinsic properties shared by instances of a given kind.
 
-For example, \"Child\" may be considered a gufo:Phase as a subclass of the gufo:Kind \"Person\", instantiated by persons younger than 12. Another example is the type \"IllPerson\", which may be considered a gufo:Phase that is instantiated whenever an instance of \"Disease\" (a gufo:IntrinsicMode) inheres in a person."""@en .
+For example, \"Child\" may be considered a gufo:Phase as a subclass of the gufo:Kind \"Person\", instantiated by persons younger than 12. Another example is the type \"IllPerson\", which may be considered a gufo:Phase that is instantiated whenever an instance of \"Disease\" (a gufo:IntrinsicMode) inheres in a person."""@en ;
+           rdfs:label "Phase"@en .
 
 
 ###  http://purl.org/nemo/gufo#PhaseMixin
@@ -1040,7 +1115,8 @@ gufo:PhaseMixin rdf:type owl:Class ;
                 owl:disjointWith gufo:RoleMixin ;
                 rdfs:comment """A gufo:EndurantType that is both non-sortal and anti-rigid. It is defined by instrinsic but contingent instantiation conditions. Phase mixins are relationally independent types that capture instrinsic properties shared by instances of different kinds.
 
-For example, \"LivingAnimal\" may be considered a gufo:PhaseMixin as a superclass of the phases \"LivingPerson\" (specializing the gufo:Kind \"Person\") and \"LivingDog\" (specializing the gufo:Kind \"Dog\")."""@en .
+For example, \"LivingAnimal\" may be considered a gufo:PhaseMixin as a superclass of the phases \"LivingPerson\" (specializing the gufo:Kind \"Person\") and \"LivingDog\" (specializing the gufo:Kind \"Dog\")."""@en ;
+                rdfs:label "PhaseMixin"@en .
 
 
 ###  http://purl.org/nemo/gufo#Quality
@@ -1048,7 +1124,8 @@ gufo:Quality rdf:type owl:Class ;
              rdfs:subClassOf gufo:IntrinsicAspect ;
              rdfs:comment """A gufo:IntrinsicAspect that is measurable by some value spaces. A quality may be used to compare individuals, on the basis of the value it takes in a certain quality space (for instance, a position within the RGB spectrum).
 
-Examples include the weight of a person, the name of organization, the color of a car, and the duration of a concert."""@en .
+Examples include the weight of a person, the name of organization, the color of a car, and the duration of a concert."""@en ;
+             rdfs:label "Quality"@en .
 
 
 ###  http://purl.org/nemo/gufo#QualityValue
@@ -1061,6 +1138,7 @@ Instances of gufo:QualityValue include the rational number 2.5 when used to conc
 Corresponds to \"Quale\" in Guizzardi (2005). 
 
 Use this class only for quality values (qualia) that are to be reified in the A-box and associated with a gufo:ConcreteIndividual through the object property gufo:hasReifiedQualityValue. Otherwise, use the gufo:hasQualityValue data property and a literal to determine the quality value."""@en ;
+                  rdfs:label "QualityValue"@en ;
                   rdfs:seeAlso gufo:hasReifiedQualityValue .
 
 
@@ -1101,6 +1179,7 @@ A gufo:QualityValueAttributionSituation should be used only for mutable qualitie
 Examples include: the situation in which the value of a bitcoin in Euros is 6.526,12, which lasted from 10/12/2019 to 11/12/2019; the situation in which the weight of Mike Tyson was 100 kg; and the situation in which the color of Einstein' hair was grey.
 
 This is a reification of the quality value attribution (in a solution that is similar to the qualified relation pattern  http://patterns.dataincubator.org/book/qualified-relation.html )"""@en ;
+                                      rdfs:label "QualityValueAttributionSituation"@en ;
                                       rdfs:seeAlso gufo:concernsQualityValue ,
                                                    gufo:concernsReifiedQualityValue .
 
@@ -1113,6 +1192,7 @@ gufo:Quantity rdf:type owl:Class ;
 Examples include the portion of wine in a wine tank, a lump of clay, the gold that constitutes a wedding ring.
 
 Also termed \"quantity of matter\", \"objectified portion of matter\", \"piece\" in the philosophical literature."""@en ;
+              rdfs:label "Quantity"@en ;
               rdfs:seeAlso gufo:isSubQuantityOf .
 
 
@@ -1125,7 +1205,8 @@ The object properties \"marriedWith\" and \"enrolledIn\" are examples of materia
 
 The use of gufo:RelationshipType and its subclasses requires OWL 2 punning.
 
-Corresponds to \"Relation\" in Guizzardi (2005) and Fonseca et al. (2019)."""@en .
+Corresponds to \"Relation\" in Guizzardi (2005) and Fonseca et al. (2019)."""@en ;
+                      rdfs:label "RelationshipType"@en .
 
 
 ###  http://purl.org/nemo/gufo#Relator
@@ -1139,6 +1220,7 @@ gufo:Relator rdf:type owl:Class ;
              rdfs:comment """A gufo:ExtrinsicAspect that connects (involves, mediates) two or more concrete individuals. Relators are reified relationships composed of reciprocal extrinsic modes.
 
 Examples of relators include John and Mary's marriage (composed of John's obligations towards Mary in the scope of the marriage, Mary's reciprocal claims, Mary's obligations towards John, John's reciprocal claims), Mary's employment contract at Nasa, a covalent bond between two atoms."""@en ;
+             rdfs:label "Relator"@en ;
              rdfs:seeAlso gufo:mediates .
 
 
@@ -1147,7 +1229,8 @@ gufo:RigidType rdf:type owl:Class ;
                rdfs:subClassOf gufo:EndurantType ;
                rdfs:comment """A gufo:EndurantType which applies necessarily to its instances (see Guizzardi, 2005, chapter 4).
 
-Examples include the types \"Agent\", \"Person\", \"Animal\", \"PhysicalObject\", \"Car\", and \"Tree\"."""@en .
+Examples include the types \"Agent\", \"Person\", \"Animal\", \"PhysicalObject\", \"Car\", and \"Tree\"."""@en ;
+               rdfs:label "RigidType"@en .
 
 
 ###  http://purl.org/nemo/gufo#Role
@@ -1156,7 +1239,8 @@ gufo:Role rdf:type owl:Class ;
                           gufo:Sortal ;
           rdfs:comment """A gufo:EndurantType that both sortal and anti-rigid. It is defined by relational instantiation conditions. Roles are relationally dependent types, capturing relational properties shared by instances of a given kind.
 
-For example, \"Student\" may be considered a gufo:Role as a subclass of the gufo:Kind \"Person\", instantiated by all persons enrolled in a school. \""""@en .
+For example, \"Student\" may be considered a gufo:Role as a subclass of the gufo:Kind \"Person\", instantiated by all persons enrolled in a school. \""""@en ;
+          rdfs:label "Role"@en .
 
 
 ###  http://purl.org/nemo/gufo#RoleMixin
@@ -1165,13 +1249,15 @@ gufo:RoleMixin rdf:type owl:Class ;
                                gufo:NonSortal ;
                rdfs:comment """A gufo:EndurantType that is both non-sortal and anti-rigid. It is defined by relational instantiation conditions. Role mixins are relationally dependent types, capturing relational properties shared by instances of different kinds.
 
-For example, \"Customer\" may be considered a gufo:RoleMixin as a superclass of the roles \"CorporateCustomer\" (specializing the gufo:Kind \"BusinessOrganization\") and \"PersonalCustomer\" (specializing the gufo:Kind \"Person\")."""@en .
+For example, \"Customer\" may be considered a gufo:RoleMixin as a superclass of the roles \"CorporateCustomer\" (specializing the gufo:Kind \"BusinessOrganization\") and \"PersonalCustomer\" (specializing the gufo:Kind \"Person\")."""@en ;
+               rdfs:label "RoleMixin"@en .
 
 
 ###  http://purl.org/nemo/gufo#SemiRigidType
 gufo:SemiRigidType rdf:type owl:Class ;
                    rdfs:subClassOf gufo:NonRigidType ;
-                   rdfs:comment "A gufo:NonRigidType that applies necessarily to some of its instances and contingently to some others (see Guizzardi, 2005, chapter 4)."@en .
+                   rdfs:comment "A gufo:NonRigidType that applies necessarily to some of its instances and contingently to some others (see Guizzardi, 2005, chapter 4)."@en ;
+                   rdfs:label "SemiRigidType"@en .
 
 
 ###  http://purl.org/nemo/gufo#Situation
@@ -1181,7 +1267,8 @@ gufo:Situation rdf:type owl:Class ;
 
 Note that, in Guizzardi et al. (2013), situations were considered to obtain at a specific point in time. Here, instead, they obtain in a time interval when begin and end points differ.
 
-The various subclasses of Situation in this implementation are used to capture \"mutable\" facts which obtain during some time and fail to obtain at other times. This includes the contingent instantiation of non-rigid types (e.g., as someone is a child at one point in time and a teenager later), the attribution of value to mutable qualities (such as a person's weight) and temporary participation in part-whole relations for replaceable parts (such as a car's tires). Other subclasses may be created to capture domain-specific notions such as \"HazardousSituation\", \"PersonHasFever\"."""@en .
+The various subclasses of Situation in this implementation are used to capture \"mutable\" facts which obtain during some time and fail to obtain at other times. This includes the contingent instantiation of non-rigid types (e.g., as someone is a child at one point in time and a teenager later), the attribution of value to mutable qualities (such as a person's weight) and temporary participation in part-whole relations for replaceable parts (such as a car's tires). Other subclasses may be created to capture domain-specific notions such as \"HazardousSituation\", \"PersonHasFever\"."""@en ;
+               rdfs:label "Situation"@en .
 
 
 ###  http://purl.org/nemo/gufo#SituationType
@@ -1191,13 +1278,15 @@ gufo:SituationType rdf:type owl:Class ;
 
 Instances of gufo:SituationType are subclasses of gufo:Situation.
 
-Examples include \"HazardousSituation\", \"PersonHasFever\",  \"PersonIsStudent\"."""@en .
+Examples include \"HazardousSituation\", \"PersonHasFever\",  \"PersonIsStudent\"."""@en ;
+                   rdfs:label "SituationType"@en .
 
 
 ###  http://purl.org/nemo/gufo#Sortal
 gufo:Sortal rdf:type owl:Class ;
             rdfs:subClassOf gufo:EndurantType ;
-            rdfs:comment "A gufo:EndurantType which carries (or supplies) a principle of identity for its instances  (see Guizzardi, 2005, chapter 4)."@en .
+            rdfs:comment "A gufo:EndurantType which carries (or supplies) a principle of identity for its instances  (see Guizzardi, 2005, chapter 4)."@en ;
+            rdfs:label "Sortal"@en .
 
 
 ###  http://purl.org/nemo/gufo#SubKind
@@ -1206,7 +1295,8 @@ gufo:SubKind rdf:type owl:Class ;
                              gufo:Sortal ;
              rdfs:comment """A gufo:EndurantType that is both sortal and rigid. It specializes a gufo:Kind carrying the principle of identity supplied by that kind. Every gufo:SubKind should directly or indirectly specialize a gufo:Kind.
 
-For example, the gufo:Kind \"Lion\" may be specialized into the \"Lionness\" and \"Male Lion\" subkinds, while the gufo:Kind \"Computer\" may be specialized into the \"Laptop\" and \"Desktop\" subkinds."""@en .
+For example, the gufo:Kind \"Lion\" may be specialized into the \"Lionness\" and \"Male Lion\" subkinds, while the gufo:Kind \"Computer\" may be specialized into the \"Laptop\" and \"Desktop\" subkinds."""@en ;
+             rdfs:label "SubKind"@en .
 
 
 ###  http://purl.org/nemo/gufo#TemporaryConstitutionSituation
@@ -1231,7 +1321,8 @@ When constitution of an object may change in time, it may be qualified by the pe
 
 Examples include: the situation in which the Beatles is constituted by the group composed of {John,Paul,Ringo,George}; and the situation in which the statue of Venus de Milo was constituted by its original quantity of marble (including its arms).
 
-This is a reification of constitution (in a solution that is similar to the qualified relation pattern  http://patterns.dataincubator.org/book/qualified-relation.html)"""@en .
+This is a reification of constitution (in a solution that is similar to the qualified relation pattern  http://patterns.dataincubator.org/book/qualified-relation.html)"""@en ;
+                                    rdfs:label "TemporaryConstitutionSituation"@en .
 
 
 ###  http://purl.org/nemo/gufo#TemporaryInstantiationSituation
@@ -1256,7 +1347,8 @@ A gufo:TemporaryInstantiationSituation can account for the time period in which 
 
 Examples include: the situation in which Obama instantiates the role of president, which began in 20/01/2009 and lasted until 20/01/2017; the situation in which Coatria instantiates the role of EU Member, which began in 01/07/2013 (and is still on-going); and the situation in which Steve Jobs instantiates the child phase, which began in 24/02/1955 and lasted until 24/02/1965.
 
-This solution is inspired in the qualified relation pattern (http://patterns.dataincubator.org/book/qualified-relation.html)."""@en .
+This solution is inspired in the qualified relation pattern (http://patterns.dataincubator.org/book/qualified-relation.html)."""@en ;
+                                     rdfs:label "TemporaryInstantiationSituation"@en .
 
 
 ###  http://purl.org/nemo/gufo#TemporaryParthoodSituation
@@ -1282,7 +1374,8 @@ Examples include: the situation in which the United Kingdom is a member of the E
 
 Note that, since every instance of gufo:Quantity or gufo:FixedCollection only has essential parts, the gufo:TemporaryParthoodSituation should not be used to represent these parthood relations.
  
-This solution is inspired in the qualified relation pattern (http://patterns.dataincubator.org/book/qualified-relation.html).""" .
+This solution is inspired in the qualified relation pattern (http://patterns.dataincubator.org/book/qualified-relation.html).""" ;
+                                rdfs:label "TemporaryParthoodSituation"@en .
 
 
 ###  http://purl.org/nemo/gufo#TemporaryRelationshipSituation
@@ -1311,7 +1404,8 @@ Examples include: the situation in which Einstein works at the Swiss Patent Offi
 
 For material relationships, prefer the use of gufo:Relator.
 
-This is a reification of the relationship (in a solution that is similar to the qualified relation pattern  http://patterns.dataincubator.org/book/qualified-relation.html)."""@en .
+This is a reification of the relationship (in a solution that is similar to the qualified relation pattern  http://patterns.dataincubator.org/book/qualified-relation.html)."""@en ;
+                                    rdfs:label "TemporaryRelationshipSituation"@en .
 
 
 ###  http://purl.org/nemo/gufo#Type
@@ -1322,7 +1416,8 @@ Examples include the kind \"Person\", the event type \"Earthquake\", and the abs
 
 Instances of gufo:Type are classes, and should specialize the taxonomy of individuals of gUFO. For example, \"Person\" is a gufo:Type (more specifically a gufo:Kind), specializing gufo:Object. The mechanism that allows for this is called punning in OWL 2.
 
-Encompasses the notion of \"Universal\" in Guizzardi (2005)."""@en .
+Encompasses the notion of \"Universal\" in Guizzardi (2005)."""@en ;
+          rdfs:label "Type"@en .
 
 
 ###  http://purl.org/nemo/gufo#VariableCollection
@@ -1335,13 +1430,15 @@ Such a collection obeys an intensional principle of identity, i.e., change in me
 
 For example, KLM's fleet of airplanes could be understood as a gufo:VariableCollection. In this case, when the company acquires (or retires) an airplane, the fleet changes. Note that, in this case, the airplanes are conceptualized as playing the role of \"member of a fleet\". If various roles for the parts of a fleet were envisioned (such as \"cargo airplane\", \"passenger airplane\"), then a fleet would be best understood as a gufo:FunctionalComplex.
 
-See gufo:TemporaryParthoodSituation for the pattern to represent the relation of a variable collection to its temporary parts."""@en .
+See gufo:TemporaryParthoodSituation for the pattern to represent the relation of a variable collection to its temporary parts."""@en ;
+                        rdfs:label "VariableCollection"@en .
 
 
 ###  http://www.w3.org/2006/time#Instant
 time:Instant rdf:type owl:Class ;
              rdfs:subClassOf gufo:AbstractIndividual ;
-             rdfs:comment "An gufo:AbstractIndividual that reifies time instants. It is used as a target of the gufo:hasBeginPoint and gufo:hasEndPoint object properties."@en .
+             rdfs:comment "An gufo:AbstractIndividual that reifies time instants. It is used as a target of the gufo:hasBeginPoint and gufo:hasEndPoint object properties."@en ;
+             rdfs:label "Instant"@en .
 
 
 #################################################################
