@@ -24,4 +24,6 @@ Authors:
 * Tiago Prince Sales;
 * Ricardo A. Falbo.
 
-See http://purl.org/nemo/doc/gufo for usage guide and complete documentation of gUFO.
+See <http://purl.org/nemo/doc/gufo> for usage guide and complete documentation of gUFO.
+
+Some tutorial videos can be found in: <https://www.youtube.com/channel/UCrO83sDDZ7q4ymI76bwB-bg>
