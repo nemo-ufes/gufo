@@ -557,11 +557,11 @@ This is a reification of the instantiation (in a solution that is similar to the
 Instances of gufo:TemporaryParthoodSituation are used in a pattern when it is necessary to qualify parthood and its change in time. In the following fragment, a heart transplant is tracked (from situations in which John and Paul have their original parts, to a situation in which there was a heart transplant from John to Paul).
 
     :JohnsHeart rdf:type :Heart ;
-                gufo:standsInQualifiedParthood :JohnHasOriginalHeart .
+                gufo:standsInQualifiedParthood :JohnHasOriginalHeart,
+                                               :PaulHasJohnsHeart .
 
     :PaulsHeart rdf:type :Heart ;
-                gufo:standsInQualifiedParthood :PaulHasJohnsHeart ,
-                                            :PaulHasOriginalHeart .
+                gufo:standsInQualifiedParthood :PaulHasOriginalHeart .
 
     :JohnHasOriginalHeart rdf:type gufo:TemporaryParthoodSituation ;
                         gufo:concernsTemporaryWhole :John ;
