@@ -1,0 +1,25 @@
+@prefix : <http://purl.org/nemo/gufo/boilerplates/gufo-import#> .
+@prefix gufo: <http://purl.org/nemo/gufo#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@base <http://purl.org/nemo/gufo/boilerplates/gufo-import> .
+
+<http://purl.org/nemo/gufo/boilerplates/gufo-import> rdf:type owl:Ontology ;
+                                                      owl:imports gufo: ;
+                                                      dc:creator "Your name goes here."@en ;
+                                                      dc:title "The name of your ontology goes here."@en ;
+                                                      rdfs:comment """This is a boilerplate file that imports gUFO.
+
+First steps:
+
+1. Replace the Ontology IRI
+2. Replace dc:title
+3. Replace dc:creator
+4. Start using gUFO to create your ontology (it has already been imported by Protégé!)
+
+For guidelines on how to you gUFO effectively, please refer to <http://purl.org/nemo/doc/gufo>.
+"""@en .
