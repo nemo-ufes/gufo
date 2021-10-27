@@ -27,3 +27,5 @@ Authors:
 See <http://purl.org/nemo/doc/gufo> for usage guide and complete documentation of gUFO.
 
 Some tutorial videos can be found in: <https://www.youtube.com/channel/UCrO83sDDZ7q4ymI76bwB-bg>
+
+To import gUFO in Protégé use <https://purl.org/nemo/gufo#> (using `https` instead of `http`). (This is required in Protégé 5.5.0 as it uses a version of the OWL API that is unable to handle multiple http redirects.)
