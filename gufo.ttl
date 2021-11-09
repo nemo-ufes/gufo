@@ -3,7 +3,6 @@
 @prefix dct: <http://purl.org/dc/terms/> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix sdo: <http://schema.org/> .
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
@@ -14,13 +13,18 @@
 @base <http://purl.org/nemo/gufo#> .
 
 <http://purl.org/nemo/gufo#> rdf:type owl:Ontology ;
+                              owl:versionIRI <http://purl.org/nemo/gufo#/1.0.0> ;
+                              owl:versionInfo "1.0.0"@en ;
                               dc:creator "Almeida, João Paulo A." ,
                                          "Falbo, Ricardo A." ,
                                          "Guizzardi, Giancarlo" ,
                                          "Sales, Tiago P." ;
-                              dc:date "2019-11-11"@en ;
                               dc:title "gUFO: A Lightweight Implementation of the Unified Foundational Ontology (UFO)"@en ;
-                              dct:rights "This work is distributed under Creative Commons Attribution License CC BY 4.0 <https://creativecommons.org/licenses/by/4.0/legalcode>"@en ;
+                              dct:bibliographicCitation "J. P. A. Almeida, G. Guizzardi, T. P. Sales, R. A. Falbo, \"gUFO: A Lightweight Implementation of the Unified Foundational Ontology (UFO)\", 2019, http://purl.org/nemo/doc/gufo"@en ;
+                              dct:created "2019-11-11"^^xsd:date ;
+                              dct:modified "2021-11-01"^^xsd:date ;
+                              dct:license <https://creativecommons.org/licenses/by/4.0/legalcode> ;
+                              vann:preferredNamespacePrefix "gufo"@en ;
                               vann:preferredNamespaceUri "http://purl.org/nemo/gufo#"^^xsd:anyURI ;
                               rdfs:comment """The objective of gUFO is to provide a lightweight implementation of the Unified Foundational Ontology (UFO) [1-5] suitable for Semantic Web OWL 2 DL applications. 
 
@@ -43,34 +47,40 @@ Cite this work as:
 
 J. P. A. Almeida, G. Guizzardi, T. P. Sales, R. A. Falbo, \"gUFO: A Lightweight Implementation of the Unified Foundational Ontology (UFO)\", 2019, http://purl.org/nemo/doc/gufo
 
+This work is distributed under Creative Commons Attribution License CC BY 4.0 <https://creativecommons.org/licenses/by/4.0/legalcode>.
+
 For the source repository, see: <https://github.com/nemo-ufes/gufo>"""@en .
 
 #################################################################
 #    Annotation properties
 #################################################################
 
-###  http://purl.org/dc/elements/1.1/contributor
-dc:contributor rdf:type owl:AnnotationProperty .
-
-
 ###  http://purl.org/dc/elements/1.1/creator
 dc:creator rdf:type owl:AnnotationProperty .
-
-
-###  http://purl.org/dc/elements/1.1/date
-dc:date rdf:type owl:AnnotationProperty .
-
-
-###  http://purl.org/dc/elements/1.1/rights
-dc:rights rdf:type owl:AnnotationProperty .
 
 
 ###  http://purl.org/dc/elements/1.1/title
 dc:title rdf:type owl:AnnotationProperty .
 
 
-###  http://purl.org/dc/terms/rights
-dct:rights rdf:type owl:AnnotationProperty .
+###  http://purl.org/dc/terms/bibliographicCitation
+dct:bibliographicCitation rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/terms/created
+dct:created rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/terms/license
+dct:license rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/terms/modified
+dct:modified rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/vocab/vann/preferredNamespacePrefix
+vann:preferredNamespacePrefix rdf:type owl:AnnotationProperty .
 
 
 ###  http://purl.org/vocab/vann/preferredNamespaceUri
@@ -925,14 +935,14 @@ gufo:ExtrinsicMode rdf:type owl:Class ;
                                      owl:onClass gufo:ConcreteIndividual
                                    ] ;
                    owl:disjointWith gufo:Relator ;
-                   rdfs:label "ExtrinsicMode"@en ;
-                   rdfs:seeAlso gufo:externallyDependsOn ,
-                                gufo:inheresIn ,
-                                """A gufo:ExtrinsicAspect that inheres in a concrete individual and depends on others for its existence.
+                   rdfs:comment """A gufo:ExtrinsicAspect that inheres in a concrete individual and depends on others for its existence.
 
 A gufo:ExtrinsicMode can be understood as a reified one-sided relationship, such as John's admiration for Mary.
 
-Corresponds to \"Extrinsic Moment\" in Fonseca et al (2019). Encompasses what \"Externally Dependent Mode\", \"Qua Individual\" and \"Relator\" in Guizzardi (2005)."""@en .
+Corresponds to \"Extrinsic Moment\" in Fonseca et al (2019). Encompasses what \"Externally Dependent Mode\", \"Qua Individual\" and \"Relator\" in Guizzardi (2005)."""@en ;
+                   rdfs:label "ExtrinsicMode"@en ;
+                   rdfs:seeAlso gufo:externallyDependsOn ,
+                                gufo:inheresIn .
 
 
 ###  http://purl.org/nemo/gufo#FixedCollection
@@ -1002,12 +1012,12 @@ Corresponds to \"Instrinsic Moment\" in Guizzardi (2005). Different from Guizzar
 gufo:IntrinsicMode rdf:type owl:Class ;
                    rdfs:subClassOf gufo:IntrinsicAspect ;
                    owl:disjointWith gufo:Quality ;
-                   rdfs:label "IntrinsicMode"@en ;
-                   rdfs:seeAlso """A gufo:IntrinsicAspect that is not measurable.
+                   rdfs:comment """A gufo:IntrinsicAspect that is not measurable.
 
 For example, Bob's belief that the Eiffel Tower is in Paris, his math skills, his headache.
 
-Corresponds to \"Mode\" in Guizzardi (2005)."""@en .
+Corresponds to \"Mode\" in Guizzardi (2005)."""@en ;
+                   rdfs:label "IntrinsicMode"@en .
 
 
 ###  http://purl.org/nemo/gufo#Kind
