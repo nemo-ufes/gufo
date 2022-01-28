@@ -26,7 +26,7 @@ See also [reference table of contents](#toc).
 
 gUFO is intended for reuse in the definition of UFO-based lightweight ontologies. The term "user" will thus be reserved to identify the designers of these ontologies.
 
-Reuse of gUFO consists in instantiating and/or specializing the  various classes, object properties and data properties defined in the ontology, inheriting from it the domain-independent distinctions of UFO. This section provides an introduction to gUFO as a primer to prospective users. [Turtle](https://www.w3.org/TR/turtle/) is used as a syntax for RDF serialization for illustrative purposes.  
+Reuse of gUFO consists in instantiating and/or specializing the various classes, object properties and data properties defined in the ontology, inheriting from it the domain-independent distinctions of UFO. This section provides an introduction to gUFO as a primer to prospective users. [Turtle](https://www.w3.org/TR/turtle/) is used as a syntax for RDF serialization for illustrative purposes.  
 
 A key feature of UFO (and hence, gUFO) is that it includes two taxonomies: one with classes whose instances are individuals (classes in this taxonomy include gufo:Object, gufo:Event) and another with classes whose instances are types (classes in this taxonomy include gufo:Kind, gufo:Phase, gufo:Category).
 
@@ -58,7 +58,7 @@ An overview of these taxonomies in gUFO is shown below.
 >         * SituationType
 >     * RelationshipType
 
-Considering these two taxonomies, the following usage scenarios are envisioned and discussed in this document  where appropriate:
+Considering these two taxonomies, the following usage scenarios are envisioned and discussed in this document where appropriate:
 
 1. A UFO-based ontology *instantiates* gUFO classes in the taxonomy of individuals  
    For example, `:Earth rdf:type gufo:Object` and `:WorldCup1970Final rdf:type gufo:Event`.
@@ -77,6 +77,15 @@ Users may combine the various scenarios discussed. For example, users will often
     :Person rdf:type owl:Class ;
             rdfs:subClassOf gufo:Object ;
             rdf:type gufo:Kind .
+
+An example ontology on the car rental domain that adopts scenarios 2 and 3 is available at [http://purl.org/nemo/gufo/boilerplates/car-rental](http://purl.org/nemo/gufo/boilerplates/car-rental).
+
+The main gUFO module, `gufo: <http://purl.org/nemo/gufo#>`, defines object properties in a single direction. For instance, an UFO's inherence relation is implemented in gUFO as the object property `gufo:inheresIn`, which has`gufo:Aspect` in its domain and `gufo:ConcreteIndividual` in its range.
+
+Users who also want to leverage inverse properties in their ontologies can import a separate ontology module called `gufoi`, which is available at [http://purl.org/nemo/gufo/inverse](http://purl.org/nemo/gufo/inverse). 
+
+A boilerplate which imports both `gufo` and `gufoi` is available for reuse at [http://purl.org/nemo/gufo/boilerplates/gufo-gufoi-import](http://purl.org/nemo/gufo/boilerplates/gufo-gufoi-import).
+
 
 <a name="individuals"></a>
 
