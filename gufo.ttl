@@ -22,7 +22,7 @@
                               dct:bibliographicCitation "J. P. A. Almeida, G. Guizzardi, T. P. Sales, R. A. Falbo, \"gUFO: A Lightweight Implementation of the Unified Foundational Ontology (UFO)\", 2019, http://purl.org/nemo/doc/gufo"@en ;
                               dct:created "2019-11-11"^^xsd:date ;
                               dct:license <https://creativecommons.org/licenses/by/4.0/legalcode> ;
-                              dct:modified "2022-09-08"@en ;
+                              dct:modified "2022-09-08"^^xsd:date ;
                               vann:preferredNamespacePrefix "gufo"@en ;
                               vann:preferredNamespaceUri "http://purl.org/nemo/gufo#"^^xsd:anyURI ;
                               rdfs:comment """The objective of gUFO is to provide a lightweight implementation of the Unified Foundational Ontology (UFO) [1-5] suitable for Semantic Web OWL 2 DL applications.
@@ -178,6 +178,18 @@ gufo:concernsInstanciatedEndurant rdf:type owl:ObjectProperty ;
                                   rdfs:seeAlso gufo:TemporaryInstantiationSituation .
 
 
+###  http://purl.org/nemo/gufo#concernsMainEndurant
+gufo:concernsMainEndurant rdf:type owl:ObjectProperty ;
+                          rdfs:subPropertyOf gufo:concernsThing ;
+                          owl:inverseOf gufo:standsInQualifiedRelationship ;
+                          rdfs:domain gufo:TemporaryRelationshipSituation ;
+                          rdfs:range gufo:Endurant ;
+                          rdfs:comment "Identifies the main gufo:Endurant in the gufo:TemporaryRelationshipSituation."@en ;
+                          rdfs:label "concernsMainEndurant"@en ;
+                          rdfs:seeAlso gufo:TemporaryRelationshipSituation ,
+                                       gufo:concernsRelatedEndurant .
+
+
 ###  http://purl.org/nemo/gufo#concernsNonRigidType
 gufo:concernsNonRigidType rdf:type owl:ObjectProperty ;
                           rdfs:subPropertyOf gufo:concernsType ;
@@ -225,13 +237,13 @@ gufo:concernsReifiedQualityValue rdf:type owl:ObjectProperty ,
 ###  http://purl.org/nemo/gufo#concernsRelatedEndurant
 gufo:concernsRelatedEndurant rdf:type owl:ObjectProperty ;
                              rdfs:subPropertyOf gufo:concernsThing ;
-                             owl:inverseOf gufo:standsInQualifiedRelationship ;
                              rdf:type owl:FunctionalProperty ;
                              rdfs:domain gufo:TemporaryRelationshipSituation ;
                              rdfs:range gufo:Endurant ;
                              rdfs:comment "Identifies the related gufo:Endurant in the gufo:TemporaryRelationshipSituation."@en ;
                              rdfs:label "concernsRelatedEndurant"@en ;
-                             rdfs:seeAlso gufo:TemporaryRelationshipSituation .
+                             rdfs:seeAlso gufo:TemporaryRelationshipSituation ,
+                                          gufo:concernsMainEndurant .
 
 
 ###  http://purl.org/nemo/gufo#concernsRelationshipType
@@ -1262,15 +1274,14 @@ gufo:QualityValueAttributionSituation rdf:type owl:Class ;
                                                                     )
                                                       ] ,
                                                       [ rdf:type owl:Restriction ;
+                                                        owl:onProperty gufo:concernsQualifiedEndurant ;
+                                                        owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                                        owl:onClass gufo:Endurant
+                                                      ] ,
+                                                      [ rdf:type owl:Restriction ;
                                                         owl:onProperty gufo:concernsQualityType ;
                                                         owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
                                                         owl:onClass gufo:EndurantType
-                                                      ] ,
-                                                      [ rdf:type owl:Restriction ;
-                                                        owl:onProperty [ owl:inverseOf gufo:standsInQualifiedAttribution
-                                                                       ] ;
-                                                        owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                                        owl:onClass gufo:Endurant
                                                       ] ;
                                       owl:disjointWith gufo:TemporaryConstitutionSituation ,
                                                        gufo:TemporaryInstantiationSituation ,
@@ -1410,12 +1421,6 @@ gufo:TemporaryConstitutionSituation rdf:type owl:Class ;
                                                       owl:onProperty gufo:concernsConstitutedEndurant ;
                                                       owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
                                                       owl:onClass gufo:Object
-                                                    ] ,
-                                                    [ rdf:type owl:Restriction ;
-                                                      owl:onProperty [ owl:inverseOf gufo:standsInQualifiedConstitution
-                                                                     ] ;
-                                                      owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                                      owl:onClass gufo:Object
                                                     ] ;
                                     owl:disjointWith gufo:TemporaryInstantiationSituation ,
                                                      gufo:TemporaryRelationshipSituation ;
@@ -1433,15 +1438,14 @@ This is a reification of constitution (in a solution that is similar to the qual
 gufo:TemporaryInstantiationSituation rdf:type owl:Class ;
                                      rdfs:subClassOf gufo:Situation ,
                                                      [ rdf:type owl:Restriction ;
+                                                       owl:onProperty gufo:concernsInstanciatedEndurant ;
+                                                       owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                                       owl:onClass gufo:Endurant
+                                                     ] ,
+                                                     [ rdf:type owl:Restriction ;
                                                        owl:onProperty gufo:concernsNonRigidType ;
                                                        owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
                                                        owl:onClass gufo:NonRigidType
-                                                     ] ,
-                                                     [ rdf:type owl:Restriction ;
-                                                       owl:onProperty [ owl:inverseOf gufo:standsInQualifiedInstantiation
-                                                                      ] ;
-                                                       owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                                       owl:onClass gufo:Endurant
                                                      ] ;
                                      owl:disjointWith gufo:TemporaryParthoodSituation ,
                                                       gufo:TemporaryRelationshipSituation ;
@@ -1459,13 +1463,12 @@ This solution is inspired in the qualified relation pattern (http://patterns.dat
 gufo:TemporaryParthoodSituation rdf:type owl:Class ;
                                 rdfs:subClassOf gufo:Situation ,
                                                 [ rdf:type owl:Restriction ;
-                                                  owl:onProperty gufo:concernsTemporaryWhole ;
+                                                  owl:onProperty gufo:concernsTemporaryPart ;
                                                   owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
                                                   owl:onClass gufo:Endurant
                                                 ] ,
                                                 [ rdf:type owl:Restriction ;
-                                                  owl:onProperty [ owl:inverseOf gufo:standsInQualifiedParthood
-                                                                 ] ;
+                                                  owl:onProperty gufo:concernsTemporaryWhole ;
                                                   owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
                                                   owl:onClass gufo:Endurant
                                                 ] ;
@@ -1490,15 +1493,14 @@ gufo:TemporaryRelationshipSituation rdf:type owl:Class ;
                                                       owl:someValuesFrom gufo:Endurant
                                                     ] ,
                                                     [ rdf:type owl:Restriction ;
+                                                      owl:onProperty gufo:concernsMainEndurant ;
+                                                      owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                                      owl:onClass gufo:Endurant
+                                                    ] ,
+                                                    [ rdf:type owl:Restriction ;
                                                       owl:onProperty gufo:concernsRelationshipType ;
                                                       owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
                                                       owl:onClass gufo:RelationshipType
-                                                    ] ,
-                                                    [ rdf:type owl:Restriction ;
-                                                      owl:onProperty [ owl:inverseOf gufo:standsInQualifiedRelationship
-                                                                     ] ;
-                                                      owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-                                                      owl:onClass gufo:Endurant
                                                     ] ;
                                     rdfs:comment """A gufo:Situation in which a gufo:Endurant temporarily stands in a relation with another gufo:Endurant (or other endurants in the case of n-ary relationships).
 
