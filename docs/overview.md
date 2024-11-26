@@ -546,7 +546,7 @@ In this case, John was born in 1977 and is considered a child until 1995:
     :JohnWasAChildFrom1977to1995 rdf:type gufo:TemporaryInstantiationSituation ;
                                 gufo:concernsNonRigidType :Child ;
                                 gufo:hasBeginPointInXSDDate "1977-10-01"^^xsd:date ;
-                                gufo:hasEndPointInXSDDate "1995-09-31"^^xsd:date .
+                                gufo:hasEndPointInXSDDate "1995-09-30"^^xsd:date .
 
     :JohnIsAdultFrom1995 rdf:type gufo:TemporaryInstantiationSituation ;
                                 gufo:concernsNonRigidType :Adult ;
