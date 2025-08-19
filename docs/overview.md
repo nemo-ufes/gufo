@@ -167,7 +167,7 @@ Reified aspects in gUFO are further divided into intrinsic aspects (qualities an
 
 > * Endurant
 >     * Aspect
->         * InstrinsicAspect
+>         * IntrinsicAspect
 >             * Quality
 >             * IntrinsicMode
 >         * ExtrinsicAspect
