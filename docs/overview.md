@@ -130,7 +130,7 @@ A gufo:Collection is a complex gufo:Object whose parts (the members of the colle
 
 A gufo:Quantity is complex gufo:Object that is a maximally-connected portion of stuff. A gufo:Quantity has a fixed constitution, and thus, removing or adding a sub-quantity would result in a different quantity. Examples include the portion of wine in a wine tank, a lump of clay, the gold that constitutes a wedding ring.
 
-The relations between a part and its whole are captured with the gufo:isObjectPropertPartOf property and its sub-properties, depending on the types of parts and complex objects involved:
+The relations between a part and its whole are captured with the gufo:isObjectProperPartOf property and its sub-properties, depending on the types of parts and complex objects involved:
 
 > * isObjectProperPartOf
 >     * isComponentOf - when the part is a component of a funcional complex
