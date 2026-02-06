@@ -1,0 +1,900 @@
+@prefix : <http://purl.org/nemo/gufo/car-rental#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix gufo: <http://purl.org/nemo/gufo#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rental: <http://purl.org/nemo/gufo/boilerplates/car-rental#> .
+@base <http://purl.org/nemo/gufo/boilerplates/car-rental> .
+
+<http://purl.org/nemo/gufo/boilerplates/car-rental> rdf:type owl:Ontology ;
+                                                     owl:imports gufo: ;
+                                                     <http://purl.org/dc/elements/1.1/creator> "Sales, Tiago P"^^xsd:string ;
+                                                     <http://purl.org/dc/elements/1.1/date> "2020-10-02"^^xsd:date ;
+                                                     <http://purl.org/dc/elements/1.1/title> "Car Rental Ontology (gUFO Demo)"@en ;
+                                                     rdfs:comment """This file demonstrates how to create a ontology by *specializing* gUFO classes in the taxonomy of individuals, while *instantiating* gUFO classes in the taxonomy of types.
+
+For example: 
+
+rental:CarRental  rdf:type owl:Class ;
+                         rdfs:subClassOf gufo:Relator ;
+                         rdf:type gufo:Kind .
+
+If you are opening this ontology on Protégé, you will see <rental:CarRental> seemly duplicated, as both a class and an individual. That occurs because gUFO leverages OWL's punning feature to characterize certain properties of types, a feature which is not explicitly supported by the tool."""@en .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#carOwner
+rental:carOwner rdf:type owl:ObjectProperty ;
+                rdfs:subPropertyOf gufo:mediates ;
+                rdfs:domain rental:CarOwnership ;
+                rdfs:range rental:CarAgency ;
+                rdfs:label "involves car owner" .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#confirmedBy
+rental:confirmedBy rdf:type owl:ObjectProperty ;
+                   rdfs:subPropertyOf gufo:mediates ;
+                   rdfs:domain rental:OfficialCommitment ;
+                   rdfs:range rental:Notary ;
+                   rdfs:label "confirmed by" .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#formalizedBy
+rental:formalizedBy rdf:type owl:ObjectProperty ;
+                    rdfs:subPropertyOf gufo:mediates ;
+                    rdfs:domain rental:OfficialCommitment ;
+                    rdfs:range rental:Contract ;
+                    rdfs:label "formalized by" .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#includes
+rental:includes rdf:type owl:ObjectProperty ;
+                rdfs:subPropertyOf gufo:mediates ;
+                rdfs:domain rental:CarRental ;
+                rdfs:range rental:RentalCar ;
+                rdfs:label "includes" .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#involvesCar
+rental:involvesCar rdf:type owl:ObjectProperty ;
+                   rdfs:subPropertyOf gufo:mediates ;
+                   rdfs:domain rental:CarOwnership ;
+                   rdfs:range rental:Car ;
+                   rdfs:label "involves car" .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#involvesEmployee
+rental:involvesEmployee rdf:type owl:ObjectProperty ;
+                        rdfs:subPropertyOf gufo:mediates ;
+                        rdfs:domain rental:Employment ;
+                        rdfs:range rental:Employee ;
+                        rdfs:label "involves employee" .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#involvesEmployer
+rental:involvesEmployer rdf:type owl:ObjectProperty ;
+                        rdfs:subPropertyOf gufo:mediates ;
+                        rdfs:domain rental:Employment ;
+                        rdfs:range rental:Organization ;
+                        rdfs:label "involves employer" .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#involvesHusband
+rental:involvesHusband rdf:type owl:ObjectProperty ;
+                       rdfs:subPropertyOf gufo:mediates ;
+                       rdfs:domain rental:Marriage ;
+                       rdfs:range rental:Husband ;
+                       rdfs:label "involves husband" .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#involvesPossession
+rental:involvesPossession rdf:type owl:ObjectProperty ;
+                          rdfs:subPropertyOf gufo:mediates ;
+                          rdfs:domain rental:Ownership ;
+                          rdfs:range rental:Ownable ;
+                          rdfs:label "involves possession" .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#involvesWife
+rental:involvesWife rdf:type owl:ObjectProperty ;
+                    rdfs:subPropertyOf gufo:mediates ;
+                    rdfs:domain rental:Marriage ;
+                    rdfs:range rental:Wife ;
+                    rdfs:label "involves wife" .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#owner
+rental:owner rdf:type owl:ObjectProperty ;
+             rdfs:subPropertyOf gufo:mediates ;
+             rdfs:domain rental:Ownership ;
+             rdfs:range rental:Agent ;
+             rdfs:label "involves owner" .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#processedBy
+rental:processedBy rdf:type owl:ObjectProperty ;
+                   rdfs:subPropertyOf gufo:mediates ;
+                   rdfs:domain rental:CarRental ;
+                   rdfs:range rental:ResponsibleEmployee ;
+                   rdfs:label "processed by" .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#protects
+rental:protects rdf:type owl:ObjectProperty ;
+                rdfs:subPropertyOf gufo:mediates ;
+                rdfs:domain rental:RentalInsurance ;
+                rdfs:range rental:CarRental ;
+                rdfs:label "protects" .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#providedBy
+rental:providedBy rdf:type owl:ObjectProperty ;
+                  rdfs:subPropertyOf gufo:mediates ;
+                  rdfs:domain rental:RentalInsurance ;
+                  rdfs:range rental:InsuranceCompany ;
+                  rdfs:label "provided by" .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#requestedBy
+rental:requestedBy rdf:type owl:ObjectProperty ;
+                   rdfs:subPropertyOf gufo:mediates ;
+                   rdfs:domain rental:CarRental ;
+                   rdfs:range rental:Customer ;
+                   rdfs:label "requested by" .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Adult
+rental:Adult rdf:type owl:Class ;
+             rdfs:subClassOf rental:LivingPerson .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Agent
+rental:Agent rdf:type owl:Class ;
+             rdfs:subClassOf gufo:FunctionalComplex .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#AvailableCar
+rental:AvailableCar rdf:type owl:Class ;
+                    rdfs:subClassOf rental:Car ;
+                    owl:disjointWith rental:UnderMaintenanceCar .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Car
+rental:Car rdf:type owl:Class ;
+           owl:equivalentClass [ rdf:type owl:Class ;
+                                 owl:unionOf ( rental:AvailableCar
+                                               rental:UnderMaintenanceCar
+                                             )
+                               ] ;
+           rdfs:subClassOf rental:Ownable ,
+                           [ rdf:type owl:Restriction ;
+                             owl:onProperty [ owl:inverseOf rental:involvesCar
+                                            ] ;
+                             owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                             owl:onClass rental:CarOwnership
+                           ] .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#CarAgency
+rental:CarAgency rdf:type owl:Class ;
+                 rdfs:subClassOf rental:Organization .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#CarOwnership
+rental:CarOwnership rdf:type owl:Class ;
+                    rdfs:subClassOf rental:Ownership ,
+                                    [ rdf:type owl:Restriction ;
+                                      owl:onProperty rental:carOwner ;
+                                      owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                      owl:onClass rental:CarAgency
+                                    ] ,
+                                    [ rdf:type owl:Restriction ;
+                                      owl:onProperty rental:involvesCar ;
+                                      owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                      owl:onClass rental:Car
+                                    ] .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#CarRental
+rental:CarRental rdf:type owl:Class ;
+                 rdfs:subClassOf gufo:Relator ,
+                                 [ rdf:type owl:Restriction ;
+                                   owl:onProperty rental:includes ;
+                                   owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                   owl:onClass rental:RentalCar
+                                 ] ,
+                                 [ rdf:type owl:Restriction ;
+                                   owl:onProperty rental:processedBy ;
+                                   owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                   owl:onClass rental:ResponsibleEmployee
+                                 ] ,
+                                 [ rdf:type owl:Restriction ;
+                                   owl:onProperty rental:requestedBy ;
+                                   owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                   owl:onClass rental:Customer
+                                 ] .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Child
+rental:Child rdf:type owl:Class ;
+             rdfs:subClassOf rental:LivingPerson .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Contract
+rental:Contract rdf:type owl:Class ;
+                rdfs:subClassOf gufo:FunctionalComplex ,
+                                [ rdf:type owl:Restriction ;
+                                  owl:onProperty [ owl:inverseOf rental:formalizedBy
+                                                 ] ;
+                                  owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                  owl:onClass rental:OfficialCommitment
+                                ] .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#CorporateCustomer
+rental:CorporateCustomer rdf:type owl:Class ;
+                         rdfs:subClassOf rental:Customer ,
+                                         rental:Organization ;
+                         owl:disjointWith rental:PersonalCustomer .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Customer
+rental:Customer rdf:type owl:Class ;
+                owl:equivalentClass [ rdf:type owl:Class ;
+                                      owl:unionOf ( rental:CorporateCustomer
+                                                    rental:PersonalCustomer
+                                                  )
+                                    ] ;
+                rdfs:subClassOf gufo:FunctionalComplex ,
+                                [ rdf:type owl:Restriction ;
+                                  owl:onProperty [ owl:inverseOf rental:requestedBy
+                                                 ] ;
+                                  owl:someValuesFrom rental:CarRental
+                                ] .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#DeceasedPerson
+rental:DeceasedPerson rdf:type owl:Class ;
+                      rdfs:subClassOf rental:Person ;
+                      owl:disjointWith rental:LivingPerson .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Employee
+rental:Employee rdf:type owl:Class ;
+                rdfs:subClassOf rental:Person ,
+                                [ rdf:type owl:Restriction ;
+                                  owl:onProperty [ owl:inverseOf rental:involvesEmployee
+                                                 ] ;
+                                  owl:someValuesFrom rental:Employment
+                                ] .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Employment
+rental:Employment rdf:type owl:Class ;
+                  rdfs:subClassOf rental:OfficialCommitment ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty rental:involvesEmployee ;
+                                    owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                    owl:onClass rental:Employee
+                                  ] ,
+                                  [ rdf:type owl:Restriction ;
+                                    owl:onProperty rental:involvesEmployer ;
+                                    owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                    owl:onClass rental:Organization
+                                  ] .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Husband
+rental:Husband rdf:type owl:Class ;
+               rdfs:subClassOf rental:Man ,
+                               [ rdf:type owl:Restriction ;
+                                 owl:onProperty [ owl:inverseOf rental:involvesHusband
+                                                ] ;
+                                 owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                 owl:onClass rental:Marriage
+                               ] .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#InsuranceCompany
+rental:InsuranceCompany rdf:type owl:Class ;
+                        rdfs:subClassOf rental:Organization .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#LivingPerson
+rental:LivingPerson rdf:type owl:Class ;
+                    owl:equivalentClass [ rdf:type owl:Class ;
+                                          owl:unionOf ( rental:Adult
+                                                        rental:Child
+                                                        rental:Teenager
+                                                      )
+                                        ] ;
+                    rdfs:subClassOf rental:Person .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#LogisticsOperator
+rental:LogisticsOperator rdf:type owl:Class ;
+                         rdfs:subClassOf rental:Organization .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Man
+rental:Man rdf:type owl:Class ;
+           rdfs:subClassOf rental:Person ;
+           owl:disjointWith rental:Woman .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Marriage
+rental:Marriage rdf:type owl:Class ;
+                rdfs:subClassOf gufo:Relator ,
+                                [ rdf:type owl:Restriction ;
+                                  owl:onProperty rental:involvesHusband ;
+                                  owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                  owl:onClass rental:Husband
+                                ] ,
+                                [ rdf:type owl:Restriction ;
+                                  owl:onProperty rental:involvesWife ;
+                                  owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                  owl:onClass rental:Wife
+                                ] .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Notary
+rental:Notary rdf:type owl:Class ;
+              rdfs:subClassOf rental:Person ,
+                              [ rdf:type owl:Restriction ;
+                                owl:onProperty [ owl:inverseOf rental:confirmedBy
+                                               ] ;
+                                owl:someValuesFrom rental:OfficialCommitment
+                              ] .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#OfficialCommitment
+rental:OfficialCommitment rdf:type owl:Class ;
+                          rdfs:subClassOf gufo:Relator ,
+                                          [ rdf:type owl:Restriction ;
+                                            owl:onProperty rental:formalizedBy ;
+                                            owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                            owl:onClass rental:Contract
+                                          ] ,
+                                          [ rdf:type owl:Restriction ;
+                                            owl:onProperty rental:confirmedBy ;
+                                            owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                            owl:onClass rental:Notary
+                                          ] .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Organization
+rental:Organization rdf:type owl:Class ;
+                    rdfs:subClassOf rental:Agent .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Ownable
+rental:Ownable rdf:type owl:Class ;
+               rdfs:subClassOf gufo:FunctionalComplex ,
+                               [ rdf:type owl:Restriction ;
+                                 owl:onProperty [ owl:inverseOf rental:involvesPossession
+                                                ] ;
+                                 owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                 owl:onClass rental:Ownership
+                               ] .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Ownership
+rental:Ownership rdf:type owl:Class ;
+                 rdfs:subClassOf gufo:Relator ,
+                                 [ rdf:type owl:Restriction ;
+                                   owl:onProperty rental:involvesPossession ;
+                                   owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                   owl:onClass rental:Ownable
+                                 ] ,
+                                 [ rdf:type owl:Restriction ;
+                                   owl:onProperty rental:owner ;
+                                   owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                   owl:onClass rental:Agent
+                                 ] .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Person
+rental:Person rdf:type owl:Class ;
+              owl:equivalentClass [ rdf:type owl:Class ;
+                                    owl:unionOf ( rental:DeceasedPerson
+                                                  rental:LivingPerson
+                                                )
+                                  ] ,
+                                  [ rdf:type owl:Class ;
+                                    owl:unionOf ( rental:Man
+                                                  rental:Woman
+                                                )
+                                  ] ;
+              rdfs:subClassOf rental:Agent .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#PersonalCustomer
+rental:PersonalCustomer rdf:type owl:Class ;
+                        rdfs:subClassOf rental:Adult ,
+                                        rental:Customer .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#RentalCar
+rental:RentalCar rdf:type owl:Class ;
+                 rdfs:subClassOf rental:AvailableCar ,
+                                 [ rdf:type owl:Restriction ;
+                                   owl:onProperty [ owl:inverseOf rental:includes
+                                                  ] ;
+                                   owl:someValuesFrom rental:CarRental
+                                 ] .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#RentalInsurance
+rental:RentalInsurance rdf:type owl:Class ;
+                       rdfs:subClassOf gufo:Relator ,
+                                       [ rdf:type owl:Restriction ;
+                                         owl:onProperty rental:protects ;
+                                         owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                         owl:onClass rental:CarRental
+                                       ] ,
+                                       [ rdf:type owl:Restriction ;
+                                         owl:onProperty rental:providedBy ;
+                                         owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                         owl:onClass rental:InsuranceCompany
+                                       ] .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#ResponsibleEmployee
+rental:ResponsibleEmployee rdf:type owl:Class ;
+                           rdfs:subClassOf rental:Employee ,
+                                           [ rdf:type owl:Restriction ;
+                                             owl:onProperty [ owl:inverseOf rental:processedBy
+                                                            ] ;
+                                             owl:someValuesFrom rental:CarRental
+                                           ] .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Teenager
+rental:Teenager rdf:type owl:Class ;
+                rdfs:subClassOf rental:LivingPerson .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#UnderMaintenanceCar
+rental:UnderMaintenanceCar rdf:type owl:Class ;
+                           rdfs:subClassOf rental:Car .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Wife
+rental:Wife rdf:type owl:Class ;
+            rdfs:subClassOf rental:Woman ,
+                            [ rdf:type owl:Restriction ;
+                              owl:onProperty [ owl:inverseOf rental:involvesWife
+                                             ] ;
+                              owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                              owl:onClass rental:Marriage
+                            ] .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Woman
+rental:Woman rdf:type owl:Class ;
+             rdfs:subClassOf rental:Person .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Adult
+rental:Adult rdf:type owl:NamedIndividual ,
+                      gufo:Phase .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Agent
+rental:Agent rdf:type owl:NamedIndividual ,
+                      gufo:Category .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#AvailableCar
+rental:AvailableCar rdf:type owl:NamedIndividual ,
+                             gufo:Phase .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Car
+rental:Car rdf:type owl:NamedIndividual ,
+                    gufo:Kind .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#CarAgency
+rental:CarAgency rdf:type owl:NamedIndividual ,
+                          gufo:SubKind .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#CarOwnership
+rental:CarOwnership rdf:type owl:NamedIndividual ,
+                             gufo:Kind .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#CarRental
+rental:CarRental rdf:type owl:NamedIndividual ,
+                          gufo:Kind .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Child
+rental:Child rdf:type owl:NamedIndividual ,
+                      gufo:Phase .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Contract
+rental:Contract rdf:type owl:NamedIndividual ,
+                         gufo:Kind .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#CorporateCustomer
+rental:CorporateCustomer rdf:type owl:NamedIndividual ,
+                                  gufo:Role .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Customer
+rental:Customer rdf:type owl:NamedIndividual ,
+                         gufo:RoleMixin .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#DeceasedPerson
+rental:DeceasedPerson rdf:type owl:NamedIndividual ,
+                               gufo:Phase .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Employee
+rental:Employee rdf:type owl:NamedIndividual ,
+                         gufo:Role .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Employment
+rental:Employment rdf:type owl:NamedIndividual ,
+                           gufo:Kind .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Husband
+rental:Husband rdf:type owl:NamedIndividual ,
+                        gufo:Role .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#InsuranceCompany
+rental:InsuranceCompany rdf:type owl:NamedIndividual ,
+                                 gufo:SubKind .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#LivingPerson
+rental:LivingPerson rdf:type owl:NamedIndividual ,
+                             gufo:Phase .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#LogisticsOperator
+rental:LogisticsOperator rdf:type owl:NamedIndividual ,
+                                  gufo:SubKind .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Man
+rental:Man rdf:type owl:NamedIndividual ,
+                    gufo:SubKind .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Marriage
+rental:Marriage rdf:type owl:NamedIndividual ,
+                         gufo:Kind .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Notary
+rental:Notary rdf:type owl:NamedIndividual ,
+                       gufo:Role .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#OfficialCommitment
+rental:OfficialCommitment rdf:type owl:NamedIndividual ,
+                                   gufo:Category .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Organization
+rental:Organization rdf:type owl:NamedIndividual ,
+                             gufo:Kind .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Ownable
+rental:Ownable rdf:type owl:NamedIndividual ,
+                        gufo:Mixin .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Ownership
+rental:Ownership rdf:type owl:NamedIndividual ,
+                          gufo:Category .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Person
+rental:Person rdf:type owl:NamedIndividual ,
+                       gufo:Kind .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#PersonalCustomer
+rental:PersonalCustomer rdf:type owl:NamedIndividual ,
+                                 gufo:Role .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#RentalCar
+rental:RentalCar rdf:type owl:NamedIndividual ,
+                          gufo:Role .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#RentalInsurance
+rental:RentalInsurance rdf:type owl:NamedIndividual ,
+                                gufo:Kind .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#ResponsibleEmployee
+rental:ResponsibleEmployee rdf:type owl:NamedIndividual ,
+                                    gufo:Role .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Teenager
+rental:Teenager rdf:type owl:NamedIndividual ,
+                         gufo:Phase .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#UnderMaintenanceCar
+rental:UnderMaintenanceCar rdf:type owl:NamedIndividual ,
+                                    gufo:Phase .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Wife
+rental:Wife rdf:type owl:NamedIndividual ,
+                     gufo:Role .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#Woman
+rental:Woman rdf:type owl:NamedIndividual ,
+                      gufo:SubKind .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#boolean
+rental:boolean rdf:type owl:NamedIndividual ,
+                        gufo:AbstractIndividualType .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#byte
+rental:byte rdf:type owl:NamedIndividual ,
+                     gufo:AbstractIndividualType .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#char
+rental:char rdf:type owl:NamedIndividual ,
+                     gufo:AbstractIndividualType .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#double
+rental:double rdf:type owl:NamedIndividual ,
+                       gufo:AbstractIndividualType .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#float
+rental:float rdf:type owl:NamedIndividual ,
+                      gufo:AbstractIndividualType .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#int
+rental:int rdf:type owl:NamedIndividual ,
+                    gufo:AbstractIndividualType .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#long
+rental:long rdf:type owl:NamedIndividual ,
+                     gufo:AbstractIndividualType .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#short
+rental:short rdf:type owl:NamedIndividual ,
+                      gufo:AbstractIndividualType .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#string
+rental:string rdf:type owl:NamedIndividual ,
+                       gufo:AbstractIndividualType .
+
+
+###  http://purl.org/nemo/gufo/boilerplates/car-rental#void
+rental:void rdf:type owl:NamedIndividual ,
+                     gufo:AbstractIndividualType .
+
+
+#################################################################
+#    Annotations
+#################################################################
+
+rental:Adult rdfs:label "Adult" .
+
+
+rental:Agent rdfs:label "Agent" .
+
+
+rental:AvailableCar rdfs:label "Available Car" .
+
+
+rental:Car rdfs:label "Car" .
+
+
+rental:CarAgency rdfs:label "Car Agency" .
+
+
+rental:CarOwnership rdfs:label "Car Ownership" .
+
+
+rental:CarRental rdfs:label "Car Rental" .
+
+
+rental:Child rdfs:label "Child" .
+
+
+rental:Contract rdfs:label "Contract" .
+
+
+rental:CorporateCustomer rdfs:label "Corporate Customer" .
+
+
+rental:Customer rdfs:label "Customer" .
+
+
+rental:DeceasedPerson rdfs:label "Deceased Person" .
+
+
+rental:Employee rdfs:label "Employee" .
+
+
+rental:Employment rdfs:label "Employment" .
+
+
+rental:Husband rdfs:label "Husband" .
+
+
+rental:InsuranceCompany rdfs:label "Insurance Company" .
+
+
+rental:LivingPerson rdfs:label "Living Person" .
+
+
+rental:LogisticsOperator rdfs:label "Logistics Operator" .
+
+
+rental:Man rdfs:label "Man" .
+
+
+rental:Marriage rdfs:label "Marriage" .
+
+
+rental:Notary rdfs:label "Notary" .
+
+
+rental:OfficialCommitment rdfs:label "Official Commitment" .
+
+
+rental:Organization rdfs:label "Organization" .
+
+
+rental:Ownable rdfs:label "Ownable" .
+
+
+rental:Ownership rdfs:label "Ownership" .
+
+
+rental:Person rdfs:label "Person" .
+
+
+rental:PersonalCustomer rdfs:label "Personal Customer" .
+
+
+rental:RentalCar rdfs:label "Rental Car" .
+
+
+rental:RentalInsurance rdfs:label "Rental Insurance" .
+
+
+rental:ResponsibleEmployee rdfs:label "Responsible Employee" .
+
+
+rental:Teenager rdfs:label "Teenager" .
+
+
+rental:UnderMaintenanceCar rdfs:label "Under Maintenance Car" .
+
+
+rental:Wife rdfs:label "Wife" .
+
+
+rental:Woman rdfs:label "Woman" .
+
+
+<https://ontouml.org/example/school#isMediatedByCarOwnership> rdfs:label "involves car" .
+
+
+<https://ontouml.org/example/school#isMediatedByCarOwnership_inverse_jOCq4c6GAqACAg3c> rdfs:label "involves car owner" .
+
+
+<https://ontouml.org/example/school#isMediatedByCarRental> rdfs:label "processed by" .
+
+
+<https://ontouml.org/example/school#isMediatedByCarRental_inverse_NZgq4c6GAqACAg18> rdfs:label "requested by" .
+
+
+<https://ontouml.org/example/school#isMediatedByCarRental_inverse_aooq4c6GAqACAg2P> rdfs:label "includes" .
+
+
+<https://ontouml.org/example/school#isMediatedByEmployment> rdfs:label "involves employee" .
+
+
+<https://ontouml.org/example/school#isMediatedByEmployment_inverse_etZy4c6GAqACAgsu> rdfs:label "involves employer" .
+
+
+<https://ontouml.org/example/school#isMediatedByMarriage> rdfs:label "involves husband" .
+
+
+<https://ontouml.org/example/school#isMediatedByMarriage_inverse_YfBS4c6GAqACAgk8> rdfs:label "involves wife" .
+
+
+<https://ontouml.org/example/school#isMediatedByOfficialCommitment> rdfs:label "formalized by" .
+
+
+<https://ontouml.org/example/school#isMediatedByOfficialCommitment_inverse_BrFcMc6GAqACAiQh> rdfs:label "confirmed by" .
+
+
+<https://ontouml.org/example/school#isMediatedByOwnership> rdfs:label "involves possession" .
+
+
+<https://ontouml.org/example/school#isMediatedByOwnership_inverse_cM58Mc6GAqACAiXe> rdfs:label "involves owner" .
+
+
+<https://ontouml.org/example/school#isMediatedByRentalInsurance> rdfs:label "protects" .
+
+
+<https://ontouml.org/example/school#isMediatedByRentalInsurance_inverse_0oYsMc6GAqACAiJK> rdfs:label "provided by" .
+
+
+#################################################################
+#    General axioms
+#################################################################
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( rental:Adult
+                rental:Child
+                rental:Teenager
+              )
+] .
+
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( rental:Car
+                rental:Contract
+                rental:Organization
+                rental:Person
+              )
+] .
+
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( rental:CarAgency
+                rental:InsuranceCompany
+                rental:LogisticsOperator
+              )
+] .
+
+
+[ rdf:type owl:AllDisjointClasses ;
+  owl:members ( rental:CarOwnership
+                rental:CarRental
+                rental:Employment
+                rental:Marriage
+                rental:RentalInsurance
+              )
+] .
+
+
+###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi
