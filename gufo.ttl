@@ -1249,7 +1249,7 @@ gufo:Role rdf:type owl:Class ;
                           gufo:Sortal ;
           rdfs:comment """A gufo:EndurantType that both sortal and anti-rigid. It is defined by relational instantiation conditions. Roles are relationally dependent types, capturing relational properties shared by instances of a given kind.
 
-For example, \"Student\" may be considered a gufo:Role as a subclass of the gufo:Kind \"Person\", instantiated by all persons enrolled in a school. \""""@en ;
+For example, \"Student\" may be considered a gufo:Role as a subclass of the gufo:Kind \"Person\", instantiated by all persons enrolled in a school."""@en ;
           rdfs:label "Role"@en .
 
 
