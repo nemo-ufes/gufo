@@ -1384,7 +1384,7 @@ Examples include: the situation in which the United Kingdom is a member of the E
 
 Note that, since every instance of gufo:Quantity or gufo:FixedCollection only has essential parts, the gufo:TemporaryParthoodSituation should not be used to represent these parthood relations.
  
-This solution is inspired in the qualified relation pattern (http://patterns.dataincubator.org/book/qualified-relation.html).""" ;
+This solution is inspired in the qualified relation pattern (http://patterns.dataincubator.org/book/qualified-relation.html)."""@en ;
                                 rdfs:label "TemporaryParthoodSituation"@en .
 
 
