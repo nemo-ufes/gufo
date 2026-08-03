@@ -962,8 +962,7 @@ Consider, for example, a group of people understood as a gufo:FixedCollection. I
 ###  http://purl.org/nemo/gufo#FunctionalComplex
 gufo:FunctionalComplex rdf:type owl:Class ;
                        rdfs:subClassOf gufo:Object ;
-                       rdfs:comment gufo:isComponentOf ,
-                                    """A complex gufo:Object whose parts (components) play different roles in its composition. 
+                       rdfs:comment """A complex gufo:Object whose parts (components) play different roles in its composition. 
 
 For example, a person could be considered a gufo:FunctionalComplex with the various organs (heart, brain, lungs, etc.) playing different roles. Another example is a scrum team, which is composed by people playing the roles of scrum master, product owner, developer, etc.
 
