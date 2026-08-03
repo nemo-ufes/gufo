@@ -472,8 +472,8 @@ An event can also be related to the endurants that are created or terminated in 
                                         :Mary ;
                     gufo:wasCreatedIn :JohnMarysWedding.
 
-    :JohnMarysWedding rdf:type gufo:Event 
-                        gufo:hasBeginPointInXSDDate "2001-12-12"^^xsd:date .
+    :JohnMarysWedding rdf:type gufo:Event ;
+                        gufo:hasBeginPointInXSDDate "2001-12-12"^^xsd:date ;
                         gufo:hasEndPointInXSDDate "2001-12-12"^^xsd:date .
 
 The Space Shuttle Challenger (OV-099) was tragically destroyed during the launch of its tenth flight on January 28, 1986:
