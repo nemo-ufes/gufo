@@ -233,7 +233,7 @@ gufo:externallyDependsOn rdf:type owl:ObjectProperty ,
 
 For example, John's duty to return the book he borrowed from Mary (a gufo:ExtrinsicMode) depends externally on Mary.
 
-The identifed gufo:Endurant should  be external to the bearer of the extrinsic mode (see Guizzardi, 2005, p. 239). In other words, the identified endurant should not be a part or an intrisic aspect of the bearer of the extrinsic mode."""@en ;
+The identified gufo:Endurant should  be external to the bearer of the extrinsic mode (see Guizzardi, 2005, p. 239). In other words, the identified endurant should not be a part or an intrinsic aspect of the bearer of the extrinsic mode."""@en ;
                          rdfs:label "externallyDependsOn"@en .
 
 
@@ -617,7 +617,7 @@ gufo:wasTerminatedIn rdf:type owl:ObjectProperty ;
 
 For example, the Space Shuttle Challenger (OV-099) (a gufo:FunctionalComplex) was destroyed during the launch of its tenth flight (a gufo:Event). 
 
-Benevides et al. (2019) only discussed termination of objects; gufo:wasCreatedIn is extended to endurants in general. This means that a gufo:Relator (such as a marriage) can be declared terminated. Further, in that work \"terminatedBy\" required the event to be \"triggered\" by a situation in which the terminated object is present. We relax this requirement here, such that the object may be created and terminated in the scope of the identified gufo:Event.
+Benevides et al. (2019) only discussed termination of objects; gufo:wasTerminatedIn is extended to endurants in general. This means that a gufo:Relator (such as a marriage) can be declared terminated. Further, in that work \"terminatedBy\" required the event to be \"triggered\" by a situation in which the terminated object is present. We relax this requirement here, such that the object may be created and terminated in the scope of the identified gufo:Event.
 
 A. B. Benevides, J. R. Bourguet, G. Guizzardi, R. Penãloza, and J. P. A. Almeida, “Representing a reference foundational ontology of events in SROIQ,” Applied ontology, vol. 14, iss. 3, p. 293–334, 2019. <http://dx.doi.org/10.3233/AO-190214>"""@en ;
                      rdfs:label "wasTerminatedIn"@en .
@@ -646,7 +646,7 @@ gufo:hasBeginPointInXSDDate rdf:type owl:DatatypeProperty ,
                             rdfs:range xsd:date ;
                             rdfs:comment """Determines the begin point for a gufo:ConcreteIndividual, using a xsd:date literal.
 
-In the case of endurants, gufo:asBeginPointInXSDDate determines the time point when the endurant comes into existence. In the case of events, this data property determines the time point when the event starts to take place. In the case of situation, it determines the time point when the situation begins to hold.
+In the case of endurants, gufo:hasBeginPointInXSDDate determines the time point when the endurant comes into existence. In the case of events, this data property determines the time point when the event starts to take place. In the case of situation, it determines the time point when the situation begins to hold.
 
 Use gufo:hasBeginPoint instead when temporal entities are reified."""@en ;
                             rdfs:label "hasBeginPointInXSDDate"@en ;

@@ -135,7 +135,7 @@ The relations between a part and its whole are captured with the gufo:isObjectPr
 > * isObjectProperPartOf
 >     * isComponentOf - when the part is a component of a funcional complex
 >     * isCollectionMemberOf - when the part is a member of a collection
->     * isSubCollectionOf - when the part is a collection containing a proper subset of all the member of another collection
+>     * isSubCollectionOf - when the part is a collection containing a proper subset of all the members of another collection
 >     * isSubQuantityOf - when the part and the whole are quantities
 
 For example, John's brain is a component of John's:
@@ -192,7 +192,7 @@ As an intrinsic aspect, a gufo:Quality gufo:inheresIn a gufo:ConcreteIndividual.
     :Moon rdf:type :PhysicalObject .
 
     :MoonsMass rdf:type :Mass ;
-                    gufo:inheresIn :Moon
+                    gufo:inheresIn :Moon ;
                     gufo:hasQualityValue "7.34767309E22"^^xsd:double .
 
 A user may add that a mass must inhere in exactly one physical object:
