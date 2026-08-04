@@ -1,0 +1,169 @@
+@prefix : <https://purl.org/nemo/gufo-examples/qualities#> .
+@prefix gufo: <http://purl.org/nemo/gufo#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+#################################################################
+# gUFO usage example 03: Qualities and quality values
+#
+# Demonstrates the basic quality pattern (gufo:Quality +
+# gufo:hasQualityValue), the enumerated reified-value pattern
+# (gufo:QualityValue with owl:oneOf) and the multidimensional
+# reified-value pattern (gufo:hasValueComponent), across three small
+# retail products. See index.html for a guided walkthrough.
+#################################################################
+
+: a owl:Ontology ;
+    rdfs:label "gUFO example 03: Qualities and quality values"@en ;
+    rdfs:comment "A small ontology of retail products, illustrating gUFO's basic and advanced patterns for representing qualities."@en ;
+    owl:imports <https://purl.org/nemo/gufo#> .
+
+#################################################################
+# Product kinds
+#################################################################
+
+:Gemstone a owl:Class , gufo:Kind ;
+    rdfs:subClassOf gufo:FunctionalComplex ;
+    rdfs:label "Gemstone"@en .
+
+:TShirt a owl:Class , gufo:Kind ;
+    rdfs:subClassOf gufo:FunctionalComplex ;
+    rdfs:label "T-Shirt"@en .
+
+:Painting a owl:Class , gufo:Kind ;
+    rdfs:subClassOf gufo:FunctionalComplex ;
+    rdfs:label "Painting"@en .
+
+#################################################################
+# Pattern 1 (basic): a quality with a literal value
+#################################################################
+
+:Mass a owl:Class ;
+    rdfs:subClassOf gufo:Quality ,
+        [ a owl:Restriction ;
+          owl:onProperty gufo:inheresIn ;
+          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+          owl:onClass :Gemstone ] ;
+    rdfs:label "Mass"@en ;
+    rdfs:comment "A quality inhering in exactly one gemstone, given a value directly as a literal."@en .
+
+:massOf a owl:ObjectProperty ;
+    rdfs:subPropertyOf gufo:inheresIn ;
+    rdfs:domain :Mass ;
+    rdfs:range :Gemstone ;
+    rdfs:label "mass of"@en .
+
+:massInGrams a owl:DatatypeProperty ;
+    rdfs:subPropertyOf gufo:hasQualityValue ;
+    rdfs:domain :Mass ;
+    rdfs:range xsd:double ;
+    rdfs:label "mass in grams"@en .
+
+#################################################################
+# Pattern 2 (advanced, enumerated): a quality valued from a fixed
+# set of reified quality values
+#################################################################
+
+:ShirtSize a owl:Class ;
+    rdfs:subClassOf gufo:QualityValue ;
+    owl:equivalentClass [ a owl:Class ; owl:oneOf ( :S :M :L :XL ) ] ;
+    rdfs:label "Shirt size"@en ;
+    rdfs:comment "The value space for the Size quality of a t-shirt: a closed enumeration, not a literal range."@en .
+
+:S a :ShirtSize ; rdfs:label "S"@en .
+:M a :ShirtSize ; rdfs:label "M"@en .
+:L a :ShirtSize ; rdfs:label "L"@en .
+:XL a :ShirtSize ; rdfs:label "XL"@en .
+
+:Size a owl:Class ;
+    rdfs:subClassOf gufo:Quality ;
+    rdfs:label "Size"@en .
+
+:sizeOf a owl:ObjectProperty ;
+    rdfs:subPropertyOf gufo:inheresIn ;
+    rdfs:domain :Size ;
+    rdfs:range :TShirt ;
+    rdfs:label "size of"@en .
+
+:hasSizeValue a owl:ObjectProperty ;
+    rdfs:subPropertyOf gufo:hasReifiedQualityValue ;
+    rdfs:domain :Size ;
+    rdfs:range :ShirtSize ;
+    rdfs:label "has size value"@en .
+
+#################################################################
+# Pattern 3 (advanced, multidimensional): a quality valued from a
+# reified value with several components
+#################################################################
+
+:ColorValueInRGB a owl:Class ;
+    rdfs:subClassOf gufo:QualityValue ;
+    rdfs:label "Color value in RGB"@en ;
+    rdfs:comment "A point in a three-dimensional value space (red, green, blue components), used as the value of a Color quality."@en .
+
+:hasRedValueComponent a owl:DatatypeProperty ;
+    rdfs:subPropertyOf gufo:hasValueComponent ;
+    rdfs:domain :ColorValueInRGB ;
+    rdfs:range xsd:nonNegativeInteger ;
+    rdfs:label "has red value component"@en .
+
+:hasGreenValueComponent a owl:DatatypeProperty ;
+    rdfs:subPropertyOf gufo:hasValueComponent ;
+    rdfs:domain :ColorValueInRGB ;
+    rdfs:range xsd:nonNegativeInteger ;
+    rdfs:label "has green value component"@en .
+
+:hasBlueValueComponent a owl:DatatypeProperty ;
+    rdfs:subPropertyOf gufo:hasValueComponent ;
+    rdfs:domain :ColorValueInRGB ;
+    rdfs:range xsd:nonNegativeInteger ;
+    rdfs:label "has blue value component"@en .
+
+:Color a owl:Class ;
+    rdfs:subClassOf gufo:Quality ;
+    rdfs:label "Color"@en .
+
+:colorOf a owl:ObjectProperty ;
+    rdfs:subPropertyOf gufo:inheresIn ;
+    rdfs:domain :Color ;
+    rdfs:range :Painting ;
+    rdfs:label "color of"@en .
+
+:hasColorValueInRGB a owl:ObjectProperty ;
+    rdfs:subPropertyOf gufo:hasReifiedQualityValue ;
+    rdfs:domain :Color ;
+    rdfs:range :ColorValueInRGB ;
+    rdfs:label "has color value in RGB"@en .
+
+#################################################################
+# Individuals
+#################################################################
+
+:Gemstone1 a :Gemstone ;
+    rdfs:label "Gemstone #1"@en .
+
+:Gemstone1Mass a :Mass ;
+    :massOf :Gemstone1 ;
+    :massInGrams "4.5"^^xsd:double ;
+    rdfs:label "Gemstone #1's mass"@en .
+
+:TShirt1 a :TShirt ;
+    rdfs:label "T-Shirt #1"@en .
+
+:TShirt1Size a :Size ;
+    :sizeOf :TShirt1 ;
+    :hasSizeValue :M ;
+    rdfs:label "T-Shirt #1's size"@en .
+
+:Painting1 a :Painting ;
+    rdfs:label "Painting #1 (\"Blue Monochrome\")"@en .
+
+:Painting1Color a :Color ;
+    :colorOf :Painting1 ;
+    :hasColorValueInRGB [ a :ColorValueInRGB ;
+        :hasRedValueComponent "0"^^xsd:nonNegativeInteger ;
+        :hasGreenValueComponent "47"^^xsd:nonNegativeInteger ;
+        :hasBlueValueComponent "167"^^xsd:nonNegativeInteger ] ;
+    rdfs:label "Painting #1's color"@en .

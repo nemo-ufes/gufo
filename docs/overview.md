@@ -20,6 +20,8 @@
 
 See also [reference table of contents](#toc).
 
+For worked examples applying this guide, see the [gUFO usage examples](examples/index.html): seven small, realistic ontologies, each covering one part of the taxonomy discussed below and validated with an OWL 2 DL reasoner and the [gUFO SHACL shapes](https://github.com/nemo-ufes/gufoshapes).
+
 <a name="scenarios"></a>
 
 ### 1. Usage Scenarios

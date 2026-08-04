@@ -1,0 +1,223 @@
+@prefix : <https://purl.org/nemo/gufo-examples/situations#> .
+@prefix gufo: <http://purl.org/nemo/gufo#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+#################################################################
+# gUFO usage example 06: Situations
+#
+# Demonstrates gUFO's five gufo:Situation subclasses --
+# QualityValueAttributionSituation, TemporaryInstantiationSituation,
+# TemporaryParthoodSituation, TemporaryConstitutionSituation and
+# TemporaryRelationshipSituation -- plus gufo:broughtAbout and
+# gufo:contributedToTrigger, in a patient health record. See
+# index.html for a guided walkthrough. Patient names are fictional.
+#################################################################
+
+: a owl:Ontology ;
+    rdfs:label "gUFO example 06: Situations"@en ;
+    rdfs:comment "A small ontology of a patient health record, illustrating gUFO's situation-based patterns for tracking change: quality value attribution, contingent instantiation, temporary parthood, temporary constitution, and temporary relationships."@en ;
+    owl:imports <https://purl.org/nemo/gufo#> .
+
+#################################################################
+# Endurant classes
+#################################################################
+
+:Patient a owl:Class , gufo:Kind ;
+    rdfs:subClassOf gufo:FunctionalComplex ;
+    rdfs:label "Patient"@en .
+
+:OverweightPerson a owl:Class , gufo:Phase ;
+    rdfs:subClassOf :Patient ;
+    rdfs:label "Overweight person"@en ;
+    rdfs:comment "A phase a patient may be in for a while and later leave, tracked here with a TemporaryInstantiationSituation rather than a plain rdf:type assertion, so the period during which it held is recorded."@en .
+
+:FebrilePatient a owl:Class , gufo:Phase ;
+    rdfs:subClassOf :Patient ;
+    rdfs:label "Febrile patient"@en .
+
+:Weight a owl:Class ;
+    rdfs:subClassOf gufo:Quality ;
+    rdfs:label "Weight"@en ;
+    rdfs:comment "A mutable quality: unlike example 3's qualities, Weight's value is not given once via gufo:hasQualityValue, but tracked over time via QualityValueAttributionSituation below."@en .
+
+:Heart a owl:Class , gufo:Kind ;
+    rdfs:subClassOf gufo:FunctionalComplex ;
+    rdfs:label "Heart"@en .
+
+:DentalCrown a owl:Class , gufo:Kind ;
+    rdfs:subClassOf gufo:FunctionalComplex ;
+    rdfs:label "Dental crown"@en .
+
+:PorcelainQuantity a owl:Class , gufo:Kind ;
+    rdfs:subClassOf gufo:Quantity ;
+    rdfs:label "Quantity of porcelain"@en .
+
+:CompositeResinQuantity a owl:Class , gufo:Kind ;
+    rdfs:subClassOf gufo:Quantity ;
+    rdfs:label "Quantity of composite resin"@en .
+
+#################################################################
+# Event classes (for broughtAbout / contributedToTrigger)
+#################################################################
+
+:HeartTransplantSurgery a owl:Class ;
+    rdfs:subClassOf gufo:Event ;
+    rdfs:label "Heart transplant surgery"@en .
+
+:SepsisAlert a owl:Class ;
+    rdfs:subClassOf gufo:Event ;
+    rdfs:label "Sepsis alert"@en ;
+    rdfs:comment "A clinical decision support event: an alert firing to prompt urgent review."@en .
+
+#################################################################
+# A comparative relationship type, for TemporaryRelationshipSituation
+#################################################################
+
+:heavierThan a owl:ObjectProperty , gufo:ComparativeRelationshipType ;
+    rdfs:domain :Patient ;
+    rdfs:range :Patient ;
+    gufo:isDerivedFrom :Weight ;
+    rdfs:label "heavier than"@en ;
+    rdfs:comment "A relationship type reducible to the Weight quality of the two related patients -- see gUFO's gufo:ComparativeRelationshipType."@en .
+
+:standsAsHeavierPatient a owl:ObjectProperty ;
+    rdfs:subPropertyOf gufo:standsInQualifiedRelationship ;
+    rdfs:domain :Patient ;
+    rdfs:label "stands as heavier patient in"@en .
+
+:concernsLighterPatient a owl:ObjectProperty ;
+    rdfs:subPropertyOf gufo:concernsRelatedEndurant ;
+    rdfs:range :Patient ;
+    rdfs:label "concerns lighter patient"@en .
+
+#################################################################
+# Individuals: the two patients
+#################################################################
+
+:Nora a :Patient ;
+    rdfs:label "Nora Whitfield"@en .
+
+:Miguel a :Patient ;
+    rdfs:label "Miguel Santos"@en .
+
+#################################################################
+# 1. QualityValueAttributionSituation -- weight tracked over time
+#################################################################
+
+:NoraWeighs82KgIn2023 a gufo:QualityValueAttributionSituation ;
+    gufo:concernsQualityType :Weight ;
+    gufo:concernsQualityValue "82.0"^^xsd:double ;
+    gufo:hasBeginPointInXSDDate "2023-01-10"^^xsd:date ;
+    gufo:hasEndPointInXSDDate "2023-06-30"^^xsd:date ;
+    rdfs:label "Nora weighs 82 kg (Jan-Jun 2023)"@en .
+
+:NoraWeighs75KgIn2024 a gufo:QualityValueAttributionSituation ;
+    gufo:concernsQualityType :Weight ;
+    gufo:concernsQualityValue "75.0"^^xsd:double ;
+    gufo:hasBeginPointInXSDDate "2024-01-15"^^xsd:date ;
+    rdfs:label "Nora weighs 75 kg (from Jan 2024)"@en .
+
+:Nora gufo:standsInQualifiedAttribution :NoraWeighs82KgIn2023 , :NoraWeighs75KgIn2024 .
+
+#################################################################
+# 2. TemporaryInstantiationSituation -- a phase held for a while
+#################################################################
+
+:NoraWasOverweightUntilJune2023 a gufo:TemporaryInstantiationSituation ;
+    gufo:concernsNonRigidType :OverweightPerson ;
+    gufo:hasBeginPointInXSDDate "2020-03-01"^^xsd:date ;
+    gufo:hasEndPointInXSDDate "2023-06-30"^^xsd:date ;
+    rdfs:label "Nora was overweight (Mar 2020 - Jun 2023)"@en ;
+    rdfs:comment "Ends exactly when her weight, tracked above, drops out of the overweight range."@en .
+
+:Nora gufo:standsInQualifiedInstantiation :NoraWasOverweightUntilJune2023 .
+
+:NoraWasFebrileOnAdmission a gufo:TemporaryInstantiationSituation ;
+    gufo:concernsNonRigidType :FebrilePatient ;
+    gufo:hasBeginPointInXSDDateTimeStamp "2024-02-02T08:00:00Z"^^xsd:dateTimeStamp ;
+    gufo:hasEndPointInXSDDateTimeStamp "2024-02-02T14:00:00Z"^^xsd:dateTimeStamp ;
+    gufo:contributedToTrigger :SepsisAlert20240202 ;
+    rdfs:label "Nora was febrile on admission (2024-02-02)"@en .
+
+:Nora gufo:standsInQualifiedInstantiation :NoraWasFebrileOnAdmission .
+
+:SepsisAlert20240202 a :SepsisAlert ;
+    gufo:hasBeginPointInXSDDateTimeStamp "2024-02-02T14:05:00Z"^^xsd:dateTimeStamp ;
+    rdfs:label "Sepsis alert for Nora, 2024-02-02"@en ;
+    rdfs:comment "Nora's fever on admission is not, by itself, sufficient to explain the alert (other vitals matter too), so it contributed to triggering it rather than bringing it about outright."@en .
+
+#################################################################
+# 3. TemporaryParthoodSituation -- a heart transplant, plus
+#    broughtAbout linking it to the surgery that caused it
+#################################################################
+
+:NoraNativeHeart a :Heart ;
+    rdfs:label "Nora's native heart"@en .
+
+:DonorHeart881 a :Heart ;
+    rdfs:label "Donor heart #881"@en .
+
+:NoraHadNativeHeart a gufo:TemporaryParthoodSituation ;
+    gufo:concernsTemporaryWhole :Nora ;
+    gufo:hasEndPointInXSDDate "2024-03-05"^^xsd:date ;
+    rdfs:label "Nora had her native heart (until 2024-03-05)"@en .
+
+:NoraNativeHeart gufo:standsInQualifiedParthood :NoraHadNativeHeart .
+
+:NoraHasDonorHeart a gufo:TemporaryParthoodSituation ;
+    gufo:concernsTemporaryWhole :Nora ;
+    gufo:hasBeginPointInXSDDate "2024-03-05"^^xsd:date ;
+    rdfs:label "Nora has the donor heart (from 2024-03-05)"@en .
+
+:DonorHeart881 gufo:standsInQualifiedParthood :NoraHasDonorHeart .
+
+:NoraHeartTransplant20240305 a :HeartTransplantSurgery ;
+    gufo:hasBeginPointInXSDDate "2024-03-05"^^xsd:date ;
+    gufo:broughtAbout :NoraHasDonorHeart ;
+    rdfs:label "Nora's heart transplant surgery, 2024-03-05"@en ;
+    rdfs:comment "The surgery is sufficient by itself to bring about the new parthood situation, unlike the weaker link used for contributedToTrigger above."@en .
+
+#################################################################
+# 4. TemporaryConstitutionSituation -- a crown re-made in a
+#    different material
+#################################################################
+
+:NoraCrown a :DentalCrown ;
+    rdfs:label "Nora's dental crown"@en .
+
+:OriginalPorcelainBatch a :PorcelainQuantity ;
+    rdfs:label "Original porcelain batch"@en .
+
+:ReplacementResinBatch a :CompositeResinQuantity ;
+    rdfs:label "Replacement composite resin batch"@en .
+
+:NoraCrownWasPorcelain a gufo:TemporaryConstitutionSituation ;
+    gufo:concernsConstitutedEndurant :NoraCrown ;
+    gufo:hasEndPointInXSDDate "2022-11-20"^^xsd:date ;
+    rdfs:label "Nora's crown was constituted by porcelain (until 2022-11-20)"@en .
+
+:OriginalPorcelainBatch gufo:standsInQualifiedConstitution :NoraCrownWasPorcelain .
+
+:NoraCrownIsResin a gufo:TemporaryConstitutionSituation ;
+    gufo:concernsConstitutedEndurant :NoraCrown ;
+    gufo:hasBeginPointInXSDDate "2022-11-21"^^xsd:date ;
+    rdfs:label "Nora's crown is constituted by composite resin (from 2022-11-21)"@en ;
+    rdfs:comment "Same crown, same identity, throughout -- but a different material constitutes it after the repair."@en .
+
+:ReplacementResinBatch gufo:standsInQualifiedConstitution :NoraCrownIsResin .
+
+#################################################################
+# 5. TemporaryRelationshipSituation -- a comparison that can change
+#################################################################
+
+:NoraHeavierThanMiguelOn20240115 a gufo:TemporaryRelationshipSituation ;
+    gufo:concernsRelationshipType :heavierThan ;
+    :concernsLighterPatient :Miguel ;
+    gufo:hasBeginPointInXSDDate "2024-01-15"^^xsd:date ;
+    gufo:hasEndPointInXSDDate "2024-01-15"^^xsd:date ;
+    rdfs:label "Nora heavier than Miguel at the 2024-01-15 intake"@en .
+
+:Nora :standsAsHeavierPatient :NoraHeavierThanMiguelOn20240115 .

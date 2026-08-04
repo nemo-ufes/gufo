@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>gUFO example 4: Relators and extrinsic aspects -- Employment &amp; marriage</title>
+<link rel="stylesheet" type="text/css" href="../common/style.css">
+</head>
+<body>
+
+<p class="breadcrumb"><a href="../index.html">gUFO examples</a> &raquo; 4. Relators and extrinsic aspects</p>
+
+<h1>Example 4: Relators and extrinsic aspects</h1>
+<p class="tagline">Employment &amp; marriage -- gufo:Relator, gufo:mediates, rights &amp; duties, MaterialRelationshipType</p>
+
+<div class="concept-badges">
+<span class="badge">gufo:Relator</span>
+<span class="badge">gufo:mediates</span>
+<span class="badge">gufo:ExtrinsicMode</span>
+<span class="badge">gufo:externallyDependsOn</span>
+<span class="badge">gufo:isAspectProperPartOf</span>
+<span class="badge">gufo:MaterialRelationshipType</span>
+<span class="badge">gufo:isDerivedFrom</span>
+</div>
+
+<nav class="example-nav">
+<a href="../03-qualities/index.html">&larr; Previous: Qualities</a>
+<a href="../index.html">All examples</a>
+<a href="../05-events/index.html">Next: Events &rarr;</a>
+</nav>
+
+<div class="callout goal">
+<h4>What you'll learn</h4>
+<p>An OWL object property like <code>:employedBy</code> can link an employee to their employer, but it
+cannot, by itself, say when the employment began, or that it comes with a right to be paid and a duty to
+show up. gUFO's <code>gufo:Relator</code> reifies a relationship into an individual in its own right, built
+from the roles it connects (see <a href="../01-endurant-types/index.html">example 1</a>) and, optionally,
+from the reciprocal rights and duties (extrinsic modes) that make it up. This example builds an employment
+relator the full way, and a marriage relator the lightweight way, and shows how the two connect back to a
+plain object property.</p>
+</div>
+
+<h2>The domain</h2>
+<p>Dana works for Globex Corp.; John and Mary are married. Both are relationships that exist as more than
+just "these two are linked" -- they have a start date, they came into being at some point (see
+<a href="../05-events/index.html">example 5</a> for the wedding itself), and, in the employment case, they
+carry concrete rights and duties for each side.</p>
+
+<h2>Step by step</h2>
+
+<div class="steps">
+
+<div class="step">
+<h3>The roles a relator connects</h3>
+<p>A relator mediates entities playing roles -- here, the same <code>:Employee</code> and
+<code>:Employer</code> roles that would be declared exactly as in
+<a href="../01-endurant-types/index.html">example 1</a>:</p>
+<pre><code>:Employee a owl:Class , gufo:Role ; rdfs:subClassOf :Person .
+:Employer a owl:Class , gufo:Role ; rdfs:subClassOf :Organization .</code></pre>
+</div>
+
+<div class="step">
+<h3>The relator itself, and sub-properties of <code>gufo:mediates</code></h3>
+<p><code>:Employment</code> is declared a <code>gufo:Relator</code>. Two sub-properties of
+<code>gufo:mediates</code>, one per side, let the data distinguish which mediated party plays which role --
+important once a relator connects more than two parties, or connects parties of the same kind on both
+sides:</p>
+<pre><code>:Employment rdfs:subClassOf gufo:Relator .
+
+:involvesEmployee rdfs:subPropertyOf gufo:mediates ;
+    rdfs:domain :Employment ; rdfs:range :Employee .
+:involvesEmployer rdfs:subPropertyOf gufo:mediates ;
+    rdfs:domain :Employment ; rdfs:range :Employer .
+
+:DanaGlobexEmployment a :Employment ;
+    :involvesEmployee :Dana ;
+    :involvesEmployer :GlobexCorp ;
+    gufo:hasBeginPointInXSDDate "2020-01-06"^^xsd:date .</code></pre>
+<p>gUFO itself requires every <code>gufo:Relator</code> to mediate at least two endurants (a qualified
+cardinality restriction on <code>gufo:mediates</code>) -- one reason a DL reasoner would in fact reject a
+relator individual asserted to mediate fewer than two things, unlike the sortality mistakes in
+<a href="../01-endurant-types/index.html">example 1</a>, which OWL cannot see at all.</p>
+</div>
+
+<div class="step">
+<h3>Decomposing the relator into rights and duties</h3>
+<p>A relator can be more than an opaque link: gUFO lets you reveal the reciprocal
+<code>gufo:ExtrinsicMode</code>s it is made of -- a right on one side is matched by a duty on the other, each
+inhering in one party and externally depending on the other, and each declared a proper part of the relator
+via <code>gufo:isAspectProperPartOf</code>:</p>
+<pre><code>:RightToSalary rdfs:subClassOf gufo:ExtrinsicMode .
+:DutyToPaySalary rdfs:subClassOf gufo:ExtrinsicMode .
+
+:DanasRightToSalary a :RightToSalary ;
+    gufo:inheresIn :Dana ;
+    gufo:externallyDependsOn :GlobexCorp ;
+    gufo:isAspectProperPartOf :DanaGlobexEmployment .
+
+:GlobexsDutyToPaySalary a :DutyToPaySalary ;
+    gufo:inheresIn :GlobexCorp ;
+    gufo:externallyDependsOn :Dana ;
+    gufo:isAspectProperPartOf :DanaGlobexEmployment .</code></pre>
+<p>The full ontology mirrors this for the other direction of obligation (<code>:DutyToWork</code> /
+<code>:RightToLabor</code>), giving the employment four extrinsic-mode parts in total -- exactly the "rights
+towards Amazon, Inc." pattern from the gUFO usage guide, applied to employment instead.</p>
+</div>
+
+<div class="step">
+<h3>A shortcut property, with its provenance recorded</h3>
+<p>Applications often still want a plain binary link for querying ("who works where"). gUFO lets you add one
+without losing the connection to the relator it stands for, by declaring it a
+<code>gufo:MaterialRelationshipType</code> and pointing <code>gufo:isDerivedFrom</code> at the relator
+class:</p>
+<pre><code>:employedBy a owl:ObjectProperty , gufo:MaterialRelationshipType ;
+    rdfs:domain :Employee ;
+    rdfs:range :Employer ;
+    gufo:isDerivedFrom :Employment .
+
+:Dana :employedBy :GlobexCorp .</code></pre>
+<p><code>gufo:isDerivedFrom</code> is metadata about the property, not a logical link between
+<code>:Dana :employedBy :GlobexCorp</code> and the specific <code>:DanaGlobexEmployment</code> individual: it
+tells a reader (or a tool) that <em>this kind of edge</em> always corresponds to <em>some</em> relator of
+that type, without forcing every use of <code>:employedBy</code> to also assert the relator explicitly. See
+<a href="../07-higher-order-types/index.html">example 7</a> for more on this style of typing an object
+property itself, using OWL 2 punning.</p>
+</div>
+
+<div class="step">
+<h3>The lightweight alternative: an existential restriction</h3>
+<p>Not every relator needs distinguishable roles in the data. John and Mary's marriage does not, here, need
+to tell "husband" from "wife" apart, so <code>:Marriage</code> uses a plain existential restriction on
+<code>gufo:mediates</code> instead of two dedicated sub-properties:</p>
+<pre><code>:Marriage rdfs:subClassOf gufo:Relator ,
+    [ a owl:Restriction ; owl:onProperty gufo:mediates ; owl:someValuesFrom :Person ] .
+
+:JohnMaryMarriage a :Marriage ;
+    gufo:mediates :John , :Mary ;
+    gufo:hasBeginPointInXSDDate "2001-12-12"^^xsd:date .</code></pre>
+<p>This is a genuine trade-off, not a shortcut with no cost: querying "who is John's spouse" now means
+looking at every <code>gufo:mediates</code> value of <code>:JohnMaryMarriage</code> other than John, rather
+than following a role-specific property directly.</p>
+</div>
+
+</div>
+
+<h2>The full ontology</h2>
+<p>See <a href="ontology.ttl"><code>ontology.ttl</code></a> for the complete file.</p>
+
+<div class="callout check">
+<h4>How this is checked</h4>
+<ul>
+<li><strong>OWL 2 DL reasoning</strong> (Pellet) -- <code>gufo.ttl</code> + <code>ontology.ttl</code> is
+consistent; in particular, both <code>:DanaGlobexEmployment</code> and <code>:JohnMaryMarriage</code>
+satisfy <code>gufo:Relator</code>'s built-in "mediates at least two endurants" restriction.</li>
+<li><strong>SHACL validation</strong> against <a href="https://github.com/nemo-ufes/gufoshapes">gufoshapes</a>
+-- conforms.</li>
+</ul>
+<pre><code>cd examples/tests
+.venv/bin/pytest -v -k relators</code></pre>
+</div>
+
+<nav class="example-nav">
+<a href="../03-qualities/index.html">&larr; Previous: Qualities</a>
+<a href="../index.html">All examples</a>
+<a href="../05-events/index.html">Next: Events &rarr;</a>
+</nav>
+
+<footer class="site-footer">
+Part of the <a href="https://github.com/nemo-ufes/gufo">gUFO</a> usage examples. Ontology and text
+licensed under <a href="https://creativecommons.org/licenses/by/4.0/legalcode">CC BY 4.0</a>.
+</footer>
+
+</body>
+</html>

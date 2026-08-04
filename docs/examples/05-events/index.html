@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>gUFO example 5: Events -- Football tournament</title>
+<link rel="stylesheet" type="text/css" href="../common/style.css">
+</head>
+<body>
+
+<p class="breadcrumb"><a href="../index.html">gUFO examples</a> &raquo; 5. Events</p>
+
+<h1>Example 5: Events</h1>
+<p class="tagline">A football tournament -- participation, historical dependence, parthood, creation, termination, manifestation</p>
+
+<div class="concept-badges">
+<span class="badge">gufo:Event</span>
+<span class="badge">gufo:isEventProperPartOf</span>
+<span class="badge">gufo:historicallyDependsOn</span>
+<span class="badge">gufo:participatedIn</span>
+<span class="badge">gufo:Participation</span>
+<span class="badge">gufo:wasCreatedIn</span>
+<span class="badge">gufo:wasTerminatedIn</span>
+<span class="badge">gufo:manifestedIn</span>
+</div>
+
+<nav class="example-nav">
+<a href="../04-relators/index.html">&larr; Previous: Relators</a>
+<a href="../index.html">All examples</a>
+<a href="../06-situations/index.html">Next: Situations &rarr;</a>
+</nav>
+
+<div class="callout goal">
+<h4>What you'll learn</h4>
+<p>Everything in <a href="../01-endurant-types/index.html">example 1</a> through
+<a href="../04-relators/index.html">example 4</a> endures: it persists through time and can change while
+remaining the same thing. gUFO's other basic category of concrete individual, <code>gufo:Event</code>,
+does not endure at all: an event is always something that has already occurred, with its beginning and end
+fixed once and for all -- there is no sense in which it is still unfolding or yet to happen. This example
+shows how such (already past) events relate back to the
+endurants (objects, aspects) they involve: who participated, what was created or destroyed, what aspect
+showed itself, and how events relate to each other in time and part-whole structure.</p>
+</div>
+
+<h2>The domain</h2>
+<p>A football tournament: two semi-finals feeding into a final, an opening ceremony, three players, and a
+club that gets rebranded along the way. (Player and club names are fictional.)</p>
+
+<h2>Step by step</h2>
+
+<div class="steps">
+
+<div class="step">
+<h3>Events have parts, just like objects do</h3>
+<p>The semi-finals, the final and the opening ceremony are all sub-events of the tournament, related via
+<code>gufo:isEventProperPartOf</code> -- the event-side counterpart to
+<code>gufo:isObjectProperPartOf</code> from <a href="../02-objects-and-parts/index.html">example 2</a>, both
+sub-properties of the common <code>gufo:isProperPartOf</code>:</p>
+<pre><code>:SemiFinal1 a :SemiFinal ;
+    gufo:isEventProperPartOf :WorldChampionship2026 .
+
+:Final2026 a :Final ;
+    gufo:isEventProperPartOf :WorldChampionship2026 .</code></pre>
+</div>
+
+<div class="step">
+<h3>Historical dependence: more than just "part of"</h3>
+<p>The final would not have happened, with these two finalists, without the semi-finals having taken place
+first -- but it is not part of them, nor they part of it (they are siblings under the tournament).
+<code>gufo:historicallyDependsOn</code> captures exactly this "could not have been without" relation,
+independent of parthood:</p>
+<pre><code>:Final2026 gufo:historicallyDependsOn :SemiFinal1 , :SemiFinal2 .</code></pre>
+<p>gUFO documents this property as covering causation but also weaker forms of dependence -- cases where an
+earlier event brings about a situation that contributes to, without being sufficient by itself to guarantee,
+a later event. (See <a href="../06-situations/index.html">example 6</a> for
+<code>gufo:contributedToTrigger</code>, which makes that weaker link explicit at the situation level.)</p>
+</div>
+
+<div class="step">
+<h3>Participation, two ways</h3>
+<p>The direct way to say that a player took part in a match is a sub-property of
+<code>gufo:participatedIn</code>:</p>
+<pre><code>:participatedInMatch rdfs:subPropertyOf gufo:participatedIn ;
+    rdfs:domain :Player ; rdfs:range :Match .
+
+:AlexRivera :participatedInMatch :SemiFinal1 , :Final2026 .</code></pre>
+<p>This treats the participation as a bare fact about the player and the match, with no existence or
+properties of its own. But a participation can be more than that: it can itself have a beginning and an end
+narrower than the match's (a substitution), or bear its own qualities (minutes played). Whenever that is true
+of the domain being modeled, the participation is not just a fact to assert but an event in its own right,
+and gUFO offers <code>gufo:Participation</code> for it: a sub-class of <code>gufo:Event</code> (restricted to
+have exactly one object standing in <code>gufo:participatedIn</code> to it) that can be declared a part of
+the larger event:</p>
+<pre><code>:JordanLeeParticipationInFinal a gufo:Participation ;
+    gufo:isEventProperPartOf :Final2026 .
+
+:JordanLee :participatedInMatch :JordanLeeParticipationInFinal .</code></pre>
+<p>Both patterns are legitimate, and the choice is not arbitrary: use the direct property when the
+participation has no further properties or parts of its own worth representing; reify it as a
+<code>gufo:Participation</code> when it does. This example uses the direct pattern for Alex Rivera and Sam
+Okafor, and the reified pattern for Jordan Lee, purely to show both side by side.</p>
+</div>
+
+<div class="step">
+<h3>An aspect manifesting itself in an event</h3>
+<p>Jordan Lee has a standing knee injury -- an intrinsic mode, in the sense of
+<a href="../01-endurant-types/index.html">example 1</a>'s sibling example on aspects
+(see also <a href="../03-qualities/index.html">example 3</a> for the related notion of quality). The injury
+exists independently of any one match, but it flares up -- manifests -- specifically during the first
+semi-final:</p>
+<pre><code>:KneeInjury rdfs:subClassOf gufo:IntrinsicMode .
+
+:JordanLeeKneeInjury a :KneeInjury ;
+    :hadKneeInjury :JordanLee ;
+    gufo:manifestedIn :SemiFinal1 .</code></pre>
+<p><code>gufo:manifestedIn</code> is what lets the ontology say "this aspect showed itself here" without
+conflating the aspect (which persists) with its manifestation (which is an event, and is over once the match
+ends).</p>
+</div>
+
+<div class="step">
+<h3>Creation and termination in the same event</h3>
+<p>An endurant can come into existence, or cease to, in the course of an event -- and gUFO does not require
+the two to be different endurants or different events. Here, the host club is rebranded at the opening
+ceremony: the old organization is terminated and a new one created, in that very same event:</p>
+<pre><code>:RiverportUnitedFC a :Club ;
+    gufo:wasTerminatedIn :OpeningCeremony2026 .
+
+:RiverportCityFC a :Club ;
+    gufo:wasCreatedIn :OpeningCeremony2026 .</code></pre>
+<p>Note that <code>gufo:wasCreatedIn</code> and <code>gufo:wasTerminatedIn</code> both take
+<code>gufo:Endurant</code> in their domain, not just <code>gufo:Object</code>: a relator (a marriage, an
+employment) can just as well be created or terminated in an event, as shown by the wedding example in the
+gUFO usage guide.</p>
+<div class="callout goal">
+<p style="margin:0"><strong>Going further:</strong> gUFO itself leaves <code>wasCreatedIn</code>/
+<code>wasTerminatedIn</code> as bare assertions, with no further structure to the event beyond that. The
+<a href="http://w3id.org/nemo/gufoevents">gufoevents</a> extension accounts for this in more detail:
+<code>gufoevents:EndurantCreation</code> and
+<code>gufoevents:EndurantTermination</code> are dedicated event subclasses whose axioms entail
+<code>gufo:wasCreatedIn</code>/<code>gufo:wasTerminatedIn</code> rather than requiring them to be asserted
+directly, and a same-event creation-plus-termination like the club rebranding above is exactly what
+<code>gufoevents:Transmutation</code> formalizes as a single complex event.</p>
+</div>
+</div>
+
+</div>
+
+<h2>The full ontology</h2>
+<p>See <a href="ontology.ttl"><code>ontology.ttl</code></a> for the complete file.</p>
+
+<div class="callout check">
+<h4>How this is checked</h4>
+<ul>
+<li><strong>OWL 2 DL reasoning</strong> (Pellet) -- <code>gufo.ttl</code> + <code>ontology.ttl</code> is
+consistent, including <code>gufo:Participation</code>'s built-in "exactly one participating object"
+restriction for <code>:JordanLeeParticipationInFinal</code>.</li>
+<li><strong>SHACL validation</strong> against <a href="https://github.com/nemo-ufes/gufoshapes">gufoshapes</a>
+-- conforms.</li>
+</ul>
+<pre><code>cd examples/tests
+.venv/bin/pytest -v -k 05-events</code></pre>
+</div>
+
+<nav class="example-nav">
+<a href="../04-relators/index.html">&larr; Previous: Relators</a>
+<a href="../index.html">All examples</a>
+<a href="../06-situations/index.html">Next: Situations &rarr;</a>
+</nav>
+
+<footer class="site-footer">
+Part of the <a href="https://github.com/nemo-ufes/gufo">gUFO</a> usage examples. Ontology and text
+licensed under <a href="https://creativecommons.org/licenses/by/4.0/legalcode">CC BY 4.0</a>.
+</footer>
+
+</body>
+</html>

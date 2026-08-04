@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>gUFO usage examples</title>
+<link rel="stylesheet" type="text/css" href="common/style.css">
+</head>
+<body>
+
+<h1>gUFO usage examples</h1>
+<p class="tagline">Seven small, realistic ontologies, each a tutorial on one part of gUFO's foundations</p>
+
+<div class="callout goal">
+<h4>What this is</h4>
+<p>Each example below is a self-contained OWL ontology (<code>ontology.ttl</code>) that reuses
+<a href="../gufo.ttl">gUFO</a> the way a real domain ontology would -- by specializing and instantiating its
+classes and properties -- paired with a tutorial page that walks through the design decisions step by step.
+Together, the seven cover the ground mapped out in the
+<a href="../index.html#usageguide">gUFO usage guide</a>: the taxonomy of endurant types, objects and
+their parts, qualities, relators, events, situations, and higher-order types. Every ontology is checked with
+an OWL 2 DL reasoner and with the <a href="https://github.com/nemo-ufes/gufoshapes">gUFO SHACL shapes</a> --
+see <a href="#testing">how this is tested</a> below.</p>
+</div>
+
+<h2>The examples</h2>
+
+<div class="card-grid">
+
+<div class="card">
+<h3>1. <a class="card-link" href="01-endurant-types/index.html">Endurant types</a></h3>
+<p><em>People &amp; Organizations</em></p>
+<p>Kind, SubKind, Phase, Role, Category, RoleMixin, PhaseMixin -- and a common pitfall the SHACL shapes catch
+that OWL alone does not.</p>
+</div>
+
+<div class="card">
+<h3>2. <a class="card-link" href="02-objects-and-parts/index.html">Objects and their parts</a></h3>
+<p><em>Car fleet</em></p>
+<p>FunctionalComplex, Collection, Quantity, and their three distinct part-whole properties.</p>
+</div>
+
+<div class="card">
+<h3>3. <a class="card-link" href="03-qualities/index.html">Qualities and quality values</a></h3>
+<p><em>Retail products</em></p>
+<p>The basic, enumerated and multidimensional patterns for giving a reified quality a value.</p>
+</div>
+
+<div class="card">
+<h3>4. <a class="card-link" href="04-relators/index.html">Relators and extrinsic aspects</a></h3>
+<p><em>Employment &amp; marriage</em></p>
+<p>Reifying a relationship, decomposing it into reciprocal rights and duties, and deriving a shortcut
+property from it.</p>
+</div>
+
+<div class="card">
+<h3>5. <a class="card-link" href="05-events/index.html">Events</a></h3>
+<p><em>Football tournament</em></p>
+<p>Participation, historical dependence, event parthood, creation, termination, and aspect manifestation.</p>
+</div>
+
+<div class="card">
+<h3>6. <a class="card-link" href="06-situations/index.html">Situations</a></h3>
+<p><em>Patient health record</em></p>
+<p>All five gufo:Situation subclasses, used to track change in quality values, phases, parts, constitution
+and relationships over time.</p>
+</div>
+
+<div class="card">
+<h3>7. <a class="card-link" href="07-higher-order-types/index.html">Higher-order types</a></h3>
+<p><em>Wildlife classification</em></p>
+<p>The powertype pattern (gufo:partitions), and a pitfall the SHACL shapes catch that OWL alone does not.</p>
+</div>
+
+</div>
+
+<h2>Suggested order</h2>
+<p>The examples are numbered in a reasonable reading order -- endurant types and objects first, since later
+examples assume familiarity with roles and kinds; situations near the end, since they build on qualities,
+parthood and events introduced earlier -- but each is self-contained and can be read on its own. Every
+example uses its own namespace and fictional names, so nothing but the reading order links them.</p>
+
+<h2 id="testing">How this is tested</h2>
+<p>Every <code>ontology.ttl</code> (and, for examples 1 and 7, the accompanying
+<code>invalid-example.ttl</code>, which intentionally misuses gUFO for pedagogical contrast) is checked two
+ways:</p>
+<table class="datatable">
+<tr><th>Check</th><th>Tool</th><th>Catches</th></tr>
+<tr><td>OWL 2 DL reasoning (consistency + classification)</td><td>Pellet, via <a href="https://owlready2.readthedocs.io/">owlready2</a></td><td>Logical contradictions -- e.g. an individual forced into two disjoint classes.</td></tr>
+<tr><td>SHACL validation</td><td><a href="https://github.com/RDFLib/pySHACL">pySHACL</a> against <a href="https://github.com/nemo-ufes/gufoshapes">gufoshapes</a></td><td>Taxonomic mistakes in gUFO's typing pattern (rigid types specializing anti-rigid ones, sortals without an identity provider, powertype pattern violations) that OWL 2 punning hides from a DL reasoner.</td></tr>
+</table>
+<p>Examples 1 and 7 make that second row concrete: each ships an <code>invalid-example.ttl</code> that stays
+perfectly OWL-consistent while still tripping a SHACL shape, which is precisely the gap gufoshapes exists to
+close.</p>
+<p>See <a href="https://github.com/nemo-ufes/gufo/blob/master/examples/tests/README.md">tests/README.md</a> for how to run the suite (from a clone of the repository -- the test harness itself is not part of this published copy):</p>
+<pre><code>cd examples/tests
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+.venv/bin/pytest -v</code></pre>
+
+<h2>See also</h2>
+<ul>
+<li><a href="../index.html">gUFO documentation and usage guide</a> -- the primer these examples follow and expand on.</li>
+<li><a href="https://github.com/nemo-ufes/gufoshapes">gufoshapes</a> -- the SHACL shapes used to validate the taxonomy of types.</li>
+<li><a href="http://w3id.org/nemo/gufoevents">gufoevents</a> -- an extension with a more detailed account of events, used in <a href="05-events/index.html">example 5</a> and <a href="06-situations/index.html">example 6</a> to model the creations, terminations and endurant changes only asserted directly here.</li>
+<li><a href="../../README.md">gUFO project README</a> -- background, authorship, and citation information.</li>
+</ul>
+
+<footer class="site-footer">
+Part of the <a href="https://github.com/nemo-ufes/gufo">gUFO</a> project. Ontologies and text licensed
+under <a href="https://creativecommons.org/licenses/by/4.0/legalcode">CC BY 4.0</a>.
+</footer>
+
+</body>
+</html>

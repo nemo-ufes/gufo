@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>gUFO example 1: Endurant types -- People &amp; Organizations</title>
+<link rel="stylesheet" type="text/css" href="../common/style.css">
+</head>
+<body>
+
+<p class="breadcrumb"><a href="../index.html">gUFO examples</a> &raquo; 1. Endurant types</p>
+
+<h1>Example 1: Endurant types</h1>
+<p class="tagline">People &amp; Organizations -- Kind, SubKind, Phase, Role, Category, RoleMixin, PhaseMixin</p>
+
+<div class="concept-badges">
+<span class="badge">gufo:Kind</span>
+<span class="badge">gufo:SubKind</span>
+<span class="badge">gufo:Phase</span>
+<span class="badge">gufo:Role</span>
+<span class="badge">gufo:Category</span>
+<span class="badge">gufo:RoleMixin</span>
+<span class="badge">gufo:PhaseMixin</span>
+</div>
+
+<nav class="example-nav">
+<a href="../index.html">&larr; All examples</a>
+<a href="../02-objects-and-parts/index.html">Next: Objects &amp; parts &rarr;</a>
+</nav>
+
+<div class="callout goal">
+<h4>What you'll learn</h4>
+<p>This example is about <em>usage scenarios 3 and 4</em> from the gUFO usage guide: instantiating and
+specializing gUFO's <strong>taxonomy of types</strong>. You will see how to say, of an OWL class you define,
+<em>what kind of type it is</em> -- whether it is rigid or anti-rigid, whether it supplies identity to its
+instances (a <em>sortal</em>) or merely groups several sortals together (a <em>non-sortal</em>) -- and why
+that distinction matters enough that gUFO ships a whole taxonomy, and gufoshapes ships rules to check it.</p>
+</div>
+
+<h2>The domain</h2>
+<p>The ontology models people and organizations at a small scale: <code>:Person</code> and
+<code>:Organization</code>, a few of the ways an instance of either can be temporarily or contingently
+classified (<code>:Child</code>/<code>:Adult</code>, <code>:Student</code>, <code>:Employee</code>), and one
+specialization that is permanent rather than contingent (<code>:University</code>, a kind of organization).
+It also has two classes that intentionally do <em>not</em> specialize just <code>:Person</code> or just
+<code>:Organization</code>, because the distinctions they capture -- being a customer, being currently
+active -- cut across both.</p>
+
+<h2>Why gUFO has a taxonomy of <em>types</em>, not just individuals</h2>
+<p>Declaring <code>:Person rdfs:subClassOf gufo:FunctionalComplex</code> tells OWL that persons are
+functional complexes, but it says nothing about what <em>kind</em> of class <code>:Person</code> itself is.
+Two classes can look identical in OWL -- both are just <code>owl:Class</code> with some
+<code>rdfs:subClassOf</code> axioms -- while meaning very different things conceptually. Compare:</p>
+
+<pre><code>:Person rdfs:subClassOf gufo:FunctionalComplex .   # every person is necessarily a person
+:Student rdfs:subClassOf :Person .                 # a person may stop being a student</code></pre>
+
+<p>Nothing in that OWL fragment distinguishes a class whose instances hold it necessarily from one whose
+instances hold it contingently. gUFO's taxonomy of types exists to make that distinction explicit, by
+having the modeler additionally state, using <a href="https://www.w3.org/TR/owl2-new-features/#F12:_Punning">OWL
+2 punning</a>, that the class is <em>itself an instance</em> of one of gUFO's type metaclasses:</p>
+
+<pre><code>:Person rdf:type owl:Class ;
+        rdfs:subClassOf gufo:FunctionalComplex ;
+        rdf:type gufo:Kind .
+
+:Student rdf:type owl:Class ;
+         rdfs:subClassOf :Person ;
+         rdf:type gufo:Role .</code></pre>
+
+<p>Punning is what makes <code>:Person</code> both a class (of persons) and an individual (an instance of
+<code>gufo:Kind</code>) at once. This is legal OWL 2 DL not because of anything specific to gUFO, but because
+OWL 2's semantics always interpret a name's "class facet" and its "individual facet" separately, so the two
+uses never contradict each other -- any OWL 2 DL ontology gets that for free. What gUFO contributes is not
+this legality but the vocabulary: a whole second taxonomy of metaclasses (<code>gufo:Kind</code>,
+<code>gufo:Role</code>, <code>gufo:Phase</code>, ...) for the individual facet of a punned class like
+<code>:Person</code> to instantiate meaningfully.</p>
+
+<h2 id="taxonomy">The taxonomy, in two dimensions</h2>
+<p>Every gUFO endurant type sits somewhere on two independent axes:</p>
+<table class="datatable">
+<tr><th></th><th>Sortal (supplies identity)</th><th>Non-sortal (does not)</th></tr>
+<tr><th>Rigid (necessary for all instances)</th><td><code>gufo:Kind</code>, <code>gufo:SubKind</code></td><td><code>gufo:Category</code></td></tr>
+<tr><th>Anti-rigid (contingent for all instances)</th><td><code>gufo:Phase</code>, <code>gufo:Role</code></td><td><code>gufo:PhaseMixin</code>, <code>gufo:RoleMixin</code></td></tr>
+<tr><th>Semi-rigid (necessary for some, contingent for others)</th><td><em>(gUFO defines no such sortal)</em></td><td><code>gufo:Mixin</code></td></tr>
+</table>
+<p><strong>Sortal vs. non-sortal</strong> is about identity: a <em>sortal</em> type (like <code>:Person</code>)
+provides the principle by which we count and re-identify its instances over time -- "this is the same person
+as before". A <em>non-sortal</em> (like <code>:Agent</code> below) groups instances that already get their
+identity from some sortal further down the hierarchy; <code>:Agent</code> itself answers no "is this the same
+agent?" question that isn't really "is this the same person/organization?".</p>
+<p><strong>Rigid, anti-rigid and semi-rigid</strong> are about modality: a <em>rigid</em> type applies to its
+instances in every possible world in which they exist at all (a person cannot stop being a person without ceasing to
+exist). An <em>anti-rigid</em> type applies contingently (a person can stop being a student, or a child,
+while remaining the very same person). A <em>semi-rigid</em> type is neither uniformly: it applies necessarily
+to some of its instances and contingently to others. gUFO's own example is "FemaleAnimal"
+(<code>gufo:Mixin</code>): necessary for a lion or a shark, but contingent for a clownfish or a mushroom
+coral, which can change sex. Note that <code>gufo:Mixin</code> is <em>non-sortal</em> only, not
+anti-rigid -- gUFO defines no semi-rigid sortal, since a sortal's identity principle is expected to apply
+uniformly to its instances. This example has no natural semi-rigid grouping in its domain, so
+<code>gufo:Mixin</code> is not instantiated below; see the table above for where it would fit if it were.</p>
+
+<h2>Step by step</h2>
+
+<div class="steps">
+
+<div class="step">
+<h3>A non-sortal at the top: <code>gufo:Category</code></h3>
+<p><code>:Agent</code> captures what persons and organizations have in common, without providing identity for
+either. It is rigid (nothing stops being an agent while it exists) but non-sortal, so it is declared a
+<code>gufo:Category</code>:</p>
+<pre><code>:Agent a owl:Class , gufo:Category ;
+    rdfs:subClassOf gufo:FunctionalComplex .</code></pre>
+</div>
+
+<div class="step">
+<h3>Two rigid sortals: <code>gufo:Kind</code></h3>
+<p><code>:Person</code> and <code>:Organization</code> each supply their own principle of identity, and each
+applies necessarily to its instances, so both are kinds. In UFO, an individual can only ever instantiate one
+kind -- a kind is precisely what supplies its unique principle of identity -- so any two distinct kinds are,
+in principle, always disjoint. OWL has no way of enforcing this by itself, though: nothing about being
+declared a <code>gufo:Kind</code> makes two classes disjoint automatically. Declaring
+<code>owl:disjointWith</code> explicitly is what actually makes that hold in this ontology, and it is good
+practice to do so for any two kinds, regardless of what supertype (if any) they share:</p>
+<pre><code>:Person a owl:Class , gufo:Kind ;
+    rdfs:subClassOf :Agent .
+
+:Organization a owl:Class , gufo:Kind ;
+    rdfs:subClassOf :Agent ;
+    owl:disjointWith :Person .</code></pre>
+</div>
+
+<div class="step">
+<h3>A rigid specialization: <code>gufo:SubKind</code></h3>
+<p><code>:University</code> is still rigid -- an organization does not stop being a university while it
+exists -- but it does not introduce a <em>new</em> principle of identity: a university is individuated exactly
+as any organization is. That combination (rigid, sortal, but not identity-providing) is
+<code>gufo:SubKind</code>:</p>
+<pre><code>:University a owl:Class , gufo:SubKind ;
+    rdfs:subClassOf :Organization .</code></pre>
+</div>
+
+<div class="step">
+<h3>Anti-rigid sortals: <code>gufo:Phase</code> and <code>gufo:Role</code></h3>
+<p><code>:Child</code>/<code>:Adult</code> and <code>:Student</code>/<code>:Employee</code> are all anti-rigid
+specializations of <code>:Person</code>: a given person moves in and out of them without changing who they
+are. gUFO further distinguishes <em>why</em> the type is contingent:</p>
+<ul>
+<li><code>gufo:Phase</code> applies in virtue of an <strong>intrinsic</strong> condition of the instance
+itself (age, for <code>:Child</code>/<code>:Adult</code>). This example declares <code>:Child</code> and
+<code>:Adult</code> disjoint, but that is only sound because this ontology represents a single snapshot of
+the domain, where each person is recorded with just their currently-applicable phase. <code>rdf:type</code>
+is not temporalized -- a plain <code>:Bob a :Child</code> triple carries no date -- so if the knowledge graph
+instead needed to accumulate history (Bob was a child, and is now an adult) without retracting old triples,
+the two plain <code>rdf:type</code> facts would sit in the graph together and the disjointness would make
+them inconsistent. gUFO's mechanism for that case is not phase disjointness but
+<code>gufo:TemporaryInstantiationSituation</code> (see <a href="../06-situations/index.html">example 6</a>),
+which attaches a begin and end point to each instantiation of an anti-rigid type instead of relying on
+<code>rdf:type</code> alone.</li>
+<li><code>gufo:Role</code> applies in virtue of a <strong>relational</strong> condition -- something the
+instance participates in (enrollment, for <code>:Student</code>; employment, for <code>:Employee</code>, see
+<a href="../04-relators/index.html">example 4</a>). Roles are not generally disjoint: the same person can be
+both a student and an employee.</li>
+</ul>
+<pre><code>:Child a owl:Class , gufo:Phase ;
+    rdfs:subClassOf :Person .
+
+:Adult a owl:Class , gufo:Phase ;
+    rdfs:subClassOf :Person ;
+    owl:disjointWith :Child .
+
+:Student a owl:Class , gufo:Role ;
+    rdfs:subClassOf :Person .
+
+:Employee a owl:Class , gufo:Role ;
+    rdfs:subClassOf :Person .</code></pre>
+</div>
+
+<div class="step">
+<h3>Anti-rigid non-sortals: <code>gufo:RoleMixin</code> and <code>gufo:PhaseMixin</code></h3>
+<p>"Being a customer" and "being currently active" are contingent, just like a role or a phase -- but they
+are not specific to persons or to organizations: <em>both</em> can be customers, and <em>both</em> can be
+active or inactive. A class like this must specialize the non-sortal <code>:Agent</code>, not either kind,
+and its metatype records that it is anti-rigid and relationally- or intrinsically-grounded, just like Role
+and Phase, but without supplying identity:</p>
+<pre><code>:Customer a owl:Class , gufo:RoleMixin ;
+    rdfs:subClassOf :Agent .
+
+:ActiveAgent a owl:Class , gufo:PhaseMixin ;
+    rdfs:subClassOf :Agent .
+
+:InactiveAgent a owl:Class , gufo:PhaseMixin ;
+    rdfs:subClassOf :Agent ;
+    owl:disjointWith :ActiveAgent .</code></pre>
+<p>This is exactly the situation gUFO's non-sortals are for: had <code>:Customer</code> been forced to
+specialize <code>:Person</code> alone, <code>:GlobexCorp</code> (an organization) could never be modeled as a
+customer without either duplicating the role under <code>:Organization</code> or, worse, misclassifying
+<code>:GlobexCorp</code> as a person.</p>
+</div>
+
+<div class="step">
+<h3>Instantiating it</h3>
+<p>With the type-level declarations in place, ordinary individuals just instantiate these classes as usual
+(<a href="index.html#taxonomy">usage scenario 1</a> from the guide):</p>
+<pre><code>:Alice a :Person , :Student , :Adult , :Customer , :ActiveAgent .
+
+:GlobexCorp a :Organization , :Customer , :ActiveAgent .
+
+:OldTownPrinters a :Organization , :InactiveAgent .</code></pre>
+<p>Notice <code>:GlobexCorp</code> and <code>:Alice</code> share the <code>:Customer</code> and
+<code>:ActiveAgent</code> classifications despite being different kinds of thing -- precisely what the
+non-sortals were introduced to allow.</p>
+</div>
+
+</div>
+
+<h2>The full ontology</h2>
+<p>See <a href="ontology.ttl"><code>ontology.ttl</code></a> for the complete file, including all
+individuals (<code>:Bob</code>, <code>:Carol</code>, <code>:AcmeUniversity</code>).</p>
+
+<div class="callout pitfall">
+<h4>Common pitfall: a rigid type "under" a role</h4>
+<p>Suppose a modeler wants a class for managers and, reaching for the class that "sounds most important",
+declares:</p>
+<pre><code>:Manager a owl:Class , <strong>gufo:Kind</strong> ;
+    rdfs:subClassOf :Employee .   # :Employee is a gufo:Role</code></pre>
+<p>This is syntactically fine OWL, and -- because <code>gufo:Kind</code> and <code>gufo:Role</code> are just
+punned individuals, not classes that OWL's open-world semantics can reason about as mutually exclusive in
+this configuration -- <strong>a DL reasoner raises no error</strong>. But it is nonsense in UFO: a
+<code>gufo:Kind</code> must be rigid and must supply identity on its own, yet here it specializes
+<code>:Employee</code>, which is both anti-rigid and already sortal. Managers would, absurdly, never stop
+being managers even after leaving the company, while simultaneously getting their identity from a role that
+is itself contingent.</p>
+<p>What was probably meant is <code>:Manager a gufo:Role</code> (a kind of employee, contingent on managing
+something) or <code>gufo:SubKind</code> (if "manager" is meant to be permanent once attained). The full
+mistake is kept in <a href="invalid-example.ttl"><code>invalid-example.ttl</code></a>, and the gUFO SHACL
+shapes reject it on two counts at once:</p>
+<ul>
+<li><strong>gufoshapes:KindShape</strong> -- a <code>gufo:Kind</code> cannot specialize another sortal.</li>
+<li><strong>gufoshapes:RigidOrSemiRigidShape</strong> -- a rigid type cannot specialize an anti-rigid one.</li>
+</ul>
+</div>
+
+<div class="callout check">
+<h4>How this is checked</h4>
+<p><code>examples/tests/test_examples.py</code> runs two checks against <code>ontology.ttl</code>, and two
+against <code>invalid-example.ttl</code>:</p>
+<ul>
+<li><strong>OWL 2 DL reasoning</strong> (Pellet, via owlready2) -- confirms <code>gufo.ttl</code> +
+<code>ontology.ttl</code> is consistent and every class is satisfiable. Run alone against
+<code>invalid-example.ttl</code>, this check <em>passes</em>, which is the point of the pitfall above: OWL
+punning hides the mistake from the reasoner.</li>
+<li><strong>SHACL validation</strong> against
+<a href="https://github.com/nemo-ufes/gufoshapes">gufoshapes</a> (vendored at
+<code>examples/common/gufoshapes.ttl</code>) -- <code>ontology.ttl</code> conforms;
+<code>invalid-example.ttl</code> does not, with the two violations quoted above.</li>
+</ul>
+<p>From <code>examples/tests/</code>, after installing <code>requirements.txt</code> into a virtualenv:</p>
+<pre><code>.venv/bin/pytest -v -k endurant-types</code></pre>
+</div>
+
+<nav class="example-nav">
+<a href="../index.html">&larr; All examples</a>
+<a href="../02-objects-and-parts/index.html">Next: Objects &amp; parts &rarr;</a>
+</nav>
+
+<footer class="site-footer">
+Part of the <a href="https://github.com/nemo-ufes/gufo">gUFO</a> usage examples. Ontology and text
+licensed under <a href="https://creativecommons.org/licenses/by/4.0/legalcode">CC BY 4.0</a>.
+</footer>
+
+</body>
+</html>

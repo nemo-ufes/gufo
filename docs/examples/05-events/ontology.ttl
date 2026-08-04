@@ -1,0 +1,147 @@
+@prefix : <https://purl.org/nemo/gufo-examples/events#> .
+@prefix gufo: <http://purl.org/nemo/gufo#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+#################################################################
+# gUFO usage example 05: Events
+#
+# Demonstrates gufo:Event, gufo:isEventProperPartOf,
+# gufo:historicallyDependsOn, gufo:participatedIn (and
+# gufo:Participation), gufo:wasCreatedIn, gufo:wasTerminatedIn and
+# gufo:manifestedIn, in a football tournament. See index.html for a
+# guided walkthrough. Player and club names are fictional.
+#################################################################
+
+: a owl:Ontology ;
+    rdfs:label "gUFO example 05: Events"@en ;
+    rdfs:comment "A small ontology of a football tournament, illustrating gUFO's representation of events, their parts, and their relations to the endurants that participate in, are created or terminated in, or manifest aspects in them."@en ;
+    owl:imports <https://purl.org/nemo/gufo#> .
+
+#################################################################
+# Event classes
+#################################################################
+
+:Tournament a owl:Class ;
+    rdfs:subClassOf gufo:Event ;
+    rdfs:label "Tournament"@en .
+
+:Match a owl:Class ;
+    rdfs:subClassOf gufo:Event ;
+    rdfs:label "Match"@en .
+
+:SemiFinal a owl:Class ;
+    rdfs:subClassOf :Match ;
+    rdfs:label "Semi-final"@en .
+
+:Final a owl:Class ;
+    rdfs:subClassOf :Match ;
+    owl:disjointWith :SemiFinal ;
+    rdfs:label "Final"@en .
+
+:OpeningCeremony a owl:Class ;
+    rdfs:subClassOf gufo:Event ;
+    rdfs:label "Opening ceremony"@en .
+
+#################################################################
+# Endurant classes participating in / created or terminated in
+# these events
+#################################################################
+
+:Player a owl:Class , gufo:Kind ;
+    rdfs:subClassOf gufo:FunctionalComplex ;
+    rdfs:label "Player"@en .
+
+:Club a owl:Class , gufo:Kind ;
+    rdfs:subClassOf gufo:FunctionalComplex ;
+    rdfs:label "Club"@en .
+
+:KneeInjury a owl:Class ;
+    rdfs:subClassOf gufo:IntrinsicMode ;
+    rdfs:label "Knee injury"@en ;
+    rdfs:comment "A lasting intrinsic mode of a player, which may manifest itself in specific matches (see gufo:manifestedIn below) without that manifestation being the injury's only occurrence."@en .
+
+#################################################################
+# Properties
+#################################################################
+
+:participatedInMatch a owl:ObjectProperty ;
+    rdfs:subPropertyOf gufo:participatedIn ;
+    rdfs:domain :Player ;
+    rdfs:range :Match ;
+    rdfs:label "participated in match"@en .
+
+:hadKneeInjury a owl:ObjectProperty ;
+    rdfs:subPropertyOf gufo:inheresIn ;
+    rdfs:domain :KneeInjury ;
+    rdfs:range :Player ;
+    rdfs:label "knee injury of"@en .
+
+#################################################################
+# Individuals: the tournament and its parts
+#################################################################
+
+:WorldChampionship2026 a :Tournament ;
+    rdfs:label "2026 World Championship"@en .
+
+:OpeningCeremony2026 a :OpeningCeremony ;
+    gufo:isEventProperPartOf :WorldChampionship2026 ;
+    rdfs:label "2026 World Championship opening ceremony"@en .
+
+:SemiFinal1 a :SemiFinal ;
+    gufo:isEventProperPartOf :WorldChampionship2026 ;
+    rdfs:label "2026 World Championship, semi-final 1"@en .
+
+:SemiFinal2 a :SemiFinal ;
+    gufo:isEventProperPartOf :WorldChampionship2026 ;
+    rdfs:label "2026 World Championship, semi-final 2"@en .
+
+:Final2026 a :Final ;
+    gufo:isEventProperPartOf :WorldChampionship2026 ;
+    gufo:historicallyDependsOn :SemiFinal1 , :SemiFinal2 ;
+    gufo:hasBeginPointInXSDDate "2026-07-19"^^xsd:date ;
+    rdfs:label "2026 World Championship final"@en ;
+    rdfs:comment "Historically depends on both semi-finals: it could not have taken place, with these two finalists, without them."@en .
+
+#################################################################
+# Individuals: players, participation (direct and reified) and an
+# injury manifestation
+#################################################################
+
+:AlexRivera a :Player ; rdfs:label "Alex Rivera"@en .
+:SamOkafor a :Player ; rdfs:label "Sam Okafor"@en .
+:JordanLee a :Player ; rdfs:label "Jordan Lee"@en .
+
+:AlexRivera :participatedInMatch :SemiFinal1 , :Final2026 .
+:SamOkafor :participatedInMatch :SemiFinal2 , :Final2026 .
+:JordanLee :participatedInMatch :SemiFinal1 .
+
+:JordanLeeParticipationInFinal a gufo:Participation ;
+    gufo:isEventProperPartOf :Final2026 ;
+    rdfs:label "Jordan Lee's participation in the 2026 final"@en ;
+    rdfs:comment "The alternative, reified pattern for participation: rather than asserting :JordanLee :participatedInMatch :Final2026 directly, the participation itself is a sub-event of the final, which is useful when the participation needs its own properties (e.g. minutes played)."@en .
+
+:JordanLee :participatedInMatch :JordanLeeParticipationInFinal .
+
+:JordanLeeKneeInjury a :KneeInjury ;
+    :hadKneeInjury :JordanLee ;
+    gufo:manifestedIn :SemiFinal1 ;
+    rdfs:label "Jordan Lee's knee injury"@en ;
+    rdfs:comment "The injury is a standing intrinsic mode of Jordan Lee; it flared up (manifested) specifically during semi-final 1, which is why Jordan Lee did not take part in the final."@en .
+
+#################################################################
+# Individuals: a club created and its predecessor terminated in
+# the same event
+#################################################################
+
+:RiverportUnitedFC a :Club ;
+    gufo:wasTerminatedIn :OpeningCeremony2026 ;
+    rdfs:label "Riverport United FC"@en ;
+    rdfs:comment "The host club, rebranded at the opening ceremony: this organization ceases to exist there."@en .
+
+:RiverportCityFC a :Club ;
+    gufo:wasCreatedIn :OpeningCeremony2026 ;
+    rdfs:label "Riverport City FC"@en ;
+    rdfs:comment "The rebranded successor, brought into existence in the same ceremony that terminated Riverport United FC."@en .

@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>gUFO example 2: Objects and their parts -- Car fleet</title>
+<link rel="stylesheet" type="text/css" href="../common/style.css">
+</head>
+<body>
+
+<p class="breadcrumb"><a href="../index.html">gUFO examples</a> &raquo; 2. Objects and their parts</p>
+
+<h1>Example 2: Objects and their parts</h1>
+<p class="tagline">A car fleet -- FunctionalComplex, Collection, Quantity, and their part-whole properties</p>
+
+<div class="concept-badges">
+<span class="badge">gufo:FunctionalComplex</span>
+<span class="badge">gufo:Collection</span>
+<span class="badge">gufo:VariableCollection</span>
+<span class="badge">gufo:Quantity</span>
+<span class="badge">gufo:isComponentOf</span>
+<span class="badge">gufo:isCollectionMemberOf</span>
+<span class="badge">gufo:isSubCollectionOf</span>
+<span class="badge">gufo:isSubQuantityOf</span>
+<span class="badge">gufo:historicallyDependsOn</span>
+</div>
+
+<nav class="example-nav">
+<a href="../01-endurant-types/index.html">&larr; Previous: Endurant types</a>
+<a href="../index.html">All examples</a>
+<a href="../03-qualities/index.html">Next: Qualities &rarr;</a>
+</nav>
+
+<div class="callout goal">
+<h4>What you'll learn</h4>
+<p>gUFO's <code>gufo:Object</code> is not a single undifferentiated bucket. It has three subclasses that
+differ in <em>how their parts relate to the whole</em>, and each comes with its own part-whole property.
+This example shows all three at once, in a domain where they naturally coexist: a car (a complex made of
+parts playing different roles), a fleet (a collection of uniform members), and fuel (a quantity of stuff).</p>
+</div>
+
+<h2>The domain</h2>
+<p>A car-sharing operator, CityWheels, has a fleet of cars. Each car is built from components (an engine,
+wheels). The fleet itself gains and loses cars as they are bought and retired. Cars run on gasoline, stored
+in bulk in a tank at the depot before being pumped into individual cars.</p>
+
+<h2>Step by step</h2>
+
+<div class="steps">
+
+<div class="step">
+<h3>Functional complex: parts with <em>different</em> roles</h3>
+<p>A <code>gufo:FunctionalComplex</code> is what most ordinary objects are: a whole whose parts (components)
+each contribute something different. A car's engine and its wheels do not play the same role in the car, so
+<code>:Car</code>, <code>:Engine</code> and <code>:Wheel</code> are all functional complexes, and the
+part-whole link between them is (a sub-property of) <code>gufo:isComponentOf</code>:</p>
+<pre><code>:Car a owl:Class , gufo:Kind ;
+    rdfs:subClassOf gufo:FunctionalComplex .
+
+:Engine a owl:Class , gufo:Kind ;
+    rdfs:subClassOf gufo:FunctionalComplex .
+
+:isEngineOf a owl:ObjectProperty ;
+    rdfs:subPropertyOf gufo:isComponentOf ;
+    rdfs:domain :Engine ;
+    rdfs:range :Car .
+
+:Car001Engine a :Engine ;
+    :isEngineOf :Car001 .</code></pre>
+<p>Declaring a domain-specific sub-property (<code>:isEngineOf</code>) rather than using
+<code>gufo:isComponentOf</code> directly is optional but recommended: it lets you constrain domain and range
+per part type (an engine is a component of a car; a wheel, of a car too, but through its own property) while
+every asserted fact remains, by subsumption, also an instance of the general <code>gufo:isComponentOf</code>
+relation.</p>
+</div>
+
+<div class="step">
+<h3>Collection: parts with a <em>uniform</em> role</h3>
+<p>The fleet is different: every member -- every car in it -- plays the very same role ("being a member of
+the fleet"). That uniform structure is what <code>gufo:Collection</code> is for. Because CityWheels buys and
+retires cars over time, the fleet's membership is variable, so it is specifically a
+<code>gufo:VariableCollection</code> (the alternative, <code>gufo:FixedCollection</code>, is for collections
+like a hand of cards dealt in a game, where swapping a member yields a strictly different collection):</p>
+<pre><code>:Fleet a owl:Class , gufo:Kind ;
+    rdfs:subClassOf gufo:VariableCollection .
+
+:isFleetMemberOf a owl:ObjectProperty ;
+    rdfs:subPropertyOf gufo:isCollectionMemberOf ;
+    rdfs:domain :Car ;
+    rdfs:range :Fleet .
+
+:CityWheelsFleet a :Fleet .
+:Car001 :isFleetMemberOf :CityWheelsFleet .</code></pre>
+<div class="callout goal">
+<p style="margin:0"><strong>FunctionalComplex or Collection?</strong> gUFO's own documentation flags this
+exact case: if the fleet's cars are genuinely undifferentiated -- each just "a member of the fleet" -- then
+<code>Fleet</code> is a collection. If the cars actually play distinct functional roles in it -- "cargo
+car", "passenger car" -- then the fleet is really a functional complex, whose parts play those distinct
+roles. This is not a free choice for the ontology to make: it is a fact about how the fleet is structured,
+which the ontology is responsible for getting right. What genuinely is a modeling choice is <em>scope</em> --
+whether the ontology needs to represent that role differentiation at all. Choosing to model the fleet as a
+plain collection because the roles do not matter for the task at hand is a legitimate (if coarser-grained)
+conceptualization.</p>
+</div>
+<p>Collections can also have sub-collections, when a subset of the members forms a collection in its own
+right -- <code>gufo:isSubCollectionOf</code> (transitive) is for exactly this, distinct from membership:</p>
+<pre><code>:ElectricSubfleet a :Fleet ;
+    gufo:isSubCollectionOf :CityWheelsFleet .
+
+:Car001 :isFleetMemberOf :ElectricSubfleet .</code></pre>
+</div>
+
+<div class="step">
+<h3>Quantity: no roles at all, just more or less stuff</h3>
+<p>Gasoline has neither distinct components nor uniform "members" -- it is not made of parts at all in the
+way a car or a fleet is. <code>gufo:Quantity</code> models exactly this: a maximally self-connected portion
+of stuff whose sub-quantities are, again, just more (or less) of the same stuff. Unlike a car's components,
+a quantity's sub-quantities do not each play a distinct functional role. Note the class name,
+<code>:QuantityOfGasoline</code>, not just <code>:Gasoline</code>: its instances are individual portions of
+the stuff (this tankful, that delivery), not the material itself -- the same naming convention the gUFO
+usage guide uses for <code>AmountOfMarble</code>:</p>
+<pre><code>:QuantityOfGasoline a owl:Class , gufo:Kind ;
+    rdfs:subClassOf gufo:Quantity .
+
+:isPortionOf a owl:ObjectProperty ;
+    rdfs:subPropertyOf gufo:isSubQuantityOf ;
+    rdfs:domain :QuantityOfGasoline ;
+    rdfs:range :QuantityOfGasoline .
+
+:CityWheelsDepotSupply a :QuantityOfGasoline .
+
+:TuesdayDeliveryLot a :QuantityOfGasoline ;
+    :isPortionOf :CityWheelsDepotSupply .</code></pre>
+<p><code>gufo:isSubQuantityOf</code>, like <code>gufo:isComponentOf</code>, is a genuine parthood relation:
+it holds only for as long as the part actually, currently is part of the whole. Tuesday's delivery lot is a
+sub-quantity of the depot supply right now, because it is still sitting in the same tank as the rest of it --
+identifiable (for quality tracing, say) without having gone anywhere.</p>
+<p>That is what makes a quantity's parthood different from a component's, and it is easy to get backwards:
+once some of that gasoline is pumped into a car, it is no longer part of the depot supply at all -- it has
+been physically separated into a new, independent quantity. That does not mean the connection to where it
+came from has to go unrecorded, only that <code>gufo:isSubQuantityOf</code> is the wrong property for it.
+gUFO has a property for exactly this weaker, historical link: <code>gufo:historicallyDependsOn</code> (the
+same property used for causal and historical dependence between events in
+<a href="../05-events/index.html">example 5</a>, since its domain and range are the fully general
+<code>gufo:ConcreteIndividual</code>, not just <code>gufo:Event</code>):</p>
+<pre><code>:Car002FuelTankContents a :QuantityOfGasoline ;
+    gufo:historicallyDependsOn :TuesdayDeliveryLot .
+    # no :isPortionOf triple: this fuel is no longer part of :CityWheelsDepotSupply
+    # or :TuesdayDeliveryLot -- asserting one would misstate the current facts, not
+    # just their history. gufo:historicallyDependsOn records the history instead,
+    # without claiming the two are still, in any sense, one connected portion of stuff.</code></pre>
+<p>Contrast this with <code>gufo:isComponentOf</code>: unbolt a wheel and put it back on and the car has
+regained the very same component. Siphon gasoline out of a tank and there is no "putting it back" that
+restores anything -- a quantity's identity is exhausted by what it currently, physically consists of. gUFO's
+<code>gufo:Quantity</code> comment calls this "fixed constitution".</p>
+</div>
+
+</div>
+
+<h2>All three, side by side</h2>
+<table class="datatable">
+<tr><th>gUFO class</th><th>What its parts have in common</th><th>Part-whole property</th><th>In this example</th></tr>
+<tr><td><code>gufo:FunctionalComplex</code></td><td>Each part plays a <em>different</em> role</td><td><code>gufo:isComponentOf</code></td><td>Engine, Wheel &rarr; Car</td></tr>
+<tr><td><code>gufo:Collection</code></td><td>Every part plays the <em>same</em> role</td><td><code>gufo:isCollectionMemberOf</code>, <code>gufo:isSubCollectionOf</code></td><td>Car &rarr; Fleet</td></tr>
+<tr><td><code>gufo:Quantity</code></td><td>Parts are just more of the same stuff</td><td><code>gufo:isSubQuantityOf</code></td><td>Delivery lot &rarr; Depot supply</td></tr>
+</table>
+<p>All of these are sub-properties of the top-level <code>gufo:isObjectProperPartOf</code>, which is itself a
+sub-property of <code>gufo:isProperPartOf</code> (the part-whole relation shared with events -- see
+<a href="../05-events/index.html">example 5</a>).</p>
+
+<h2>The full ontology</h2>
+<p>See <a href="ontology.ttl"><code>ontology.ttl</code></a> for the complete file.</p>
+
+<div class="callout check">
+<h4>How this is checked</h4>
+<p>Unlike <a href="../01-endurant-types/index.html">example 1</a>, this example is not primarily about the
+taxonomy of types that gufoshapes targets, so its main value here is a straightforward pass: both checks
+confirm the ontology is well-formed.</p>
+<ul>
+<li><strong>OWL 2 DL reasoning</strong> (Pellet) -- <code>gufo.ttl</code> + <code>ontology.ttl</code> is
+consistent, and every class remains satisfiable (in particular, <code>:ElectricSubfleet</code> being both a
+sub-collection of <code>:CityWheelsFleet</code> and itself a <code>:Fleet</code> does not collapse anything).</li>
+<li><strong>SHACL validation</strong> against <a href="https://github.com/nemo-ufes/gufoshapes">gufoshapes</a>
+-- conforms (all three complex-object classes are plain, disjoint kinds with no sortality mistakes).</li>
+</ul>
+<pre><code>cd examples/tests
+.venv/bin/pytest -v -k objects-and-parts</code></pre>
+</div>
+
+<nav class="example-nav">
+<a href="../01-endurant-types/index.html">&larr; Previous: Endurant types</a>
+<a href="../index.html">All examples</a>
+<a href="../03-qualities/index.html">Next: Qualities &rarr;</a>
+</nav>
+
+<footer class="site-footer">
+Part of the <a href="https://github.com/nemo-ufes/gufo">gUFO</a> usage examples. Ontology and text
+licensed under <a href="https://creativecommons.org/licenses/by/4.0/legalcode">CC BY 4.0</a>.
+</footer>
+
+</body>
+</html>

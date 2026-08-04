@@ -1,0 +1,46 @@
+@prefix : <https://purl.org/nemo/gufo-examples/endurant-types-invalid#> .
+@prefix ex: <https://purl.org/nemo/gufo-examples/endurant-types#> .
+@prefix gufo: <http://purl.org/nemo/gufo#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+#################################################################
+# gUFO example 01 -- a COMMON MISTAKE, kept here on purpose.
+#
+# This file re-declares the classes from ontology.ttl and adds one
+# extra class, :Manager, that a modeler introduced by mistake as a
+# gufo:Kind specializing the gufo:Role :Employee. It is discussed
+# in index.html ("Common pitfall"). Do not copy this pattern.
+#################################################################
+
+: a owl:Ontology ;
+    rdfs:comment "Deliberately invalid variant of example 01, used by the test suite to show that OWL alone does not catch sortality mistakes that the gUFO SHACL shapes do catch."@en ;
+    owl:imports <https://purl.org/nemo/gufo#> .
+
+:Agent a owl:Class , gufo:Category ;
+    rdfs:subClassOf gufo:FunctionalComplex .
+
+:Person a owl:Class , gufo:Kind ;
+    rdfs:subClassOf :Agent .
+
+:Employee a owl:Class , gufo:Role ;
+    rdfs:subClassOf :Person .
+
+# MISTAKE: a modeler wants to say that managers are a special,
+# permanent-looking category of employee, and reaches for gufo:Kind
+# (perhaps thinking "Kind = important, top-level class"). But
+# gufo:Kind means "rigid sortal providing a principle of identity",
+# and :Employee already provides identity (inherited from :Person) --
+# and is anti-rigid to boot. The result is a rigid type specializing
+# an anti-rigid one, and a second Kind appearing below the first
+# sortal in the same identity chain. Both are meaningless in UFO:
+# what the modeler most likely wanted was `:Manager a gufo:Role`
+# (or gufo:SubKind, if managers are meant to be a permanent
+# specialization that does not depend on an employment relation).
+:Manager a owl:Class , gufo:Kind ;
+    rdfs:subClassOf :Employee ;
+    rdfs:label "Manager"@en .
+
+:Dana a :Person , :Employee , :Manager ;
+    rdfs:label "Dana"@en .

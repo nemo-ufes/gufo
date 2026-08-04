@@ -1,0 +1,96 @@
+@prefix : <https://purl.org/nemo/gufo-examples/higher-order-types#> .
+@prefix gufo: <http://purl.org/nemo/gufo#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+#################################################################
+# gUFO usage example 07: Higher-order types
+#
+# Demonstrates gUFO's powertype pattern (gufo:partitions), using OWL
+# 2 punning, in a wildlife classification scheme: every animal has
+# exactly one species, and species themselves (not individual
+# animals) are assessed for conservation status. See index.html for
+# a guided walkthrough. Animal names are fictional.
+#################################################################
+
+: a owl:Ontology ;
+    rdfs:label "gUFO example 07: Higher-order types"@en ;
+    rdfs:comment "A small ontology of wildlife classification, illustrating gUFO's powertype pattern: a higher-order type whose instances are themselves subclasses of a base type."@en ;
+    owl:imports <https://purl.org/nemo/gufo#> .
+
+#################################################################
+# The base type
+#################################################################
+
+:Animal a owl:Class , gufo:Kind ;
+    rdfs:subClassOf gufo:FunctionalComplex ;
+    rdfs:label "Animal"@en .
+
+#################################################################
+# The higher-order type: gufo:partitions -- an exhaustive-in-spirit,
+# pairwise disjoint classification. Every animal has exactly one
+# species.
+#################################################################
+
+:AnimalSpecies a owl:Class , gufo:Type ;
+    rdfs:subClassOf gufo:Type ;
+    gufo:partitions :Animal ;
+    rdfs:label "Animal species"@en ;
+    rdfs:comment "A higher-order type: its own instances (Lion, Hyena, Elephant, below) are themselves classes -- subclasses of Animal. Every animal belongs to exactly one species, so gufo:partitions -- rather than the weaker gufo:categorizes -- is the right property here. AnimalSpecies is declared a plain gufo:Type (and a specialization of gufo:Type, so its own instances count as gufo:Type too), not a gufo:SubKind or any other rigidity/sortality metatype: gufo:partitions' domain excludes gufo:ConcreteIndividualType -- which is where Kind/SubKind/Phase/Role/Category all live -- from anything that itself partitions or categorizes another type, so a genuine higher-order type like this one can never also be given one of those metatypes."@en .
+
+:Lion a owl:Class , :AnimalSpecies ;
+    rdfs:subClassOf :Animal ;
+    rdfs:label "Lion"@en .
+
+:Hyena a owl:Class , :AnimalSpecies ;
+    rdfs:subClassOf :Animal ;
+    rdfs:label "Hyena"@en .
+
+:Elephant a owl:Class , :AnimalSpecies ;
+    rdfs:subClassOf :Animal ;
+    rdfs:label "Elephant"@en .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( :Lion :Hyena :Elephant ) .
+
+#################################################################
+# Conservation status: a regular property, not a higher-order type.
+# IUCN-style status is a fact about a species as a whole --
+# populations decline or recover -- not about any individual animal
+# in it, so its domain is :AnimalSpecies (the class of species,
+# already established above), not :Animal.
+#################################################################
+
+:ConservationStatus a owl:Class ;
+    owl:equivalentClass [ a owl:Class ; owl:oneOf ( :Endangered :Vulnerable :LeastConcern ) ] ;
+    rdfs:label "Conservation status"@en ;
+    rdfs:comment "The (closed) value space for :hasConservationStatus, following the same enumerated-value pattern as :ShirtSize in example 3."@en .
+
+:Endangered a :ConservationStatus ; rdfs:label "Endangered"@en .
+:Vulnerable a :ConservationStatus ; rdfs:label "Vulnerable"@en .
+:LeastConcern a :ConservationStatus ; rdfs:label "Least concern"@en .
+
+:hasConservationStatus a owl:ObjectProperty ;
+    rdfs:domain :AnimalSpecies ;
+    rdfs:range :ConservationStatus ;
+    rdfs:label "has conservation status"@en .
+
+:Lion :hasConservationStatus :Endangered .
+:Hyena :hasConservationStatus :LeastConcern .
+:Elephant :hasConservationStatus :Vulnerable .
+
+#################################################################
+# Individuals
+#################################################################
+
+:Kesi a :Lion ;
+    rdfs:label "Kesi"@en ;
+    rdfs:comment "Kesi belongs to an endangered species, but :hasConservationStatus is a property of the species (:Lion), not of Kesi himself -- Kesi is not, and does not need to be, an :AnimalSpecies."@en .
+
+:Nia a :Hyena ;
+    rdfs:label "Nia"@en .
+
+:Tembo a :Elephant ;
+    rdfs:label "Tembo"@en .

@@ -1,0 +1,49 @@
+@prefix : <https://purl.org/nemo/gufo-examples/higher-order-types-invalid#> .
+@prefix ex: <https://purl.org/nemo/gufo-examples/higher-order-types#> .
+@prefix gufo: <http://purl.org/nemo/gufo#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+#################################################################
+# gUFO example 07 -- a COMMON MISTAKE, kept here on purpose.
+#
+# Re-declares AnimalSpecies from ontology.ttl and adds a new
+# species, :Tiger, the way a modeler might do it in a hurry: by
+# copying the :Lion pattern but forgetting to add the new class to
+# the disjointness declaration. Discussed in index.html ("Common
+# pitfall"). Do not copy this pattern.
+#################################################################
+
+: a owl:Ontology ;
+    rdfs:comment "Deliberately invalid variant of example 07, used by the test suite to show that OWL alone does not catch a missing disjointness declaration between partition members that gufoshapes does catch."@en ;
+    owl:imports <https://purl.org/nemo/gufo#> .
+
+:Animal a owl:Class , gufo:Kind ;
+    rdfs:subClassOf gufo:FunctionalComplex .
+
+:AnimalSpecies a owl:Class , gufo:Type ;
+    rdfs:subClassOf gufo:Type ;
+    gufo:partitions :Animal .
+
+:Lion a owl:Class , :AnimalSpecies ;
+    rdfs:subClassOf :Animal .
+
+:Hyena a owl:Class , :AnimalSpecies ;
+    rdfs:subClassOf :Animal ;
+    owl:disjointWith :Lion .
+
+# MISTAKE: a new species is added the way :Lion and :Hyena were,
+# but the modeler forgot the disjointness declaration -- nothing
+# here says a tiger cannot also be a lion. OWL raises no error
+# (disjointness is never assumed by default; without it, a DL
+# reasoner simply allows an individual to be both), but it defeats
+# the purpose of AnimalSpecies as a partition: species are supposed
+# to be mutually exclusive.
+:Tiger a owl:Class , :AnimalSpecies ;
+    rdfs:subClassOf :Animal ;
+    rdfs:label "Tiger"@en .
+
+:Rajah a :Lion , :Tiger ;
+    rdfs:label "Rajah"@en ;
+    rdfs:comment "Perfectly fine as far as OWL is concerned: an individual that is both a lion and a tiger, because nothing declares the two disjoint."@en .
