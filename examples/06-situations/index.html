@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>gUFO example 6: Situations -- Patient health record</title>
+<link rel="stylesheet" type="text/css" href="../common/style.css">
+</head>
+<body>
+
+<p class="breadcrumb"><a href="../index.html">gUFO examples</a> &raquo; 6. Situations</p>
+
+<h1>Example 6: Situations</h1>
+<p class="tagline">A patient health record -- tracking change with gufo:Situation and its five subclasses</p>
+
+<div class="concept-badges">
+<span class="badge">gufo:Situation</span>
+<span class="badge">gufo:QualityValueAttributionSituation</span>
+<span class="badge">gufo:TemporaryInstantiationSituation</span>
+<span class="badge">gufo:TemporaryParthoodSituation</span>
+<span class="badge">gufo:TemporaryConstitutionSituation</span>
+<span class="badge">gufo:TemporaryRelationshipSituation</span>
+<span class="badge">gufo:broughtAbout</span>
+<span class="badge">gufo:contributedToTrigger</span>
+</div>
+
+<nav class="example-nav">
+<a href="../05-events/index.html">&larr; Previous: Events</a>
+<a href="../index.html">All examples</a>
+<a href="../07-higher-order-types/index.html">Next: Higher-order types &rarr;</a>
+</nav>
+
+<div class="callout goal">
+<h4>What you'll learn</h4>
+<p>Plain OWL assertions are timeless: <code>:Nora a :OverweightPerson</code> says Nora is (tenselessly) overweight,
+with no way to say <em>when</em>. Most of the facts a health record needs to track -- a patient's weight, a
+transient diagnosis, which heart is currently theirs -- are exactly the kind that hold for a while and then
+stop holding. gUFO's <code>gufo:Situation</code> and its five subclasses reify "this held, during this
+period" as an individual in its own right, giving you somewhere to attach a begin and end point. This
+example walks through all five, on one patient's record.</p>
+</div>
+
+<h2>The domain</h2>
+<p>Nora Whitfield's health record: her weight over two years, a period in which she counted as overweight, a
+heart transplant, a dental crown re-made in a different material, and a comparison with another patient at
+intake. (Patient names are fictional.)</p>
+
+<h2>The common shape</h2>
+<p>Every pattern below follows the same "qualified relation" shape: the endurant stands in a situation via a
+<code>standsInQualified...</code> property; the situation itself is further described with
+<code>concerns...</code> properties (identifying what the situation is about) and, like any concrete
+individual, with <code>gufo:hasBeginPointInXSDDate</code>/<code>gufo:hasEndPointInXSDDate</code>.</p>
+
+<h2>Step by step</h2>
+
+<div class="steps">
+
+<div class="step">
+<h3>1. Quality value attribution: a value that changes</h3>
+<p>Rather than a single <code>gufo:hasQualityValue</code> assertion (as in
+<a href="../03-qualities/index.html">example 3</a>, for a quality that does not change), each value Nora's
+weight has taken becomes its own situation:</p>
+<pre><code>:NoraWeighs82KgIn2023 a gufo:QualityValueAttributionSituation ;
+    gufo:concernsQualityType :Weight ;
+    gufo:concernsQualityValue "82.0"^^xsd:double ;
+    gufo:hasBeginPointInXSDDate "2023-01-10"^^xsd:date ;
+    gufo:hasEndPointInXSDDate "2023-06-30"^^xsd:date .
+
+:NoraWeighs75KgIn2024 a gufo:QualityValueAttributionSituation ;
+    gufo:concernsQualityType :Weight ;
+    gufo:concernsQualityValue "75.0"^^xsd:double ;
+    gufo:hasBeginPointInXSDDate "2024-01-15"^^xsd:date .
+
+:Nora gufo:standsInQualifiedAttribution :NoraWeighs82KgIn2023 , :NoraWeighs75KgIn2024 .</code></pre>
+<p><code>:Weight</code> here is just a plain subclass of <code>gufo:Quality</code>, used as the object of
+<code>gufo:concernsQualityType</code> -- note this is a different use of "Weight" than instantiating it with
+a reified quality individual (as Gemstone1Mass was in example 3): here the class itself is what is pointed
+to, since <code>gufo:concernsQualityType</code>'s range is <code>gufo:EndurantType</code>, not
+<code>gufo:Quality</code>. This is OWL 2 punning again -- the same mechanism used throughout
+<a href="../01-endurant-types/index.html">example 1</a> and <a href="../07-higher-order-types/index.html">example 7</a>, except here it happens implicitly: simply using <code>:Weight</code> as the object of a
+property whose range is <code>gufo:EndurantType</code> is enough for a reasoner to type it accordingly,
+without an explicit <code>:Weight a gufo:Kind</code> triple.</p>
+</div>
+
+<div class="step">
+<h3>2. Temporary instantiation: a phase held for a while</h3>
+<p>Instead of a plain, tenseless <code>:Nora a :OverweightPerson</code>, the period during which the phase applied
+is recorded explicitly:</p>
+<pre><code>:NoraWasOverweightUntilJune2023 a gufo:TemporaryInstantiationSituation ;
+    gufo:concernsNonRigidType :OverweightPerson ;
+    gufo:hasBeginPointInXSDDate "2020-03-01"^^xsd:date ;
+    gufo:hasEndPointInXSDDate "2023-06-30"^^xsd:date .
+
+:Nora gufo:standsInQualifiedInstantiation :NoraWasOverweightUntilJune2023 .</code></pre>
+<p>Note the end date lines up with when her weight (tracked above) drops below the overweight threshold --
+the two situations are about the same change in the world, recorded from two different angles (a
+quality's value, and a phase's applicability).</p>
+</div>
+
+<div class="step">
+<h3>3. Temporary parthood: a heart transplant, and what caused it</h3>
+<p>A part that can be swapped out -- like a heart, once transplant surgery exists -- should not be linked to
+its whole with a plain <code>gufo:isComponentOf</code> assertion (which example 2 used for a car's engine,
+treating the link as essentially permanent). Instead, each parthood episode is its own situation:</p>
+<pre><code>:NoraHadNativeHeart a gufo:TemporaryParthoodSituation ;
+    gufo:concernsTemporaryWhole :Nora ;
+    gufo:hasEndPointInXSDDate "2024-03-05"^^xsd:date .
+:NoraNativeHeart gufo:standsInQualifiedParthood :NoraHadNativeHeart .
+
+:NoraHasDonorHeart a gufo:TemporaryParthoodSituation ;
+    gufo:concernsTemporaryWhole :Nora ;
+    gufo:hasBeginPointInXSDDate "2024-03-05"^^xsd:date .
+:DonorHeart881 gufo:standsInQualifiedParthood :NoraHasDonorHeart .</code></pre>
+<p>What caused the second situation to start? The surgery itself, and gUFO has a property just for
+"an event brought this situation about":</p>
+<pre><code>:NoraHeartTransplant20240305 a :HeartTransplantSurgery ;
+    gufo:hasBeginPointInXSDDate "2024-03-05"^^xsd:date ;
+    gufo:broughtAbout :NoraHasDonorHeart .</code></pre>
+</div>
+
+<div class="step">
+<h3>4. Temporary constitution: same crown, different material</h3>
+<p>Nora's dental crown keeps its identity across a repair, even though what it is made of changes -- exactly
+the kind of case <code>gufo:TemporaryConstitutionSituation</code> is for (mirroring the Venus de Milo example
+in the gUFO usage guide, which loses its arms without losing its identity):</p>
+<pre><code>:NoraCrownWasPorcelain a gufo:TemporaryConstitutionSituation ;
+    gufo:concernsConstitutedEndurant :NoraCrown ;
+    gufo:hasEndPointInXSDDate "2022-11-20"^^xsd:date .
+:OriginalPorcelainBatch gufo:standsInQualifiedConstitution :NoraCrownWasPorcelain .
+
+:NoraCrownIsResin a gufo:TemporaryConstitutionSituation ;
+    gufo:concernsConstitutedEndurant :NoraCrown ;
+    gufo:hasBeginPointInXSDDate "2022-11-21"^^xsd:date .
+:ReplacementResinBatch gufo:standsInQualifiedConstitution :NoraCrownIsResin .</code></pre>
+</div>
+
+<div class="step">
+<h3>5. Temporary relationship: a comparison that can flip</h3>
+<p>Finally, a relationship between two patients that depends on a quality that changes -- "heavier than" --
+is qualified the same way, with the relationship type itself declared a
+<code>gufo:ComparativeRelationshipType</code> derived from the Weight quality, exactly as the usage guide
+recommends:</p>
+<pre><code>:heavierThan a owl:ObjectProperty , gufo:ComparativeRelationshipType ;
+    rdfs:domain :Patient ; rdfs:range :Patient ;
+    gufo:isDerivedFrom :Weight .
+
+:NoraHeavierThanMiguelOn20240115 a gufo:TemporaryRelationshipSituation ;
+    gufo:concernsRelationshipType :heavierThan ;
+    :concernsLighterPatient :Miguel ;
+    gufo:hasBeginPointInXSDDate "2024-01-15"^^xsd:date ;
+    gufo:hasEndPointInXSDDate "2024-01-15"^^xsd:date .
+
+:Nora :standsAsHeavierPatient :NoraHeavierThanMiguelOn20240115 .</code></pre>
+</div>
+
+<div class="step">
+<h3>Bonus: a weaker link, <code>gufo:contributedToTrigger</code></h3>
+<p><code>gufo:broughtAbout</code> (step 3) links an event to a situation it is sufficient to explain.
+Sometimes a situation only plays a part in causing an event, without being sufficient on its own -- gUFO's
+<code>gufo:contributedToTrigger</code> is for that weaker claim, going the other direction (situation
+&rarr; event):</p>
+<pre><code>:NoraWasFebrileOnAdmission a gufo:TemporaryInstantiationSituation ;
+    gufo:concernsNonRigidType :FebrilePatient ;
+    gufo:hasBeginPointInXSDDateTimeStamp "2024-02-02T08:00:00Z"^^xsd:dateTimeStamp ;
+    gufo:hasEndPointInXSDDateTimeStamp "2024-02-02T14:00:00Z"^^xsd:dateTimeStamp ;
+    gufo:contributedToTrigger :SepsisAlert20240202 .</code></pre>
+<p>Nora's fever, by itself, does not guarantee the alert fires (other vitals matter too) -- it merely
+contributed. This mirrors <a href="../05-events/index.html">example 5</a>'s
+<code>gufo:historicallyDependsOn</code>, but at the situation, rather than event-to-event, level.</p>
+</div>
+
+</div>
+
+<div class="callout goal">
+<h4>Going further: gufoevents</h4>
+<p>This example only says <em>that</em> each pair of situations replaced one another -- it never models the
+event in between that changed things (the transplant surgery is the one exception, via
+<code>gufo:broughtAbout</code>). The <a href="http://w3id.org/nemo/gufoevents">gufoevents</a> extension
+supplies dedicated event classes for exactly these transitions, each already axiomatized to bring about the
+right kind of situation: <code>gufoevents:QualityValueChange</code> for step 1's change in
+Nora's weight, <code>gufoevents:Declassification</code>/<code>Reclassification</code> for step 2's phase
+change, <code>gufoevents:PartReplacement</code> for step 3's heart transplant (a single complex event
+composed of the separation of the native heart and the incorporation of the donor heart), and
+<code>gufoevents:ConstituentSubstitution</code> for step 4's crown re-made in a different material. Reaching
+for gufoevents is worthwhile whenever an ontology needs to reason about the change itself -- not just about
+the before-and-after situations it connects.</p>
+</div>
+
+<h2>The full ontology</h2>
+<p>See <a href="ontology.ttl"><code>ontology.ttl</code></a> for the complete file.</p>
+
+<div class="callout check">
+<h4>How this is checked</h4>
+<p>Each situation subclass carries its own qualified cardinality restrictions (e.g.
+<code>TemporaryConstitutionSituation</code> requires exactly one <code>gufo:concernsConstitutedEndurant</code>
+value that is a <code>gufo:Object</code>, and exactly one endurant standing in it via the inverse of
+<code>gufo:standsInQualifiedConstitution</code>) -- these are exactly the kind of thing a DL reasoner checks
+well.</p>
+<ul>
+<li><strong>OWL 2 DL reasoning</strong> (Pellet) -- <code>gufo.ttl</code> + <code>ontology.ttl</code> is
+consistent, and every situation individual satisfies its class's restrictions (including the pairwise
+disjointness between the five situation subclasses).</li>
+<li><strong>SHACL validation</strong> against <a href="https://github.com/nemo-ufes/gufoshapes">gufoshapes</a>
+-- conforms.</li>
+</ul>
+<pre><code>cd examples/tests
+.venv/bin/pytest -v -k 06-situations</code></pre>
+</div>
+
+<nav class="example-nav">
+<a href="../05-events/index.html">&larr; Previous: Events</a>
+<a href="../index.html">All examples</a>
+<a href="../07-higher-order-types/index.html">Next: Higher-order types &rarr;</a>
+</nav>
+
+<footer class="site-footer">
+Part of the <a href="https://github.com/nemo-ufes/gufo">gUFO</a> usage examples. Ontology and text
+licensed under <a href="https://creativecommons.org/licenses/by/4.0/legalcode">CC BY 4.0</a>.
+</footer>
+
+</body>
+</html>

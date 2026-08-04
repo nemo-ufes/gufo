@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>gUFO example 3: Qualities and quality values -- Retail products</title>
+<link rel="stylesheet" type="text/css" href="../common/style.css">
+</head>
+<body>
+
+<p class="breadcrumb"><a href="../index.html">gUFO examples</a> &raquo; 3. Qualities and quality values</p>
+
+<h1>Example 3: Qualities and quality values</h1>
+<p class="tagline">Retail products -- basic, enumerated and multidimensional quality patterns</p>
+
+<div class="concept-badges">
+<span class="badge">gufo:Quality</span>
+<span class="badge">gufo:QualityValue</span>
+<span class="badge">gufo:inheresIn</span>
+<span class="badge">gufo:hasQualityValue</span>
+<span class="badge">gufo:hasReifiedQualityValue</span>
+<span class="badge">gufo:hasValueComponent</span>
+</div>
+
+<nav class="example-nav">
+<a href="../02-objects-and-parts/index.html">&larr; Previous: Objects &amp; parts</a>
+<a href="../index.html">All examples</a>
+<a href="../04-relators/index.html">Next: Relators &rarr;</a>
+</nav>
+
+<div class="callout goal">
+<h4>What you'll learn</h4>
+<p>gUFO treats a quality (a gemstone's mass, a painting's color) as a first-class individual that
+<em>inheres in</em> the thing it characterizes, rather than as a bare literal attribute -- this is what lets
+you attach further information to the quality itself (when it changed, what its value means in different
+scales) and is called <em>reification</em>. This example walks through the three patterns the gUFO usage
+guide offers for giving a reified quality a value, from simplest to most expressive, on three different
+products.</p>
+</div>
+
+<h2>The domain</h2>
+<p>A small retailer sells gemstones (characterized by mass), t-shirts (characterized by size) and paintings
+(characterized by color) -- three products, three qualities, three ways of recording a value.</p>
+
+<h2>Step by step</h2>
+
+<div class="steps">
+
+<div class="step">
+<h3>Pattern 1: a literal value (<code>Gemstone1</code>'s mass)</h3>
+<p>The simplest pattern: the quality is a reified individual, related to its bearer via a sub-property of
+<code>gufo:inheresIn</code>, and given a value via a sub-property of the datatype property
+<code>gufo:hasQualityValue</code>:</p>
+<pre><code>:Mass rdfs:subClassOf gufo:Quality .
+
+:massOf rdfs:subPropertyOf gufo:inheresIn ;
+    rdfs:domain :Mass ; rdfs:range :Gemstone .
+
+:massInGrams rdfs:subPropertyOf gufo:hasQualityValue ;
+    rdfs:domain :Mass ; rdfs:range xsd:double .
+
+:Gemstone1Mass a :Mass ;
+    :massOf :Gemstone1 ;
+    :massInGrams "4.5"^^xsd:double .</code></pre>
+<p>The ontology also restricts <code>:Mass</code> to inhere in <em>exactly one</em> gemstone
+(<code>owl:qualifiedCardinality "1"</code> on <code>gufo:inheresIn</code>) -- a good habit for any quality
+type once its bearer's class is known, since gUFO itself leaves <code>gufo:inheresIn</code>
+unconstrained.</p>
+<p>Use this pattern whenever a plain number (or string, date, ...) is all a quality value needs to be.</p>
+</div>
+
+<div class="step">
+<h3>Pattern 2: an enumerated reified value (<code>TShirt1</code>'s size)</h3>
+<p>A shirt size is not naturally a number: "S", "M", "L", "XL" is a closed, ordered set with no obvious
+numeric encoding worth committing to. Instead of a literal, the quality is given an individual drawn from a
+class of <code>gufo:QualityValue</code>, restricted by <code>owl:oneOf</code> to exactly those four
+individuals:</p>
+<pre><code>:ShirtSize rdfs:subClassOf gufo:QualityValue ;
+    owl:equivalentClass [ a owl:Class ; owl:oneOf ( :S :M :L :XL ) ] .
+
+:Size rdfs:subClassOf gufo:Quality .
+
+:sizeOf rdfs:subPropertyOf gufo:inheresIn ;
+    rdfs:domain :Size ; rdfs:range :TShirt .
+
+:hasSizeValue rdfs:subPropertyOf gufo:hasReifiedQualityValue ;
+    rdfs:domain :Size ; rdfs:range :ShirtSize .
+
+:TShirt1Size a :Size ;
+    :sizeOf :TShirt1 ;
+    :hasSizeValue :M .</code></pre>
+<p>The object property <code>gufo:hasReifiedQualityValue</code> (rather than the datatype property
+<code>gufo:hasQualityValue</code> from pattern 1) is gUFO's marker that the value itself is a reified
+individual, not a literal.</p>
+</div>
+
+<div class="step">
+<h3>Pattern 3: a multidimensional reified value (<code>Painting1</code>'s color)</h3>
+<p>Color needs more than one number at once -- a point in a 3-D space, not a single scalar or an item from a
+closed list. The value is again a <code>gufo:QualityValue</code> individual (this time not restricted by
+<code>owl:oneOf</code>, since the space of RGB triples is not enumerable), but now it carries its own
+datatype properties, each a sub-property of <code>gufo:hasValueComponent</code>, one per dimension:</p>
+<pre><code>:ColorValueInRGB rdfs:subClassOf gufo:QualityValue .
+
+:hasRedValueComponent rdfs:subPropertyOf gufo:hasValueComponent ;
+    rdfs:domain :ColorValueInRGB ; rdfs:range xsd:nonNegativeInteger .
+:hasGreenValueComponent rdfs:subPropertyOf gufo:hasValueComponent ; ... .
+:hasBlueValueComponent  rdfs:subPropertyOf gufo:hasValueComponent ; ... .
+
+:Color rdfs:subClassOf gufo:Quality .
+
+:hasColorValueInRGB rdfs:subPropertyOf gufo:hasReifiedQualityValue ;
+    rdfs:domain :Color ; rdfs:range :ColorValueInRGB .
+
+:Painting1Color a :Color ;
+    :colorOf :Painting1 ;
+    :hasColorValueInRGB [ a :ColorValueInRGB ;
+        :hasRedValueComponent "0"^^xsd:nonNegativeInteger ;
+        :hasGreenValueComponent "47"^^xsd:nonNegativeInteger ;
+        :hasBlueValueComponent "167"^^xsd:nonNegativeInteger ] .</code></pre>
+<p>Because the value is reified, the same color could, without touching <code>:Painting1Color</code>'s
+identity, also be given a value in a different space -- e.g. a CMYK quadruple via a second
+<code>hasColorValueInCMYK</code> property -- something a bare literal could never support cleanly.</p>
+</div>
+
+</div>
+
+<h2>Choosing a pattern</h2>
+<table class="datatable">
+<tr><th>Value shape</th><th>Use</th><th>Example here</th></tr>
+<tr><td>A single number, string, date, ...</td><td><code>gufo:hasQualityValue</code> (datatype property) + a literal</td><td>Mass in grams</td></tr>
+<tr><td>One of a fixed, enumerable set</td><td><code>gufo:hasReifiedQualityValue</code> + <code>owl:oneOf</code></td><td>Shirt size</td></tr>
+<tr><td>A point in a multidimensional space</td><td><code>gufo:hasReifiedQualityValue</code> + <code>gufo:hasValueComponent</code> per dimension</td><td>RGB color</td></tr>
+</table>
+<p>All three qualities remain, throughout, ordinary <code>gufo:ConcreteIndividual</code>s: nothing stops you
+from also tracking, e.g., when a quality's value last changed, using the situation-based pattern in
+<a href="../06-situations/index.html">example 6</a>.</p>
+
+<h2>The full ontology</h2>
+<p>See <a href="ontology.ttl"><code>ontology.ttl</code></a> for the complete file.</p>
+
+<div class="callout check">
+<h4>How this is checked</h4>
+<ul>
+<li><strong>OWL 2 DL reasoning</strong> (Pellet) -- <code>gufo.ttl</code> + <code>ontology.ttl</code> is
+consistent and satisfiable, including the qualified cardinality restriction on <code>:Mass</code>.</li>
+<li><strong>SHACL validation</strong> against <a href="https://github.com/nemo-ufes/gufoshapes">gufoshapes</a>
+-- conforms.</li>
+</ul>
+<pre><code>cd examples/tests
+.venv/bin/pytest -v -k qualities</code></pre>
+</div>
+
+<nav class="example-nav">
+<a href="../02-objects-and-parts/index.html">&larr; Previous: Objects &amp; parts</a>
+<a href="../index.html">All examples</a>
+<a href="../04-relators/index.html">Next: Relators &rarr;</a>
+</nav>
+
+<footer class="site-footer">
+Part of the <a href="https://github.com/nemo-ufes/gufo">gUFO</a> usage examples. Ontology and text
+licensed under <a href="https://creativecommons.org/licenses/by/4.0/legalcode">CC BY 4.0</a>.
+</footer>
+
+</body>
+</html>

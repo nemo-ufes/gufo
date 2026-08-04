@@ -1,0 +1,128 @@
+@prefix : <https://purl.org/nemo/gufo-examples/objects-and-parts#> .
+@prefix gufo: <http://purl.org/nemo/gufo#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+#################################################################
+# gUFO usage example 02: Objects and their parts (Car fleet)
+#
+# Demonstrates the three ways gUFO subdivides gufo:Object --
+# gufo:FunctionalComplex, gufo:Collection (gufo:VariableCollection)
+# and gufo:Quantity -- and their respective part-whole properties.
+# See index.html for a guided walkthrough.
+#################################################################
+
+: a owl:Ontology ;
+    rdfs:label "gUFO example 02: Objects and their parts (Car fleet)"@en ;
+    rdfs:comment "A small ontology of cars, their components, a fleet, and fuel, illustrating gUFO's classification of complex objects and its part-whole properties."@en ;
+    owl:imports <https://purl.org/nemo/gufo#> .
+
+#################################################################
+# FunctionalComplex: a car made of components playing different roles
+#################################################################
+
+:Car a owl:Class , gufo:Kind ;
+    rdfs:subClassOf gufo:FunctionalComplex ;
+    rdfs:label "Car"@en ;
+    rdfs:comment "A functional complex whose components (engine, wheels, ...) each play a different role in making the whole work."@en .
+
+:Engine a owl:Class , gufo:Kind ;
+    rdfs:subClassOf gufo:FunctionalComplex ;
+    rdfs:label "Engine"@en .
+
+:Wheel a owl:Class , gufo:Kind ;
+    rdfs:subClassOf gufo:FunctionalComplex ;
+    rdfs:label "Wheel"@en .
+
+:isEngineOf a owl:ObjectProperty ;
+    rdfs:subPropertyOf gufo:isComponentOf ;
+    rdfs:domain :Engine ;
+    rdfs:range :Car ;
+    rdfs:label "is engine of"@en .
+
+:isWheelOf a owl:ObjectProperty ;
+    rdfs:subPropertyOf gufo:isComponentOf ;
+    rdfs:domain :Wheel ;
+    rdfs:range :Car ;
+    rdfs:label "is wheel of"@en .
+
+#################################################################
+# Collection: a fleet, with members that come and go
+#################################################################
+
+:Fleet a owl:Class , gufo:Kind ;
+    rdfs:subClassOf gufo:VariableCollection ;
+    rdfs:label "Fleet"@en ;
+    rdfs:comment "A collection of cars with uniform structure (every member plays the same 'fleet member' role) and variable membership: cars are added when purchased and removed when retired, without the fleet losing its identity."@en .
+
+:isFleetMemberOf a owl:ObjectProperty ;
+    rdfs:subPropertyOf gufo:isCollectionMemberOf ;
+    rdfs:domain :Car ;
+    rdfs:range :Fleet ;
+    rdfs:label "is fleet member of"@en .
+
+#################################################################
+# Quantity: fuel, which has no components, only sub-quantities
+#################################################################
+
+:QuantityOfGasoline a owl:Class , gufo:Kind ;
+    rdfs:subClassOf gufo:Quantity ;
+    rdfs:label "Quantity of gasoline"@en ;
+    rdfs:comment "A maximally self-connected portion of gasoline. Removing or adding a sub-quantity yields a different quantity -- unlike a car, a portion of gasoline has no components playing distinct roles, only more (or less) of the same stuff. (Named 'QuantityOfGasoline', not 'Gasoline': instances of this class are individual portions of the stuff, not the material itself.)"@en .
+
+:isPortionOf a owl:ObjectProperty ;
+    rdfs:subPropertyOf gufo:isSubQuantityOf ;
+    rdfs:domain :QuantityOfGasoline ;
+    rdfs:range :QuantityOfGasoline ;
+    rdfs:label "is portion of"@en .
+
+#################################################################
+# Individuals
+#################################################################
+
+:Car001 a :Car ;
+    rdfs:label "Car 001"@en .
+
+:Car002 a :Car ;
+    rdfs:label "Car 002"@en .
+
+:Car001Engine a :Engine ;
+    :isEngineOf :Car001 ;
+    rdfs:label "Car 001's engine"@en .
+
+:Car001FrontLeftWheel a :Wheel ;
+    :isWheelOf :Car001 ;
+    rdfs:label "Car 001's front-left wheel"@en .
+
+:Car001FrontRightWheel a :Wheel ;
+    :isWheelOf :Car001 ;
+    rdfs:label "Car 001's front-right wheel"@en .
+
+:CityWheelsFleet a :Fleet ;
+    rdfs:label "CityWheels fleet"@en .
+
+:Car001 :isFleetMemberOf :CityWheelsFleet .
+:Car002 :isFleetMemberOf :CityWheelsFleet .
+
+:ElectricSubfleet a :Fleet ;
+    gufo:isSubCollectionOf :CityWheelsFleet ;
+    rdfs:label "CityWheels electric sub-fleet"@en ;
+    rdfs:comment "All members of the electric sub-fleet are, by definition of isSubCollectionOf, also members of the whole fleet."@en .
+
+:Car001 :isFleetMemberOf :ElectricSubfleet .
+
+:CityWheelsDepotSupply a :QuantityOfGasoline ;
+    rdfs:label "CityWheels depot fuel supply"@en ;
+    rdfs:comment "The whole quantity of gasoline currently sitting in the depot's underground storage tank."@en .
+
+:TuesdayDeliveryLot a :QuantityOfGasoline ;
+    :isPortionOf :CityWheelsDepotSupply ;
+    rdfs:label "Tuesday's delivery lot"@en ;
+    rdfs:comment "The portion added to the tank by Tuesday's delivery truck, tracked separately (e.g. for quality tracing) while it still sits, physically part of the same tank, alongside the rest of the supply. It genuinely is a sub-quantity of CityWheelsDepotSupply right now, because it is still, in fact, part of it."@en .
+
+:Car002FuelTankContents a :QuantityOfGasoline ;
+    gufo:historicallyDependsOn :TuesdayDeliveryLot ;
+    rdfs:label "Contents of Car 002's fuel tank"@en ;
+    rdfs:comment "Once pumped from the depot tank into Car 002, this fuel is physically separated from -- no longer part of -- CityWheelsDepotSupply (or TuesdayDeliveryLot), which is why there is no :isPortionOf triple linking it back. What does still hold is gufo:historicallyDependsOn: this quantity could not exist, drawn from that lot, without that lot having existed first. Unlike isSubQuantityOf, historical dependence records exactly this kind of provenance, without claiming the two are still, in any sense, one connected portion of stuff."@en .

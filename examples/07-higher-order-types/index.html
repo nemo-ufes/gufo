@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>gUFO example 7: Higher-order types -- Wildlife classification</title>
+<link rel="stylesheet" type="text/css" href="../common/style.css">
+</head>
+<body>
+
+<p class="breadcrumb"><a href="../index.html">gUFO examples</a> &raquo; 7. Higher-order types</p>
+
+<h1>Example 7: Higher-order types</h1>
+<p class="tagline">Wildlife classification -- the powertype pattern: gufo:partitions</p>
+
+<div class="concept-badges">
+<span class="badge">gufo:partitions</span>
+<span class="badge">gufo:Type</span>
+<span class="badge">gufo:Kind</span>
+<span class="badge">OWL 2 punning</span>
+</div>
+
+<nav class="example-nav">
+<a href="../06-situations/index.html">&larr; Previous: Situations</a>
+<a href="../index.html">All examples</a>
+</nav>
+
+<div class="callout goal">
+<h4>What you'll learn</h4>
+<p>"Lion" is both a class (of individual lions) and, arguably, an instance of something -- "a species" is
+itself a kind of thing you might want to reason about (how many species are there?). gUFO's higher-order
+types let a class like <code>:AnimalSpecies</code> have <em>other classes</em> as its instances, using OWL 2
+punning, and let you say precisely how strict the relationship between those instance-classes and their
+common base class is: <code>gufo:partitions</code> requires it to be a pairwise-disjoint specialization.</p>
+<p><code>:AnimalSpecies</code> is declared a plain <code>gufo:Type</code>. This
+is also the example that leans most on the SHACL shapes, since the rules governing this pattern (unlike a
+straightforward class hierarchy) are exactly the kind OWL alone cannot check on its own.</p>
+</div>
+
+<h2>The domain</h2>
+<p>A wildlife classification scheme: animals belong to exactly one species (Lion, Hyena, Elephant), and
+species -- not individual animals -- are assessed for conservation status (Endangered, Vulnerable, Least
+concern), IUCN-style: population decline or recovery is a fact about a species as a whole, not about any one
+animal in it. (Animal names are fictional.)</p>
+
+<h2>Step by step</h2>
+
+<div class="steps">
+
+<div class="step">
+<h3>The base type</h3>
+<pre><code>:Animal a owl:Class , gufo:Kind ;
+    rdfs:subClassOf gufo:FunctionalComplex .</code></pre>
+</div>
+
+<div class="step">
+<h3><code>gufo:partitions</code>: species, strictly</h3>
+<p>Every animal belongs to exactly one species, and no animal can belong to two -- a lion is never also a
+hyena. This is exactly what <code>gufo:partitions</code> is for: a higher-order type whose instances must be
+pairwise disjoint subclasses of the base type.</p>
+<pre><code>:AnimalSpecies a owl:Class , gufo:Type ;
+    rdfs:subClassOf gufo:Type ;
+    gufo:partitions :Animal .
+
+:Lion a owl:Class , :AnimalSpecies ;
+    rdfs:subClassOf :Animal .
+
+:Hyena a owl:Class , :AnimalSpecies ;
+    rdfs:subClassOf :Animal .
+
+:Elephant a owl:Class , :AnimalSpecies ;
+    rdfs:subClassOf :Animal .
+
+[] a owl:AllDisjointClasses ;
+    owl:members ( :Lion :Hyena :Elephant ) .</code></pre>
+<p>Look closely at what <code>:Lion</code> is doing here: it is declared <code>a owl:Class</code> (so
+individual lions can instantiate it), <code>a :AnimalSpecies</code> (so it is, itself, an instance of the
+higher-order type -- this is the punning), and <code>rdfs:subClassOf :Animal</code> (so its instances are
+animals). Three facts about the same name, at once, and all three are needed for the pattern to mean
+anything.</p>
+<p><code>:AnimalSpecies</code> is declared <code>a gufo:Type</code> and <code>rdfs:subClassOf gufo:Type</code>
+-- the most general acknowledgment that it is itself a type, and that its instances (<code>:Lion</code> and
+so on) are types too.</p>
+</div>
+
+<div class="step">
+<h3>Conservation status: a regular property of <code>:AnimalSpecies</code></h3>
+<p>Population decline or recovery is a fact about a species as a whole, not about any one animal in it -- but
+that does not mean it needs powertype machinery of its own. It is simply a property whose domain is
+<code>:AnimalSpecies</code> (the very class just declared above), following the same enumerated-value pattern
+as <code>:ShirtSize</code> in <a href="../03-qualities/index.html">example 3</a>:</p>
+<pre><code>:ConservationStatus a owl:Class ;
+    owl:equivalentClass [ a owl:Class ; owl:oneOf ( :Endangered :Vulnerable :LeastConcern ) ] .
+
+:hasConservationStatus a owl:ObjectProperty ;
+    rdfs:domain :AnimalSpecies ;
+    rdfs:range :ConservationStatus .
+
+:Lion :hasConservationStatus :Endangered .
+:Hyena :hasConservationStatus :LeastConcern .
+:Elephant :hasConservationStatus :Vulnerable .</code></pre>
+<p><code>:hasConservationStatus</code> applies to <code>:Lion</code> for exactly the same reason any ordinary
+property applies to any ordinary individual: <code>:Lion</code> is an instance of <code>:AnimalSpecies</code>,
+full stop -- no further punning insight is needed at this step. All the higher-order work already happened
+when <code>:Lion</code> was declared an instance of <code>:AnimalSpecies</code> above.</p>
+</div>
+
+<div class="step">
+<h3>Individuals stay one level down</h3>
+<pre><code>:Kesi a :Lion .
+
+:Nia a :Hyena .
+
+:Tembo a :Elephant .</code></pre>
+<p>Kesi is a lion, and lions have conservation status "Endangered" -- but <code>:hasConservationStatus</code>
+is never asserted on <code>:Kesi</code>, and it should not be: that property belongs to the species, not to
+any one animal in it. Nor is <code>:Kesi</code> himself an instance of <code>:AnimalSpecies</code> --
+<code>rdf:type</code> does not chain across levels. <code>:Kesi rdf:type :Lion</code> and
+<code>:Lion rdf:type :AnimalSpecies</code> are two separate facts about two different kinds of thing (an
+animal, and a species), and neither a DL reasoner nor gUFO's own axioms will combine them into
+<code>:Kesi rdf:type :AnimalSpecies</code>. If an ontology needs "what is Kesi's species' conservation
+status?" as a queryable fact starting from Kesi, that has to be asked in two steps -- follow
+<code>:Kesi</code>'s species membership, then check that species' status -- not assumed away as one.</p>
+</div>
+
+</div>
+
+<h2>The full ontology</h2>
+<p>See <a href="ontology.ttl"><code>ontology.ttl</code></a> for the complete file.</p>
+
+<div class="callout pitfall">
+<h4>Common pitfall: a new partition member, minus the disjointness</h4>
+<p>Suppose a modeler adds a fourth species by copying the <code>:Lion</code> pattern, but -- in a hurry --
+forgets to extend the disjointness declaration:</p>
+<pre><code>:Tiger a owl:Class , :AnimalSpecies ;
+    rdfs:subClassOf :Animal .
+# ...:Lion, :Hyena, :Elephant's owl:AllDisjointClasses list is not updated.
+
+:Rajah a :Lion , :Tiger .   # nothing prevents this!</code></pre>
+<p>OWL never assumes disjointness by default, so an individual asserted to be both a lion and a tiger raises
+<strong>no error from a DL reasoner</strong> -- there is simply no axiom being violated. But it silently
+defeats the entire point of modeling species as a partition. The full mistake is kept in
+<a href="invalid-example.ttl"><code>invalid-example.ttl</code></a>; the gUFO SHACL shapes catch it with:</p>
+<ul>
+<li><strong>gufoshapes:PartitionPairwiseDisjointnessShape</strong> -- for a class that
+<code>gufo:partitions</code> some base type, every pair of its instances must be declared disjoint (via
+<code>owl:disjointWith</code>, <code>owl:AllDisjointClasses</code>, or <code>owl:disjointUnionOf</code>); the
+shape reports exactly the offending pair, <code>:Lion</code> and <code>:Tiger</code>.</li>
+</ul>
+</div>
+
+<div class="callout check">
+<h4>How this is checked</h4>
+<ul>
+<li><strong>OWL 2 DL reasoning</strong> (Pellet) -- <code>gufo.ttl</code> + <code>ontology.ttl</code> is
+consistent; run against <code>invalid-example.ttl</code>, this check still <em>passes</em>, confirming OWL
+alone does not notice the missing disjointness.</li>
+<li><strong>SHACL validation</strong> against <a href="https://github.com/nemo-ufes/gufoshapes">gufoshapes</a>
+-- <code>ontology.ttl</code> conforms; <code>invalid-example.ttl</code> does not.</li>
+</ul>
+<pre><code>cd examples/tests
+.venv/bin/pytest -v -k 07-higher-order-types</code></pre>
+</div>
+
+<nav class="example-nav">
+<a href="../06-situations/index.html">&larr; Previous: Situations</a>
+<a href="../index.html">All examples</a>
+</nav>
+
+<footer class="site-footer">
+Part of the <a href="https://github.com/nemo-ufes/gufo">gUFO</a> usage examples. Ontology and text
+licensed under <a href="https://creativecommons.org/licenses/by/4.0/legalcode">CC BY 4.0</a>.
+</footer>
+
+</body>
+</html>

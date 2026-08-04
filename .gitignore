@@ -1,3 +1,7 @@
 
 catalog-v001.xml
 .DS_Store
+examples/tests/.venv/
+examples/tests/.pytest_cache/
+__pycache__/
+*.pyc

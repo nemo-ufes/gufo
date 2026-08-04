@@ -1,0 +1,153 @@
+@prefix : <https://purl.org/nemo/gufo-examples/relators#> .
+@prefix gufo: <http://purl.org/nemo/gufo#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+#################################################################
+# gUFO usage example 04: Relators and extrinsic aspects
+#
+# Demonstrates gufo:Relator, gufo:mediates, gufo:ExtrinsicMode
+# (rights and duties), gufo:isAspectProperPartOf and
+# gufo:MaterialRelationshipType + gufo:isDerivedFrom, in an
+# employment and a marriage. See index.html for a walkthrough.
+#################################################################
+
+: a owl:Ontology ;
+    rdfs:label "gUFO example 04: Relators and extrinsic aspects"@en ;
+    rdfs:comment "An ontology of employment and marriage, illustrating gUFO's representation of relators, the roles they connect, and the rights and duties they are composed of."@en ;
+    owl:imports <https://purl.org/nemo/gufo#> .
+
+#################################################################
+# Kinds and roles
+#################################################################
+
+:Person a owl:Class , gufo:Kind ;
+    rdfs:subClassOf gufo:FunctionalComplex ;
+    rdfs:label "Person"@en .
+
+:Organization a owl:Class , gufo:Kind ;
+    rdfs:subClassOf gufo:FunctionalComplex ;
+    owl:disjointWith :Person ;
+    rdfs:label "Organization"@en .
+
+:Employee a owl:Class , gufo:Role ;
+    rdfs:subClassOf :Person ;
+    rdfs:label "Employee"@en ;
+    rdfs:comment "Applies to a person in virtue of an employment relationship -- see :Employment below."@en .
+
+:Employer a owl:Class , gufo:Role ;
+    rdfs:subClassOf :Organization ;
+    rdfs:label "Employer"@en .
+
+#################################################################
+# The relator: full pattern, with explicit roles on each side
+#################################################################
+
+:Employment a owl:Class ;
+    rdfs:subClassOf gufo:Relator ;
+    rdfs:label "Employment"@en ;
+    rdfs:comment "A relator mediating an employee and an employer. Being a gufo:Relator, it exists in its own right (it has a begin date, and could have others of its own qualities), rather than being a bare fact about the two parties."@en .
+
+:involvesEmployee a owl:ObjectProperty ;
+    rdfs:subPropertyOf gufo:mediates ;
+    rdfs:domain :Employment ;
+    rdfs:range :Employee ;
+    rdfs:label "involves employee"@en .
+
+:involvesEmployer a owl:ObjectProperty ;
+    rdfs:subPropertyOf gufo:mediates ;
+    rdfs:domain :Employment ;
+    rdfs:range :Employer ;
+    rdfs:label "involves employer"@en .
+
+#################################################################
+# The relator, decomposed into reciprocal rights and duties
+# (extrinsic modes)
+#################################################################
+
+:RightToSalary a owl:Class ; rdfs:subClassOf gufo:ExtrinsicMode ;
+    rdfs:label "Right to salary"@en ;
+    rdfs:comment "Inheres in the employee; externally depends on the employer; part of the employment."@en .
+
+:DutyToPaySalary a owl:Class ; rdfs:subClassOf gufo:ExtrinsicMode ;
+    rdfs:label "Duty to pay salary"@en ;
+    rdfs:comment "Inheres in the employer; the reciprocal of RightToSalary."@en .
+
+:DutyToWork a owl:Class ; rdfs:subClassOf gufo:ExtrinsicMode ;
+    rdfs:label "Duty to work"@en ;
+    rdfs:comment "Inheres in the employee; externally depends on the employer."@en .
+
+:RightToLabor a owl:Class ; rdfs:subClassOf gufo:ExtrinsicMode ;
+    rdfs:label "Right to labor"@en ;
+    rdfs:comment "Inheres in the employer; the reciprocal of DutyToWork."@en .
+
+#################################################################
+# Simpler pattern: a relationship type derived from the relator
+#################################################################
+
+:employedBy a owl:ObjectProperty , gufo:MaterialRelationshipType ;
+    rdfs:domain :Employee ;
+    rdfs:range :Employer ;
+    gufo:isDerivedFrom :Employment ;
+    rdfs:label "employed by"@en ;
+    rdfs:comment "A shortcut binary relation standing for 'there exists an Employment relator mediating these two'. Declaring it a gufo:MaterialRelationshipType and linking it with gufo:isDerivedFrom records that provenance explicitly, rather than leaving it an unexplained plain object property."@en .
+
+#################################################################
+# Marriage: the same idea, using the lighter-weight pattern from
+# the gUFO usage guide (an existential restriction on gufo:mediates
+# instead of dedicated sub-properties per role)
+#################################################################
+
+:Marriage a owl:Class ;
+    rdfs:subClassOf gufo:Relator ,
+        [ a owl:Restriction ; owl:onProperty gufo:mediates ; owl:someValuesFrom :Person ] ;
+    rdfs:label "Marriage"@en ;
+    rdfs:comment "A simpler relator pattern: no sub-properties of gufo:mediates for each spouse's role, at the cost of not being able to distinguish the parties' roles in the data alone."@en .
+
+#################################################################
+# Individuals
+#################################################################
+
+:Dana a :Person , :Employee ;
+    rdfs:label "Dana"@en .
+
+:GlobexCorp a :Organization , :Employer ;
+    rdfs:label "Globex Corp."@en .
+
+:DanaGlobexEmployment a :Employment ;
+    :involvesEmployee :Dana ;
+    :involvesEmployer :GlobexCorp ;
+    gufo:hasBeginPointInXSDDate "2020-01-06"^^xsd:date ;
+    rdfs:label "Dana's employment at Globex Corp."@en .
+
+:Dana :employedBy :GlobexCorp .
+
+:DanasRightToSalary a :RightToSalary ;
+    gufo:inheresIn :Dana ;
+    gufo:externallyDependsOn :GlobexCorp ;
+    gufo:isAspectProperPartOf :DanaGlobexEmployment .
+
+:GlobexsDutyToPaySalary a :DutyToPaySalary ;
+    gufo:inheresIn :GlobexCorp ;
+    gufo:externallyDependsOn :Dana ;
+    gufo:isAspectProperPartOf :DanaGlobexEmployment .
+
+:DanasDutyToWork a :DutyToWork ;
+    gufo:inheresIn :Dana ;
+    gufo:externallyDependsOn :GlobexCorp ;
+    gufo:isAspectProperPartOf :DanaGlobexEmployment .
+
+:GlobexsRightToLabor a :RightToLabor ;
+    gufo:inheresIn :GlobexCorp ;
+    gufo:externallyDependsOn :Dana ;
+    gufo:isAspectProperPartOf :DanaGlobexEmployment .
+
+:John a :Person ; rdfs:label "John"@en .
+:Mary a :Person ; rdfs:label "Mary"@en .
+
+:JohnMaryMarriage a :Marriage ;
+    gufo:mediates :John , :Mary ;
+    gufo:hasBeginPointInXSDDate "2001-12-12"^^xsd:date ;
+    rdfs:label "John and Mary's marriage"@en .

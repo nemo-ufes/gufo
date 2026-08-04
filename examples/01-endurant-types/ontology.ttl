@@ -1,0 +1,110 @@
+@prefix : <https://purl.org/nemo/gufo-examples/endurant-types#> .
+@prefix gufo: <http://purl.org/nemo/gufo#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+#################################################################
+# gUFO usage example 01: Endurant types (People & Organizations)
+#
+# Demonstrates gUFO's taxonomy of endurant types: gufo:Kind,
+# gufo:SubKind, gufo:Phase, gufo:Role, gufo:Category, gufo:RoleMixin
+# and gufo:PhaseMixin. See index.html for a guided walkthrough.
+#################################################################
+
+: a owl:Ontology ;
+    rdfs:label "gUFO example 01: Endurant types (People & Organizations)"@en ;
+    rdfs:comment "A small ontology of people and organizations, illustrating gUFO's taxonomy of endurant types (sortals and non-sortals, rigid and anti-rigid types)."@en ;
+    owl:imports <https://purl.org/nemo/gufo#> .
+
+#################################################################
+# Classes -- non-sortals (Category, RoleMixin, PhaseMixin)
+#################################################################
+
+:Agent a owl:Class , gufo:Category ;
+    rdfs:subClassOf gufo:FunctionalComplex ;
+    rdfs:label "Agent"@en ;
+    rdfs:comment "A non-sortal that captures what is common to persons and organizations (both can, e.g., own property or be party to a contract) without itself providing a principle of identity. Persons and organizations obtain their identity from their own kinds, not from Agent."@en .
+
+:Customer a owl:Class , gufo:RoleMixin ;
+    rdfs:subClassOf :Agent ;
+    rdfs:label "Customer"@en ;
+    rdfs:comment "An anti-rigid, relationally-dependent role that both persons and organizations may play (in the scope of a purchase); it cuts across the Person and Organization kinds, which is why it specializes the non-sortal Agent rather than either kind directly. See example 04 for the relator (Purchase) that would substantiate this role."@en .
+
+:ActiveAgent a owl:Class , gufo:PhaseMixin ;
+    rdfs:subClassOf :Agent ;
+    rdfs:label "Active Agent"@en ;
+    rdfs:comment "An anti-rigid phase, applicable in virtue of an intrinsic condition (being currently operative), that both persons and organizations may go through. Cuts across Person and Organization, hence specializes the non-sortal Agent."@en .
+
+:InactiveAgent a owl:Class , gufo:PhaseMixin ;
+    rdfs:subClassOf :Agent ;
+    owl:disjointWith :ActiveAgent ;
+    rdfs:label "Inactive Agent"@en ;
+    rdfs:comment "The complementary phase to Active Agent (e.g., a deceased person or a dissolved organization)."@en .
+
+#################################################################
+# Classes -- sortals (Kind, SubKind, Phase, Role)
+#################################################################
+
+:Person a owl:Class , gufo:Kind ;
+    rdfs:subClassOf :Agent ;
+    rdfs:label "Person"@en ;
+    rdfs:comment "A rigid sortal: every person is necessarily a person, and Person supplies the principle of identity for persons."@en .
+
+:Organization a owl:Class , gufo:Kind ;
+    rdfs:subClassOf :Agent ;
+    owl:disjointWith :Person ;
+    rdfs:label "Organization"@en ;
+    rdfs:comment "A rigid sortal, disjoint from Person: no individual is both a person and an organization."@en .
+
+:University a owl:Class , gufo:SubKind ;
+    rdfs:subClassOf :Organization ;
+    rdfs:label "University"@en ;
+    rdfs:comment "A rigid specialization of Organization: every organization that is a university is necessarily so, but University does not supply a new principle of identity (it inherits Organization's)."@en .
+
+:Child a owl:Class , gufo:Phase ;
+    rdfs:subClassOf :Person ;
+    rdfs:label "Child"@en ;
+    rdfs:comment "An anti-rigid phase of Person: a given person may be a child at one time and stop being one later, without ceasing to be that person. Applies in virtue of an intrinsic property (age)."@en .
+
+:Adult a owl:Class , gufo:Phase ;
+    rdfs:subClassOf :Person ;
+    owl:disjointWith :Child ;
+    rdfs:label "Adult"@en ;
+    rdfs:comment "The complementary phase to Child."@en .
+
+:Student a owl:Class , gufo:Role ;
+    rdfs:subClassOf :Person ;
+    rdfs:label "Student"@en ;
+    rdfs:comment "An anti-rigid role of Person, applicable in virtue of a relational (extrinsic) property -- here, enrollment at a university. A person is a student only relative to some university."@en .
+
+:Employee a owl:Class , gufo:Role ;
+    rdfs:subClassOf :Person ;
+    rdfs:label "Employee"@en ;
+    rdfs:comment "An anti-rigid role of Person, applicable in virtue of an employment relationship. See example 04, which reifies that relationship as a gufo:Relator."@en .
+
+#################################################################
+# Individuals
+#################################################################
+
+:Alice a :Person , :Student , :Adult , :Customer , :ActiveAgent ;
+    rdfs:label "Alice"@en .
+
+:Bob a :Person , :Child ;
+    rdfs:label "Bob"@en ;
+    rdfs:comment "Bob is a person and, currently, a child; he is neither a student nor an employee yet."@en .
+
+:Carol a :Person , :Employee , :Adult , :ActiveAgent ;
+    rdfs:label "Carol"@en .
+
+:AcmeUniversity a :University , :ActiveAgent ;
+    rdfs:label "Acme University"@en .
+
+:GlobexCorp a :Organization , :Customer , :ActiveAgent ;
+    rdfs:label "Globex Corp."@en ;
+    rdfs:comment "An organization playing the Customer role -- demonstrating that gufo:RoleMixin, unlike gufo:Role, applies across more than one kind."@en .
+
+:OldTownPrinters a :Organization , :InactiveAgent ;
+    rdfs:label "Old Town Printers"@en ;
+    rdfs:comment "A dissolved organization: inactive, but still an instance of Organization, since organizations do not lose their kind when they cease operating."@en .
