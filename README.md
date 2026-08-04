@@ -26,7 +26,7 @@ Authors:
 
 See <http://purl.org/nemo/doc/gufo> for usage guide and complete documentation of gUFO.
 
-See the [`examples`](examples/README.md) folder for seven small, realistic ontologies illustrating the usage guide, each paired with a tutorial and validated with an OWL 2 DL reasoner and the [gUFO SHACL shapes](https://github.com/nemo-ufes/gufoshapes).
+See the [`examples`](examples/README.md) folder for seven small, realistic ontologies illustrating the usage guide, each paired with a tutorial and validated with an OWL 2 DL reasoner and the [gUFO SHACL shapes](https://github.com/nemo-ufes/gufoshapes). (They are documented at <https://nemo-ufes.github.io/gufo/examples>).
 
 Some tutorial videos can be found in: <https://www.youtube.com/channel/UCrO83sDDZ7q4ymI76bwB-bg>
 
