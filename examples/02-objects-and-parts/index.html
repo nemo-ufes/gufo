@@ -186,10 +186,16 @@ extensional: change any part and you have a different whole (strong supplementat
 <code>gufo:isSubCollectionOf</code>, which satisfies only the weaker axiom). Essentiality is a modal claim
 and beyond OWL; the cardinalities above are the part of it OWL can carry.</li>
 </ul>
-<p>Transitivity is the one characteristic <em>not</em> declared on the typed properties. Essential parthood
-is always transitive, and <code>gufo:isSubQuantityOf</code> is declared transitive in gUFO
-(Guizzardi, 2005, p. 184); each typed property, relating one specific stuff to another, is not transitive on
-its own but feeds its assertions into the transitive super-property:</p>
+<p>Transitivity is the one characteristic <em>not</em> declared on the typed properties.
+<code>gufo:isSubQuantityOf</code> is itself transitive (Guizzardi, 2005, p. 184) -- a fact about
+sub-quantity parthood in particular, and not something essentiality delivers. Essentiality is a modal
+qualification laid on top of a parthood relation; it carries transitivity across only where the underlying
+relation already has it, and several of gUFO's parthood relations do not. gUFO supplies the counterexample
+itself: the members of a <code>gufo:FixedCollection</code> are essential parts of it -- which is why gUFO
+tells you not to use <code>gufo:TemporaryParthoodSituation</code> for them -- yet
+<code>gufo:isCollectionMemberOf</code> is not transitive, and neither is
+<code>gufo:isComponentOf</code>. Each typed property here, relating one specific stuff to another, is
+likewise not transitive on its own, but feeds its assertions into the transitive super-property:</p>
 <pre><code>:isBenzenePortionOf a owl:ObjectProperty ;
     rdfs:subPropertyOf gufo:isSubQuantityOf ;
     rdfs:domain :QuantityOfBenzene ;
