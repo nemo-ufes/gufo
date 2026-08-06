@@ -64,19 +64,56 @@
     rdfs:label "is fleet member of"@en .
 
 #################################################################
-# Quantity: fuel, which has no components, only sub-quantities
+# Quantity: fuel, whose sub-quantities are portions of *other* stuff
 #################################################################
 
 :QuantityOfGasoline a owl:Class , gufo:Kind ;
     rdfs:subClassOf gufo:Quantity ;
     rdfs:label "Quantity of gasoline"@en ;
-    rdfs:comment "A maximally self-connected portion of gasoline. Removing or adding a sub-quantity yields a different quantity -- unlike a car, a portion of gasoline has no components playing distinct roles, only more (or less) of the same stuff. (Named 'QuantityOfGasoline', not 'Gasoline': instances of this class are individual portions of the stuff, not the material itself.)"@en .
+    rdfs:comment "A maximally self-connected portion of the blended gasoline CityWheels pumps into its cars. 'Maximally self-connected' is the load-bearing part: any two portions of gasoline in contact are one quantity, not two, so a quantity of gasoline never has a smaller quantity of gasoline as a part. Its sub-quantities are portions of the *different* stuffs it is a blend of -- ethanol and petroleum distillate. (Named 'QuantityOfGasoline', not 'Gasoline': instances of this class are individual portions of the stuff, not the material itself.)"@en .
 
-:isPortionOf a owl:ObjectProperty ;
+:QuantityOfEthanol a owl:Class , gufo:Kind ;
+    rdfs:subClassOf gufo:Quantity ;
+    owl:disjointWith :QuantityOfGasoline ;
+    rdfs:label "Quantity of ethanol"@en ;
+    rdfs:comment "A maximally self-connected portion of ethanol. Disjoint from :QuantityOfGasoline: the two are distinct kinds, obeying distinct principles of identity, and no portion of stuff is an instance of both."@en .
+
+:QuantityOfPetroleumDistillate a owl:Class , gufo:Kind ;
+    rdfs:subClassOf gufo:Quantity ;
+    owl:disjointWith :QuantityOfGasoline , :QuantityOfEthanol ;
+    rdfs:label "Quantity of petroleum distillate"@en ;
+    rdfs:comment "A maximally self-connected portion of the petroleum-derived distillate that is blended with ethanol to make the gasoline sold at the pump."@en .
+
+# Both sub-quantity properties are functional: a portion of ethanol is a
+# sub-quantity of at most one quantity of gasoline. This is OntoUML's
+# non-shareability constraint on subQuantityOf, and it follows from topological
+# connection -- a portion of stuff cannot be simultaneously mixed into two
+# distinct maximally self-connected wholes.
+:isEthanolPortionOf a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:subPropertyOf gufo:isSubQuantityOf ;
-    rdfs:domain :QuantityOfGasoline ;
+    rdfs:domain :QuantityOfEthanol ;
     rdfs:range :QuantityOfGasoline ;
-    rdfs:label "is portion of"@en .
+    rdfs:label "is ethanol portion of"@en .
+
+:isDistillatePortionOf a owl:ObjectProperty , owl:FunctionalProperty ;
+    rdfs:subPropertyOf gufo:isSubQuantityOf ;
+    rdfs:domain :QuantityOfPetroleumDistillate ;
+    rdfs:range :QuantityOfGasoline ;
+    rdfs:label "is distillate portion of"@en .
+
+# Sub-quantities are mandatory (and, beyond what OWL can state, essential)
+# parts: every quantity of gasoline is a blend of exactly one portion of
+# ethanol and exactly one portion of distillate, and it could not have been
+# made of any others without being a different quantity.
+:QuantityOfGasoline rdfs:subClassOf
+    [ a owl:Restriction ;
+        owl:onProperty [ owl:inverseOf :isEthanolPortionOf ] ;
+        owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+        owl:onClass :QuantityOfEthanol ] ,
+    [ a owl:Restriction ;
+        owl:onProperty [ owl:inverseOf :isDistillatePortionOf ] ;
+        owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+        owl:onClass :QuantityOfPetroleumDistillate ] .
 
 #################################################################
 # Individuals
@@ -113,16 +150,41 @@
 
 :Car001 :isFleetMemberOf :ElectricSubfleet .
 
-:CityWheelsDepotSupply a :QuantityOfGasoline ;
-    rdfs:label "CityWheels depot fuel supply"@en ;
-    rdfs:comment "The whole quantity of gasoline currently sitting in the depot's underground storage tank."@en .
+:Car002FuelTankContents a :QuantityOfGasoline ;
+    rdfs:label "Contents of Car 002's fuel tank"@en ;
+    rdfs:comment "The gasoline in Car 002's tank: one maximally self-connected portion of stuff, whose sub-quantities are the portions of ethanol and distillate blended into it."@en .
+
+:Car002EthanolPortion a :QuantityOfEthanol ;
+    :isEthanolPortionOf :Car002FuelTankContents ;
+    rdfs:label "Ethanol portion of Car 002's fuel"@en ;
+    rdfs:comment "A legitimate sub-quantity: it is a portion of a different stuff (ethanol, not gasoline), so it is a maximally self-connected quantity in its own right even while blended into the whole."@en .
+
+:Car002DistillatePortion a :QuantityOfPetroleumDistillate ;
+    :isDistillatePortionOf :Car002FuelTankContents ;
+    rdfs:label "Distillate portion of Car 002's fuel"@en .
+
+#################################################################
+# What happens when quantities are mixed or split
+#
+# A gufo:Quantity has a fixed constitution, so adding or removing stuff never
+# gives an existing quantity a new part: it yields a *different* quantity.
+# The delivery is therefore modelled as three quantities, not as a parthood
+# assertion, and their provenance is recorded with gufo:historicallyDependsOn
+# (domain and range gufo:ConcreteIndividual, so it applies to objects as
+# readily as to events).
+#################################################################
+
+:DepotSupplyBeforeTuesday a :QuantityOfGasoline ;
+    rdfs:label "Depot supply before Tuesday's delivery"@en ;
+    rdfs:comment "The gasoline sitting in the depot's underground tank up to Tuesday morning."@en .
 
 :TuesdayDeliveryLot a :QuantityOfGasoline ;
-    :isPortionOf :CityWheelsDepotSupply ;
     rdfs:label "Tuesday's delivery lot"@en ;
-    rdfs:comment "The portion added to the tank by Tuesday's delivery truck, tracked separately (e.g. for quality tracing) while it still sits, physically part of the same tank, alongside the rest of the supply. It genuinely is a sub-quantity of CityWheelsDepotSupply right now, because it is still, in fact, part of it."@en .
+    rdfs:comment "The gasoline that arrived on Tuesday's truck, while still a separate portion in the truck."@en .
 
-:Car002FuelTankContents a :QuantityOfGasoline ;
-    gufo:historicallyDependsOn :TuesdayDeliveryLot ;
-    rdfs:label "Contents of Car 002's fuel tank"@en ;
-    rdfs:comment "Once pumped from the depot tank into Car 002, this fuel is physically separated from -- no longer part of -- CityWheelsDepotSupply (or TuesdayDeliveryLot), which is why there is no :isPortionOf triple linking it back. What does still hold is gufo:historicallyDependsOn: this quantity could not exist, drawn from that lot, without that lot having existed first. Unlike isSubQuantityOf, historical dependence records exactly this kind of provenance, without claiming the two are still, in any sense, one connected portion of stuff."@en .
+:DepotSupplyAfterTuesday a :QuantityOfGasoline ;
+    gufo:historicallyDependsOn :DepotSupplyBeforeTuesday , :TuesdayDeliveryLot ;
+    rdfs:label "Depot supply after Tuesday's delivery"@en ;
+    rdfs:comment "Once the delivery is pumped into the tank, the two portions are in contact and hence one maximally self-connected portion of gasoline -- a new quantity. Neither input is a sub-quantity of it: they are of the same kind as the whole, and after mixing neither is a maximally self-connected portion any more. Nor did :DepotSupplyBeforeTuesday simply grow: sub-quantities are essential parts, so a quantity cannot survive a change of constitution. What links them is history, not parthood."@en .
+
+:Car002FuelTankContents gufo:historicallyDependsOn :DepotSupplyAfterTuesday .

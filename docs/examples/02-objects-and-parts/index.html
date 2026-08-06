@@ -40,8 +40,9 @@ parts playing different roles), a fleet (a collection of uniform members), and f
 
 <h2>The domain</h2>
 <p>A car-sharing operator, CityWheels, has a fleet of cars. Each car is built from components (an engine,
-wheels). The fleet itself gains and loses cars as they are bought and retired. Cars run on gasoline, stored
-in bulk in a tank at the depot before being pumped into individual cars.</p>
+wheels). The fleet itself gains and loses cars as they are bought and retired. Cars run on gasoline -- a
+blend of a petroleum distillate and ethanol -- stored in bulk in a tank at the depot before being pumped
+into individual cars.</p>
 
 <h2>Step by step</h2>
 
@@ -110,48 +111,100 @@ right -- <code>gufo:isSubCollectionOf</code> (transitive) is for exactly this, d
 </div>
 
 <div class="step">
-<h3>Quantity: no roles at all, just more or less stuff</h3>
-<p>Gasoline has neither distinct components nor uniform "members" -- it is not made of parts at all in the
-way a car or a fleet is. <code>gufo:Quantity</code> models exactly this: a maximally self-connected portion
-of stuff whose sub-quantities are, again, just more (or less) of the same stuff. Unlike a car's components,
-a quantity's sub-quantities do not each play a distinct functional role. Note the class name,
-<code>:QuantityOfGasoline</code>, not just <code>:Gasoline</code>: its instances are individual portions of
-the stuff (this tankful, that delivery), not the material itself -- the same naming convention the gUFO
-usage guide uses for <code>AmountOfMarble</code>:</p>
+<h3>Quantity: no roles at all, just stuff</h3>
+<p>Gasoline has neither distinct components nor uniform "members" -- it is not made of parts in the way a
+car or a fleet is. <code>gufo:Quantity</code> models exactly this: a <em>maximally self-connected</em>
+portion of stuff. Note the class name, <code>:QuantityOfGasoline</code>, not just <code>:Gasoline</code>:
+its instances are individual portions of the stuff (this tankful, that delivery), not the material itself --
+the same naming convention the gUFO usage guide uses for <code>AmountOfMarble</code>.</p>
+<p>"Maximally self-connected" is not decoration; it is what constrains everything below. Any two portions
+of gasoline in contact are, together, <em>one</em> quantity rather than two, because neither of them alone
+is maximal. So a quantity of gasoline can never have a smaller quantity of gasoline as a part. What it does
+have as parts are portions of the <em>different</em> stuffs it is a blend of: pump gasoline is a blend of a
+petroleum distillate and ethanol, and each of those is a maximally self-connected portion of its own stuff
+even while mixed into the whole. This is the standard UFO illustration -- a portion of wine has a portion of
+water and a portion of alcohol as sub-quantities -- and gUFO's own definition of
+<code>gufo:isSubQuantityOf</code> uses it verbatim: "the quantity of water in a wine glass is a sub-quantity
+of the wine in that glass".</p>
 <pre><code>:QuantityOfGasoline a owl:Class , gufo:Kind ;
     rdfs:subClassOf gufo:Quantity .
 
-:isPortionOf a owl:ObjectProperty ;
+:QuantityOfEthanol a owl:Class , gufo:Kind ;
+    rdfs:subClassOf gufo:Quantity ;
+    owl:disjointWith :QuantityOfGasoline .
+
+:isEthanolPortionOf a owl:ObjectProperty , owl:FunctionalProperty ;
     rdfs:subPropertyOf gufo:isSubQuantityOf ;
-    rdfs:domain :QuantityOfGasoline ;
-    rdfs:range :QuantityOfGasoline .
+    rdfs:domain :QuantityOfEthanol ;
+    rdfs:range :QuantityOfGasoline .      # part and whole are of *different* kinds
 
-:CityWheelsDepotSupply a :QuantityOfGasoline .
+:Car002FuelTankContents a :QuantityOfGasoline .
 
-:TuesdayDeliveryLot a :QuantityOfGasoline ;
-    :isPortionOf :CityWheelsDepotSupply .</code></pre>
-<p><code>gufo:isSubQuantityOf</code>, like <code>gufo:isComponentOf</code>, is a genuine parthood relation:
-it holds only for as long as the part actually, currently is part of the whole. Tuesday's delivery lot is a
-sub-quantity of the depot supply right now, because it is still sitting in the same tank as the rest of it --
-identifiable (for quality tracing, say) without having gone anywhere.</p>
-<p>That is what makes a quantity's parthood different from a component's, and it is easy to get backwards:
-once some of that gasoline is pumped into a car, it is no longer part of the depot supply at all -- it has
-been physically separated into a new, independent quantity. That does not mean the connection to where it
-came from has to go unrecorded, only that <code>gufo:isSubQuantityOf</code> is the wrong property for it.
-gUFO has a property for exactly this weaker, historical link: <code>gufo:historicallyDependsOn</code> (the
-same property used for causal and historical dependence between events in
-<a href="../05-events/index.html">example 5</a>, since its domain and range are the fully general
+:Car002EthanolPortion a :QuantityOfEthanol ;
+    :isEthanolPortionOf :Car002FuelTankContents .</code></pre>
+<div class="callout pitfall">
+<h4>The mistake to avoid</h4>
+<p>It is tempting to declare <code>:isPortionOf</code> with <code>:QuantityOfGasoline</code> as
+<em>both</em> domain and range, and then assert that a delivery lot poured into the depot tank is a
+sub-quantity of the tank's supply. That is exactly what quantities rule out. Once the lot is in the tank it
+is in contact with the rest of the gasoline, so it is not a maximal portion any more -- it is not a quantity
+at all, and there is nothing there for <code>gufo:isSubQuantityOf</code> to relate. In OntoUML's terms:
+quantities are maximally self-connected and therefore <em>do not have parts of the same kind</em>. In this
+ontology the three quantity kinds are declared pairwise disjoint, which is enough for a DL reasoner to
+reject the mistake outright: asserting <code>:SomeGasoline :isEthanolPortionOf :OtherGasoline</code> makes
+the ontology inconsistent, because the property's domain would force that portion of gasoline to also be a
+portion of ethanol.</p>
+</div>
+<p>Two further constraints come with <code>subQuantityOf</code>, and both are stated in the ontology as far
+as OWL allows:</p>
+<ul>
+<li><strong>Non-shareable.</strong> A sub-quantity is part of at most one whole -- topologically, a portion
+of ethanol cannot be mixed into two distinct quantities at once. Hence
+<code>:isEthanolPortionOf a owl:FunctionalProperty</code>.</li>
+<li><strong>Essential (and mandatory).</strong> Sub-quantities are <em>essential</em> parts of their wholes;
+gUFO says so explicitly, and adds that <code>gufo:standsInQualifiedParthood</code> -- the pattern for
+parthood that holds only for a time -- "is not applicable for sub-quantities". Essentiality is modal and so
+beyond OWL, but its cardinality shadow is expressible: every quantity of gasoline has exactly one ethanol
+sub-quantity and exactly one distillate sub-quantity.
+<pre><code>:QuantityOfGasoline rdfs:subClassOf
+    [ a owl:Restriction ;
+        owl:onProperty [ owl:inverseOf :isEthanolPortionOf ] ;
+        owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+        owl:onClass :QuantityOfEthanol ] .</code></pre></li>
+</ul>
+<p>This is where quantities part company with functional complexes, and it is easy to get backwards.
+Unbolt a wheel and put it back on and the car has regained the very same component -- components can come
+and go while the whole keeps its identity. A quantity cannot: gUFO's <code>gufo:Quantity</code> comment
+states that it "has a fixed constitution, and thus, removing or adding a sub-quantity would result in a
+different quantity".</p>
+</div>
+
+<div class="step">
+<h3>Mixing and splitting: new quantities, not new parts</h3>
+<p>So what <em>does</em> one say about Tuesday's delivery being pumped into the depot tank, and about fuel
+later being pumped from the tank into a car? Because constitution is fixed, none of these events gives an
+existing quantity a new part or takes one away. Each yields a <em>different</em> quantity, and what survives
+is a historical link, not a parthood link. <code>gufo:historicallyDependsOn</code> is the property for it
+(the same one used for causal and historical dependence between events in
+<a href="../05-events/index.html">example 5</a> -- its domain and range are the fully general
 <code>gufo:ConcreteIndividual</code>, not just <code>gufo:Event</code>):</p>
-<pre><code>:Car002FuelTankContents a :QuantityOfGasoline ;
-    gufo:historicallyDependsOn :TuesdayDeliveryLot .
-    # no :isPortionOf triple: this fuel is no longer part of :CityWheelsDepotSupply
-    # or :TuesdayDeliveryLot -- asserting one would misstate the current facts, not
-    # just their history. gufo:historicallyDependsOn records the history instead,
-    # without claiming the two are still, in any sense, one connected portion of stuff.</code></pre>
-<p>Contrast this with <code>gufo:isComponentOf</code>: unbolt a wheel and put it back on and the car has
-regained the very same component. Siphon gasoline out of a tank and there is no "putting it back" that
-restores anything -- a quantity's identity is exhausted by what it currently, physically consists of. gUFO's
-<code>gufo:Quantity</code> comment calls this "fixed constitution".</p>
+<pre><code>:DepotSupplyBeforeTuesday a :QuantityOfGasoline .
+:TuesdayDeliveryLot a :QuantityOfGasoline .
+
+:DepotSupplyAfterTuesday a :QuantityOfGasoline ;
+    gufo:historicallyDependsOn :DepotSupplyBeforeTuesday , :TuesdayDeliveryLot .
+
+:Car002FuelTankContents gufo:historicallyDependsOn :DepotSupplyAfterTuesday .</code></pre>
+<p>Note what is <em>not</em> asserted: neither input is a sub-quantity of the mixture. They are of the same
+kind as it, and after mixing neither is a maximally self-connected portion any more. Nor did
+<code>:DepotSupplyBeforeTuesday</code> simply grow into <code>:DepotSupplyAfterTuesday</code> -- a quantity
+does not survive a change of constitution.</p>
+<p>If the ontology needs to track "the tank's supply" as one thing that persists across deliveries, the
+answer is not to stretch <code>gufo:isSubQuantityOf</code> to cover it. The persisting thing is the tank (a
+<code>gufo:FunctionalComplex</code>), successively <em>constituted by</em> different quantities of gasoline --
+see <code>gufo:isConstitutedBy</code> and the <code>gufo:TemporaryConstitutionSituation</code> pattern in the
+gUFO usage guide, which uses exactly this arrangement for the Venus de Milo and its quantities of
+marble.</p>
 </div>
 
 </div>
@@ -161,7 +214,7 @@ restores anything -- a quantity's identity is exhausted by what it currently, ph
 <tr><th>gUFO class</th><th>What its parts have in common</th><th>Part-whole property</th><th>In this example</th></tr>
 <tr><td><code>gufo:FunctionalComplex</code></td><td>Each part plays a <em>different</em> role</td><td><code>gufo:isComponentOf</code></td><td>Engine, Wheel &rarr; Car</td></tr>
 <tr><td><code>gufo:Collection</code></td><td>Every part plays the <em>same</em> role</td><td><code>gufo:isCollectionMemberOf</code>, <code>gufo:isSubCollectionOf</code></td><td>Car &rarr; Fleet</td></tr>
-<tr><td><code>gufo:Quantity</code></td><td>Parts are just more of the same stuff</td><td><code>gufo:isSubQuantityOf</code></td><td>Delivery lot &rarr; Depot supply</td></tr>
+<tr><td><code>gufo:Quantity</code></td><td>Parts are portions of the <em>other</em> stuffs the whole is a blend of -- never of the same stuff, which maximality rules out</td><td><code>gufo:isSubQuantityOf</code> (essential, non-shareable)</td><td>Ethanol portion, distillate portion &rarr; Tank contents</td></tr>
 </table>
 <p>All of these are sub-properties of the top-level <code>gufo:isObjectProperPartOf</code>, which is itself a
 sub-property of <code>gufo:isProperPartOf</code> (the part-whole relation shared with events -- see
@@ -177,8 +230,11 @@ taxonomy of types that gufoshapes targets, so its main value here is a straightf
 confirm the ontology is well-formed.</p>
 <ul>
 <li><strong>OWL 2 DL reasoning</strong> (Pellet) -- <code>gufo.ttl</code> + <code>ontology.ttl</code> is
-consistent, and every class remains satisfiable (in particular, <code>:ElectricSubfleet</code> being both a
-sub-collection of <code>:CityWheelsFleet</code> and itself a <code>:Fleet</code> does not collapse anything).</li>
+consistent, and every class remains satisfiable: the disjointness of the three quantity kinds, the
+functional sub-quantity properties and the exactly-one cardinality restrictions all hold together, and
+<code>:ElectricSubfleet</code> being both a sub-collection of <code>:CityWheelsFleet</code> and itself a
+<code>:Fleet</code> does not collapse anything. Add the same-kind sub-quantity assertion described above and
+the reasoner reports the ontology inconsistent -- which is the point of declaring the kinds disjoint.</li>
 <li><strong>SHACL validation</strong> against <a href="https://github.com/nemo-ufes/gufoshapes">gufoshapes</a>
 -- conforms (all three complex-object classes are plain, disjoint kinds with no sortality mistakes).</li>
 </ul>
