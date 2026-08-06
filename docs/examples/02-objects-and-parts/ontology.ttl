@@ -70,7 +70,7 @@
 :QuantityOfGasoline a owl:Class , gufo:Kind ;
     rdfs:subClassOf gufo:Quantity ;
     rdfs:label "Quantity of gasoline"@en ;
-    rdfs:comment "A maximally self-connected portion of the blended gasoline CityWheels pumps into its cars. 'Maximally self-connected' is the load-bearing part: any two portions of gasoline in contact are one quantity, not two, so a quantity of gasoline never has a smaller quantity of gasoline as a part. Its sub-quantities are portions of the *different* stuffs it is a blend of -- ethanol and petroleum distillate. (Named 'QuantityOfGasoline', not 'Gasoline': instances of this class are individual portions of the stuff, not the material itself.)"@en .
+    rdfs:comment "A maximally self-connected portion of the blended gasoline CityWheels pumps into its cars. Everything below follows from 'maximally self-connected': any two portions of gasoline in contact are one quantity, not two, so a quantity of gasoline never has a smaller quantity of gasoline as a part. Its sub-quantities are portions of the *different* stuffs it is a blend of -- ethanol and petroleum distillate. (Named 'QuantityOfGasoline', not 'Gasoline': instances of this class are individual portions of the stuff, not the material itself.)"@en .
 
 :QuantityOfEthanol a owl:Class , gufo:Kind ;
     rdfs:subClassOf gufo:Quantity ;

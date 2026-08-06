@@ -148,9 +148,9 @@ of the wine in that glass".</p>
 <em>both</em> domain and range, and then assert that a delivery lot poured into the depot tank is a
 sub-quantity of the tank's supply. That is exactly what quantities rule out. Once the lot is in the tank it
 is in contact with the rest of the gasoline, so it is not a maximal portion any more -- it is not a quantity
-at all, and there is nothing there for <code>gufo:isSubQuantityOf</code> to relate. In OntoUML's terms:
-quantities are maximally self-connected and therefore <em>do not have parts of the same kind</em>. In this
-ontology the three quantity kinds are declared pairwise disjoint, which is enough for a DL reasoner to
+at all, and there is nothing there for <code>gufo:isSubQuantityOf</code> to relate. Quantities are
+maximally self-connected and therefore <em>do not have parts of the same kind</em>. In this
+ontology the quantity kinds are declared pairwise disjoint, which is enough for a DL reasoner to
 reject the mistake outright: asserting <code>:SomeGasoline :isEthanolPortionOf :OtherGasoline</code> makes
 the ontology inconsistent, because the property's domain would force that portion of gasoline to also be a
 portion of ethanol.</p>
