@@ -82,29 +82,67 @@
     rdfs:subClassOf gufo:Quantity ;
     owl:disjointWith :QuantityOfGasoline , :QuantityOfEthanol ;
     rdfs:label "Quantity of petroleum distillate"@en ;
-    rdfs:comment "A maximally self-connected portion of the petroleum-derived distillate that is blended with ethanol to make the gasoline sold at the pump."@en .
+    rdfs:comment "A maximally self-connected portion of the petroleum-derived distillate that is blended with ethanol to make the gasoline sold at the pump. Itself a mixture: benzene is one of the stuffs it contains."@en .
 
-# Both sub-quantity properties are functional: a portion of ethanol is a
-# sub-quantity of at most one quantity of gasoline. This is OntoUML's
-# non-shareability constraint on subQuantityOf, and it follows from topological
-# connection -- a portion of stuff cannot be simultaneously mixed into two
-# distinct maximally self-connected wholes.
-:isEthanolPortionOf a owl:ObjectProperty , owl:FunctionalProperty ;
+:QuantityOfBenzene a owl:Class , gufo:Kind ;
+    rdfs:subClassOf gufo:Quantity ;
+    owl:disjointWith :QuantityOfGasoline , :QuantityOfEthanol , :QuantityOfPetroleumDistillate ;
+    rdfs:label "Quantity of benzene"@en ;
+    rdfs:comment "A maximally self-connected portion of benzene. Present here to exercise the transitivity of gufo:isSubQuantityOf: benzene is a sub-quantity of the distillate, which is a sub-quantity of the gasoline, so the benzene is a sub-quantity of the gasoline too."@en .
+
+# Each typed sub-quantity property below carries three characteristics:
+#
+# * owl:FunctionalProperty -- non-shareability. A portion of ethanol is a
+#   sub-quantity of at most one quantity of gasoline. This follows from
+#   topological connection: a portion of stuff cannot be mixed into two
+#   distinct maximally self-connected wholes at once.
+# * owl:IrreflexiveProperty and owl:AsymmetricProperty -- no quantity is a
+#   sub-quantity of itself, nor are two quantities sub-quantities of each
+#   other. gufo:isProperPartOf notes that these characteristics hold of every
+#   parthood property but are left undeclared in gUFO, because declaring them
+#   on transitive (OWL 2 "non-simple") properties would break DL decidability.
+#   The typed properties here are not transitive and have no transitive
+#   sub-properties, so they are simple and can state them safely.
+#
+# Not declared: transitivity. gufo:isSubQuantityOf itself is transitive
+# (Guizzardi, 2005, p. 184), and inherits assertions made through these
+# sub-properties; the typed properties are not transitive individually,
+# since each relates one specific kind of stuff to another.
+:isEthanolPortionOf a owl:ObjectProperty ,
+        owl:FunctionalProperty , owl:IrreflexiveProperty , owl:AsymmetricProperty ;
     rdfs:subPropertyOf gufo:isSubQuantityOf ;
     rdfs:domain :QuantityOfEthanol ;
     rdfs:range :QuantityOfGasoline ;
     rdfs:label "is ethanol portion of"@en .
 
-:isDistillatePortionOf a owl:ObjectProperty , owl:FunctionalProperty ;
+:isDistillatePortionOf a owl:ObjectProperty ,
+        owl:FunctionalProperty , owl:IrreflexiveProperty , owl:AsymmetricProperty ;
     rdfs:subPropertyOf gufo:isSubQuantityOf ;
     rdfs:domain :QuantityOfPetroleumDistillate ;
     rdfs:range :QuantityOfGasoline ;
     rdfs:label "is distillate portion of"@en .
 
-# Sub-quantities are mandatory (and, beyond what OWL can state, essential)
-# parts: every quantity of gasoline is a blend of exactly one portion of
-# ethanol and exactly one portion of distillate, and it could not have been
-# made of any others without being a different quantity.
+:isBenzenePortionOf a owl:ObjectProperty ,
+        owl:FunctionalProperty , owl:IrreflexiveProperty , owl:AsymmetricProperty ;
+    rdfs:subPropertyOf gufo:isSubQuantityOf ;
+    rdfs:domain :QuantityOfBenzene ;
+    rdfs:range :QuantityOfPetroleumDistillate ;
+    rdfs:label "is benzene portion of"@en .
+
+# Exactly one sub-quantity of each kind, on the sub-quantity side of every
+# subQuantityOf relation. This is not a fact about blending recipes: it follows
+# from maximality. Any two portions of ethanol within the same quantity of
+# gasoline are in contact, hence one maximal portion, hence one quantity -- so
+# there is exactly one quantity of ethanol that is part of a given quantity of
+# gasoline, exactly as there is exactly one quantity of alcohol in a given
+# quantity of wine. A reasoner puts this to work: assert two named ethanol
+# portions of the same gasoline and it will infer that they are the same
+# individual, which is precisely what maximality claims.
+#
+# These parts are also *essential* to their wholes, and quantities are
+# extensional: change any part and the whole is a different quantity (strong
+# supplementation). Essentiality is a modal claim and so beyond OWL; the
+# cardinalities below are the part of it OWL can carry.
 :QuantityOfGasoline rdfs:subClassOf
     [ a owl:Restriction ;
         owl:onProperty [ owl:inverseOf :isEthanolPortionOf ] ;
@@ -114,6 +152,12 @@
         owl:onProperty [ owl:inverseOf :isDistillatePortionOf ] ;
         owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
         owl:onClass :QuantityOfPetroleumDistillate ] .
+
+:QuantityOfPetroleumDistillate rdfs:subClassOf
+    [ a owl:Restriction ;
+        owl:onProperty [ owl:inverseOf :isBenzenePortionOf ] ;
+        owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+        owl:onClass :QuantityOfBenzene ] .
 
 #################################################################
 # Individuals
@@ -163,6 +207,11 @@
     :isDistillatePortionOf :Car002FuelTankContents ;
     rdfs:label "Distillate portion of Car 002's fuel"@en .
 
+:Car002BenzenePortion a :QuantityOfBenzene ;
+    :isBenzenePortionOf :Car002DistillatePortion ;
+    rdfs:label "Benzene portion of Car 002's fuel"@en ;
+    rdfs:comment "Asserted as a sub-quantity of the distillate only. Because gufo:isSubQuantityOf is transitive, a reasoner also derives that this benzene is a sub-quantity of :Car002FuelTankContents -- which is what one means by saying the fuel in the tank contains benzene."@en .
+
 #################################################################
 # What happens when quantities are mixed or split
 #
@@ -185,6 +234,6 @@
 :DepotSupplyAfterTuesday a :QuantityOfGasoline ;
     gufo:historicallyDependsOn :DepotSupplyBeforeTuesday , :TuesdayDeliveryLot ;
     rdfs:label "Depot supply after Tuesday's delivery"@en ;
-    rdfs:comment "Once the delivery is pumped into the tank, the two portions are in contact and hence one maximally self-connected portion of gasoline -- a new quantity. Neither input is a sub-quantity of it: they are of the same kind as the whole, and after mixing neither is a maximally self-connected portion any more. Nor did :DepotSupplyBeforeTuesday simply grow: sub-quantities are essential parts, so a quantity cannot survive a change of constitution. What links them is history, not parthood."@en .
+    rdfs:comment "Once the delivery is pumped into the tank, the two portions are in contact and hence one maximally self-connected portion of gasoline -- a new quantity. Neither input is a sub-quantity of it: they are of the same kind as the whole, and after mixing neither is a maximally self-connected portion any more. Nor did :DepotSupplyBeforeTuesday simply grow: quantities are extensional, so a change of parts is a change of whole, and their parts are essential. What links them is history, not parthood."@en .
 
 :Car002FuelTankContents gufo:historicallyDependsOn :DepotSupplyAfterTuesday .

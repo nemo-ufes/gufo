@@ -155,24 +155,51 @@ reject the mistake outright: asserting <code>:SomeGasoline :isEthanolPortionOf :
 the ontology inconsistent, because the property's domain would force that portion of gasoline to also be a
 portion of ethanol.</p>
 </div>
-<p>Two further constraints come with <code>subQuantityOf</code>, and both are stated in the ontology as far
-as OWL allows:</p>
+<p>Four further constraints come with <code>subQuantityOf</code>, each stated in the ontology as far as OWL
+allows. The first three all fall out of the same two facts -- quantities are topologically connected, and
+they are maximal:</p>
 <ul>
-<li><strong>Non-shareable.</strong> A sub-quantity is part of at most one whole -- topologically, a portion
-of ethanol cannot be mixed into two distinct quantities at once. Hence
-<code>:isEthanolPortionOf a owl:FunctionalProperty</code>.</li>
-<li><strong>Essential (and mandatory).</strong> Sub-quantities are <em>essential</em> parts of their wholes;
-gUFO says so explicitly, and adds that <code>gufo:standsInQualifiedParthood</code> -- the pattern for
-parthood that holds only for a time -- "is not applicable for sub-quantities". Essentiality is modal and so
-beyond OWL, but its cardinality shadow is expressible: every quantity of gasoline has exactly one ethanol
-sub-quantity and exactly one distillate sub-quantity.
+<li><strong>Non-shareable.</strong> A sub-quantity is part of at most one whole: a portion of ethanol
+cannot be mixed into two distinct quantities at once, because it would have to be in contact with both.
+Hence <code>:isEthanolPortionOf a owl:FunctionalProperty</code>.</li>
+<li><strong>Exactly one sub-quantity per kind.</strong> Not a fact about blending recipes -- a consequence
+of maximality. Any two portions of ethanol inside the same quantity of gasoline are in contact, hence one
+maximal portion, hence <em>one</em> quantity. So there is exactly one quantity of ethanol that is part of a
+given quantity of gasoline, just as there is exactly one quantity of alcohol in a given quantity of wine:
 <pre><code>:QuantityOfGasoline rdfs:subClassOf
     [ a owl:Restriction ;
         owl:onProperty [ owl:inverseOf :isEthanolPortionOf ] ;
         owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
-        owl:onClass :QuantityOfEthanol ] .</code></pre></li>
+        owl:onClass :QuantityOfEthanol ] .</code></pre>
+A reasoner puts this to work: assert two differently-named ethanol portions of the same gasoline and it
+infers that they are the same individual -- which is exactly what maximality claims.</li>
+<li><strong>Irreflexive (and asymmetric).</strong> No quantity is a sub-quantity of itself -- water cannot
+be part of water. gUFO notes that this holds of <em>every</em> parthood property but leaves it undeclared,
+because asserting irreflexivity on a transitive (OWL 2 "non-simple") property would break DL decidability.
+The typed properties here are not transitive and have no transitive sub-properties, so they are simple and
+can carry <code>owl:IrreflexiveProperty</code> and <code>owl:AsymmetricProperty</code> safely. This example
+therefore recovers, at the domain level, a constraint gUFO cannot state globally.</li>
+<li><strong>Essential, and the whole extensional.</strong> Sub-quantities are <em>essential</em> parts;
+gUFO says so explicitly and adds that <code>gufo:standsInQualifiedParthood</code> -- its pattern for
+parthood holding only for a time -- "is not applicable for sub-quantities". Correspondingly, quantities are
+extensional: change any part and you have a different whole (strong supplementation holds, unlike for
+<code>gufo:isSubCollectionOf</code>, which satisfies only the weaker axiom). Essentiality is a modal claim
+and beyond OWL; the cardinalities above are the part of it OWL can carry.</li>
 </ul>
-<p>This is where quantities part company with functional complexes, and it is easy to get backwards.
+<p>Transitivity is the one characteristic <em>not</em> declared on the typed properties. Essential parthood
+is always transitive, and <code>gufo:isSubQuantityOf</code> is declared transitive in gUFO
+(Guizzardi, 2005, p. 184); each typed property, relating one specific stuff to another, is not transitive on
+its own but feeds its assertions into the transitive super-property:</p>
+<pre><code>:isBenzenePortionOf a owl:ObjectProperty ;
+    rdfs:subPropertyOf gufo:isSubQuantityOf ;
+    rdfs:domain :QuantityOfBenzene ;
+    rdfs:range :QuantityOfPetroleumDistillate .
+
+:Car002BenzenePortion a :QuantityOfBenzene ;
+    :isBenzenePortionOf :Car002DistillatePortion .
+    # inferred: :Car002BenzenePortion gufo:isSubQuantityOf :Car002FuelTankContents
+    # -- which is what one means by saying the fuel in the tank contains benzene.</code></pre>
+<p>All of this is where quantities part company with functional complexes, and it is easy to get backwards.
 Unbolt a wheel and put it back on and the car has regained the very same component -- components can come
 and go while the whole keeps its identity. A quantity cannot: gUFO's <code>gufo:Quantity</code> comment
 states that it "has a fixed constitution, and thus, removing or adding a sub-quantity would result in a
