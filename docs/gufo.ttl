@@ -169,8 +169,7 @@ gufo:concernsReifiedQualityValue rdf:type owl:ObjectProperty ,
                                           owl:FunctionalProperty ;
                                  rdfs:domain gufo:QualityValueAttributionSituation ;
                                  rdfs:range gufo:QualityValue ;
-                                 rdfs:comment gufo:concernsQualityValue ,
-                                              "Identifies the gufo:QualityValue (i.e., the reified quality value) associated with the endurant that stands in the gufo:QualityValueAttributionSituation."@en ;
+                                 rdfs:comment "Identifies the gufo:QualityValue (i.e., the reified quality value) associated with the endurant that stands in the gufo:QualityValueAttributionSituation."@en ;
                                  rdfs:label "concernsReifiedQualityValue"@en .
 
 
