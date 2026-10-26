@@ -1353,7 +1353,7 @@ gufo:TemporaryInstantiationSituation rdf:type owl:Class ;
 
 A gufo:TemporaryInstantiationSituation can account for the time period in which a particular instantiation holds.
 
-Examples include: the situation in which Obama instantiates the role of president, which began in 20/01/2009 and lasted until 20/01/2017; the situation in which Coatria instantiates the role of EU Member, which began in 01/07/2013 (and is still on-going); and the situation in which Steve Jobs instantiates the child phase, which began in 24/02/1955 and lasted until 24/02/1965.
+Examples include: the situation in which Obama instantiates the role of president, which began in 20/01/2009 and lasted until 20/01/2017; the situation in which Croatia instantiates the role of EU Member, which began in 01/07/2013 (and is still on-going); and the situation in which Steve Jobs instantiates the child phase, which began in 24/02/1955 and lasted until 24/02/1965.
 
 This solution is inspired in the qualified relation pattern (http://patterns.dataincubator.org/book/qualified-relation.html)."""@en ;
                                      rdfs:label "TemporaryInstantiationSituation"@en .
