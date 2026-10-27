@@ -1,0 +1,503 @@
+@prefix : <http://purl.org/nemo/gufo/inverse#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix gufo: <http://purl.org/nemo/gufo#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix gufoi: <http://purl.org/nemo/gufo/inverse#> .
+@base <http://purl.org/nemo/gufo/inverse#> .
+
+<http://purl.org/nemo/gufo/inverse#> rdf:type owl:Ontology ;
+                                      dc:creator "Almeida, João Paulo A." ,
+                                                 "Falbo, Ricardo A." ,
+                                                 "Guizzardi, Giancarlo" ,
+                                                 "Sales, Tiago P." ;
+                                      dc:title "gUFO: Inverse properties"@en ;
+                                      dct:rights "This work is distributed under Creative Commons Attribution License CC BY 4.0 <https://creativecommons.org/licenses/by/4.0/legalcode>"@en ;
+                                      vann:preferredNamespaceUri "http://purl.org/nemo/gufo/inverse#"^^xsd:anyURI ;
+                                      rdfs:comment """This module extends the gUFO ontology <http://purl.org/nemo/gufo by> by defining inverse properties for its core object properties (e.g. gufo:inheresIn, gufo:mediates).
+
+For the source repository, see: <https://github.com/nemo-ufes/gufo>"""@en .
+
+#################################################################
+#    Annotation properties
+#################################################################
+
+###  http://purl.org/dc/elements/1.1/creator
+dc:creator rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/elements/1.1/rights
+dc:rights rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/elements/1.1/title
+dc:title rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/dc/terms/rights
+dct:rights rdf:type owl:AnnotationProperty .
+
+
+###  http://purl.org/vocab/vann/preferredNamespaceUri
+vann:preferredNamespaceUri rdf:type owl:AnnotationProperty .
+
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://purl.org/nemo/gufo#broughtAbout
+gufo:broughtAbout rdf:type owl:ObjectProperty ;
+                  owl:inverseOf gufoi:wasBroughtAboutBy .
+
+
+###  http://purl.org/nemo/gufo#categorizes
+gufo:categorizes rdf:type owl:ObjectProperty ;
+                 owl:inverseOf gufoi:isCategorizedBy .
+
+
+###  http://purl.org/nemo/gufo#constitutes
+gufo:constitutes rdf:type owl:ObjectProperty ;
+                 owl:inverseOf gufoi:isConstitutedBy .
+
+
+###  http://purl.org/nemo/gufo#contributedToTrigger
+gufo:contributedToTrigger rdf:type owl:ObjectProperty ;
+                          owl:inverseOf gufoi:wasTriggeredBy .
+
+
+###  http://purl.org/nemo/gufo#externallyDependsOn
+gufo:externallyDependsOn rdf:type owl:ObjectProperty ;
+                         owl:inverseOf gufoi:hasModeDependee .
+
+
+###  http://purl.org/nemo/gufo#hasAssociatedQualityValueType
+gufo:hasAssociatedQualityValueType rdf:type owl:ObjectProperty ;
+                                   owl:inverseOf gufoi:hasAssociatedQualityType .
+
+
+###  http://purl.org/nemo/gufo#historicallyDependsOn
+gufo:historicallyDependsOn rdf:type owl:ObjectProperty ;
+                           owl:inverseOf gufoi:hasHistoricalDependee .
+
+
+###  http://purl.org/nemo/gufo#inheresIn
+gufo:inheresIn rdf:type owl:ObjectProperty ;
+               owl:inverseOf gufoi:bears .
+
+
+###  http://purl.org/nemo/gufo#isAspectProperPartOf
+gufo:isAspectProperPartOf rdf:type owl:ObjectProperty ;
+                          owl:inverseOf gufoi:hasAspectProperPart .
+
+
+###  http://purl.org/nemo/gufo#isCollectionMemberOf
+gufo:isCollectionMemberOf rdf:type owl:ObjectProperty ;
+                          owl:inverseOf gufoi:hasCollectionMember .
+
+
+###  http://purl.org/nemo/gufo#isComponentOf
+gufo:isComponentOf rdf:type owl:ObjectProperty ;
+                   owl:inverseOf gufoi:hasComponent .
+
+
+###  http://purl.org/nemo/gufo#isDerivedFrom
+gufo:isDerivedFrom rdf:type owl:ObjectProperty ;
+                   owl:inverseOf gufoi:grounds .
+
+
+###  http://purl.org/nemo/gufo#isEventProperPartOf
+gufo:isEventProperPartOf rdf:type owl:ObjectProperty ;
+                         owl:inverseOf gufoi:hasEventProperPart .
+
+
+###  http://purl.org/nemo/gufo#isObjectProperPartOf
+gufo:isObjectProperPartOf rdf:type owl:ObjectProperty ;
+                          owl:inverseOf gufoi:hasObjectProperPart .
+
+
+###  http://purl.org/nemo/gufo#isProperPartOf
+gufo:isProperPartOf rdf:type owl:ObjectProperty ;
+                    owl:inverseOf gufoi:hasProperPart .
+
+
+###  http://purl.org/nemo/gufo#isSituationProperPartOf
+gufo:isSituationProperPartOf rdf:type owl:ObjectProperty ;
+                             owl:inverseOf gufoi:hasSituationProperPart .
+
+
+###  http://purl.org/nemo/gufo#isSubCollectionOf
+gufo:isSubCollectionOf rdf:type owl:ObjectProperty ;
+                       owl:inverseOf gufoi:hasSubCollection .
+
+
+###  http://purl.org/nemo/gufo#isSubQuantityOf
+gufo:isSubQuantityOf rdf:type owl:ObjectProperty ;
+                     owl:inverseOf gufoi:hasSubQuantity .
+
+
+###  http://purl.org/nemo/gufo#manifestedIn
+gufo:manifestedIn rdf:type owl:ObjectProperty ;
+                  owl:inverseOf gufoi:manifested .
+
+
+###  http://purl.org/nemo/gufo#mediates
+gufo:mediates rdf:type owl:ObjectProperty ;
+              owl:inverseOf gufoi:isMediatedBy .
+
+
+###  http://purl.org/nemo/gufo#participatedIn
+gufo:participatedIn rdf:type owl:ObjectProperty ;
+                    owl:inverseOf gufoi:hadParticipant .
+
+
+###  http://purl.org/nemo/gufo#partitions
+gufo:partitions rdf:type owl:ObjectProperty ;
+                owl:inverseOf gufoi:isPartitionedBy .
+
+
+###  http://purl.org/nemo/gufo#wasCreatedIn
+gufo:wasCreatedIn rdf:type owl:ObjectProperty ;
+                  owl:inverseOf gufoi:created .
+
+
+###  http://purl.org/nemo/gufo#wasTerminatedIn
+gufo:wasTerminatedIn rdf:type owl:ObjectProperty ;
+                     owl:inverseOf gufoi:terminated .
+
+
+###  http://purl.org/nemo/gufo/inverse#bears
+gufoi:bears rdf:type owl:ObjectProperty ,
+                     owl:FunctionalProperty ,
+                     owl:AsymmetricProperty ,
+                     owl:IrreflexiveProperty ;
+            rdfs:domain gufo:ConcreteIndividual ;
+            rdfs:range gufo:Aspect ;
+            rdfs:label "bears"@en ;
+            rdfs:seeAlso gufo:inheresIn .
+
+
+###  http://purl.org/nemo/gufo/inverse#created
+gufoi:created rdf:type owl:ObjectProperty ;
+              rdfs:domain gufo:Event ;
+              rdfs:range gufo:Endurant ;
+              rdfs:label "created"@en ;
+              rdfs:seeAlso gufo:wasCreatedIn .
+
+
+###  http://purl.org/nemo/gufo/inverse#grounds
+gufoi:grounds rdf:type owl:ObjectProperty ;
+              rdfs:domain gufo:EndurantType ;
+              rdfs:range [ rdf:type owl:Class ;
+                           owl:unionOf ( gufo:ComparativeRelationshipType
+                                         gufo:MaterialRelationshipType
+                                       )
+                         ] ;
+              rdfs:label "grounds"@en ;
+              rdfs:seeAlso gufo:isDerivedFrom .
+
+
+###  http://purl.org/nemo/gufo/inverse#hadParticipant
+gufoi:hadParticipant rdf:type owl:ObjectProperty ;
+                     rdfs:domain gufo:Event ;
+                     rdfs:range gufo:Object ;
+                     rdfs:label "hadParticipant"@en ;
+                     rdfs:seeAlso gufo:participatedIn .
+
+
+###  http://purl.org/nemo/gufo/inverse#hasAspectProperPart
+gufoi:hasAspectProperPart rdf:type owl:ObjectProperty ;
+                          rdfs:subPropertyOf gufoi:hasProperPart ;
+                          rdf:type owl:TransitiveProperty ;
+                          rdfs:domain gufo:Aspect ;
+                          rdfs:range gufo:Aspect ;
+                          rdfs:label "hasAspectProperPart"@en ;
+                          rdfs:seeAlso gufo:isAspectProperPartOf .
+
+
+###  http://purl.org/nemo/gufo/inverse#hasAssociatedQualityType
+gufoi:hasAssociatedQualityType rdf:type owl:ObjectProperty ;
+                               rdfs:range gufo:EndurantType ;
+                               rdfs:domain gufo:AbstractIndividualType ;
+                               rdfs:label "hasAssociatedQualityType"@en ;
+                               rdfs:seeAlso gufo:hasAssociatedQualityValueType .
+
+
+###  http://purl.org/nemo/gufo/inverse#hasCollectionMember
+gufoi:hasCollectionMember rdf:type owl:ObjectProperty ;
+                          rdfs:subPropertyOf gufoi:hasObjectProperPart ;
+                          rdfs:domain gufo:Collection ;
+                          rdfs:range gufo:Object ;
+                          rdfs:label "hasCollectionMember"@en ;
+                          rdfs:seeAlso gufo:isCollectionMemberOf .
+
+
+###  http://purl.org/nemo/gufo/inverse#hasComponent
+gufoi:hasComponent rdf:type owl:ObjectProperty ;
+                   rdfs:subPropertyOf gufoi:hasObjectProperPart ;
+                   rdfs:domain gufo:FunctionalComplex ;
+                   rdfs:range gufo:Object ;
+                   rdfs:label "hasComponent"@en ;
+                   rdfs:seeAlso gufo:isComponentOf .
+
+
+###  http://purl.org/nemo/gufo/inverse#hasEventProperPart
+gufoi:hasEventProperPart rdf:type owl:ObjectProperty ;
+                         rdfs:subPropertyOf gufoi:hasProperPart ;
+                         rdf:type owl:TransitiveProperty ;
+                         rdfs:domain gufo:Event ;
+                         rdfs:range gufo:Event ;
+                         rdfs:label "hasEventProperPart"@en ;
+                         rdfs:seeAlso gufo:isEventProperPartOf .
+
+
+###  http://purl.org/nemo/gufo/inverse#hasHistoricalDependee
+gufoi:hasHistoricalDependee rdf:type owl:ObjectProperty ,
+                                     owl:TransitiveProperty ;
+                            rdfs:domain gufo:ConcreteIndividual ;
+                            rdfs:range gufo:ConcreteIndividual ;
+                            rdfs:label "hasHistoricalDependee"@en ;
+                            rdfs:seeAlso gufo:historicallyDependsOn .
+
+
+###  http://purl.org/nemo/gufo/inverse#hasModeDependee
+gufoi:hasModeDependee rdf:type owl:ObjectProperty ,
+                               owl:IrreflexiveProperty ;
+                      rdfs:domain gufo:Endurant ;
+                      rdfs:range gufo:ExtrinsicMode ;
+                      rdfs:label "hasModeDependee"@en ;
+                      rdfs:seeAlso gufo:externallyDependsOn .
+
+
+###  http://purl.org/nemo/gufo/inverse#hasObjectProperPart
+gufoi:hasObjectProperPart rdf:type owl:ObjectProperty ;
+                          rdfs:subPropertyOf gufoi:hasProperPart ;
+                          rdf:type owl:TransitiveProperty ;
+                          rdfs:domain gufo:Object ;
+                          rdfs:range gufo:Object ;
+                          rdfs:label "hasObjectProperPart"@en ;
+                          rdfs:seeAlso gufo:isObjectProperPartOf .
+
+
+###  http://purl.org/nemo/gufo/inverse#hasProperPart
+gufoi:hasProperPart rdf:type owl:ObjectProperty ,
+                             owl:TransitiveProperty ;
+                    rdfs:domain owl:Thing ;
+                    rdfs:range owl:Thing ;
+                    rdfs:seeAlso gufo:isProperPartOf ;
+                    rdfs:label "hasProperPart"@en .
+
+
+###  http://purl.org/nemo/gufo/inverse#hasSituationProperPart
+gufoi:hasSituationProperPart rdf:type owl:ObjectProperty ;
+                             rdfs:subPropertyOf gufoi:hasProperPart ;
+                             rdfs:domain gufo:Situation ;
+                             rdfs:range gufo:Situation ;
+                    rdfs:seeAlso gufo:isSituationProperPartOf ;
+                             rdfs:label "hasSituationProperPart"@en .
+
+
+###  http://purl.org/nemo/gufo/inverse#hasSubCollection
+gufoi:hasSubCollection rdf:type owl:ObjectProperty ;
+                       rdfs:subPropertyOf gufoi:hasObjectProperPart ;
+                       rdf:type owl:TransitiveProperty ;
+                       rdfs:domain gufo:Collection ;
+                       rdfs:range gufo:Collection ;
+                    rdfs:seeAlso gufo:isSubCollectionOf ;
+                       rdfs:label "hasSubCollection"@en .
+
+
+###  http://purl.org/nemo/gufo/inverse#hasSubQuantity
+gufoi:hasSubQuantity rdf:type owl:ObjectProperty ;
+                     rdfs:subPropertyOf gufoi:hasObjectProperPart ;
+                     rdf:type owl:TransitiveProperty ;
+                     rdfs:domain gufo:Quantity ;
+                     rdfs:range gufo:Quantity ;
+                    rdfs:seeAlso gufo:isSubQuantityOf ;
+                     rdfs:label "hasSubQuantity"@en .
+
+
+###  http://purl.org/nemo/gufo/inverse#isCategorizedBy
+gufoi:isCategorizedBy rdf:type owl:ObjectProperty ;
+                      rdfs:domain gufo:Type ;
+                      rdfs:range [ owl:intersectionOf ( gufo:Type
+                                                        [ rdf:type owl:Class ;
+                                                          owl:complementOf gufo:AbstractIndividualType
+                                                        ]
+                                                        [ rdf:type owl:Class ;
+                                                          owl:complementOf gufo:ConcreteIndividualType
+                                                        ]
+                                                      ) ;
+                                   rdf:type owl:Class
+                                 ] ;
+                    rdfs:seeAlso gufo:categorizes ;
+                      rdfs:label "isCategorizedBy"@en .
+
+
+###  http://purl.org/nemo/gufo/inverse#isConstitutedBy
+gufoi:isConstitutedBy rdf:type owl:ObjectProperty ;
+                      rdfs:domain gufo:ConcreteIndividual ;
+                      rdfs:range gufo:ConcreteIndividual ;
+                      rdfs:label "isConstitutedBy"@en ;
+                      rdfs:seeAlso gufo:constitutes .
+
+
+###  http://purl.org/nemo/gufo/inverse#isMediatedBy
+gufoi:isMediatedBy rdf:type owl:ObjectProperty ,
+                            owl:AsymmetricProperty ,
+                            owl:IrreflexiveProperty ;
+                   rdfs:domain gufo:Endurant ;
+                   rdfs:range gufo:Relator ;
+                    rdfs:seeAlso gufo:mediates ;
+                   rdfs:label "isMediatedBy"@en .
+
+
+###  http://purl.org/nemo/gufo/inverse#isPartitionedBy
+gufoi:isPartitionedBy rdf:type owl:ObjectProperty ;
+                      rdfs:subPropertyOf gufoi:isCategorizedBy ;
+                      rdfs:label "isPartitionedBy"@en ;
+                      rdfs:seeAlso gufo:partitions .
+
+
+###  http://purl.org/nemo/gufo/inverse#manifested
+gufoi:manifested rdf:type owl:ObjectProperty ;
+                 rdfs:domain gufo:Event ;
+                 rdfs:range gufo:Aspect ;
+                 rdfs:label "manifested"@en ;
+                 rdfs:seeAlso gufo:manifestedIn .
+
+
+###  http://purl.org/nemo/gufo/inverse#terminated
+gufoi:terminated rdf:type owl:ObjectProperty ;
+                 rdfs:domain gufo:Event ;
+                 rdfs:range gufo:Endurant ;
+                 rdfs:label "terminated"@en ;
+                 rdfs:seeAlso gufo:wasTerminatedIn .
+
+
+###  http://purl.org/nemo/gufo/inverse#wasBroughtAboutBy
+gufoi:wasBroughtAboutBy rdf:type owl:ObjectProperty ;
+                        rdfs:domain gufo:Situation ;
+                        rdfs:range gufo:Event ;
+                        rdfs:label "wasBroughtAboutBy"@en ;
+                        rdfs:seeAlso gufo:broughtAbout .
+
+
+###  http://purl.org/nemo/gufo/inverse#wasTriggeredBy
+gufoi:wasTriggeredBy rdf:type owl:ObjectProperty ;
+                     rdfs:domain gufo:Event ;
+                     rdfs:range gufo:Situation ;
+                     rdfs:label "wasTriggeredBy"@en ;
+                     rdfs:seeAlso gufo:contributedToTrigger .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://purl.org/nemo/gufo#AbstractIndividualType
+gufo:AbstractIndividualType rdf:type owl:Class .
+
+
+###  http://purl.org/nemo/gufo#Aspect
+gufo:Aspect rdf:type owl:Class .
+
+
+###  http://purl.org/nemo/gufo#Collection
+gufo:Collection rdf:type owl:Class .
+
+
+###  http://purl.org/nemo/gufo#ComparativeRelationshipType
+gufo:ComparativeRelationshipType rdf:type owl:Class .
+
+
+###  http://purl.org/nemo/gufo#ConcreteIndividual
+gufo:ConcreteIndividual rdf:type owl:Class .
+
+
+###  http://purl.org/nemo/gufo#ConcreteIndividualType
+gufo:ConcreteIndividualType rdf:type owl:Class .
+
+
+###  http://purl.org/nemo/gufo#Endurant
+gufo:Endurant rdf:type owl:Class .
+
+
+###  http://purl.org/nemo/gufo#EndurantType
+gufo:EndurantType rdf:type owl:Class .
+
+
+###  http://purl.org/nemo/gufo#Event
+gufo:Event rdf:type owl:Class .
+
+
+###  http://purl.org/nemo/gufo#ExtrinsicMode
+gufo:ExtrinsicMode rdf:type owl:Class .
+
+
+###  http://purl.org/nemo/gufo#FunctionalComplex
+gufo:FunctionalComplex rdf:type owl:Class .
+
+
+###  http://purl.org/nemo/gufo#MaterialRelationshipType
+gufo:MaterialRelationshipType rdf:type owl:Class .
+
+
+###  http://purl.org/nemo/gufo#NonRigidType
+gufo:NonRigidType rdf:type owl:Class .
+
+
+###  http://purl.org/nemo/gufo#Object
+gufo:Object rdf:type owl:Class .
+
+
+###  http://purl.org/nemo/gufo#QualityValue
+gufo:QualityValue rdf:type owl:Class .
+
+
+###  http://purl.org/nemo/gufo#QualityValueAttributionSituation
+gufo:QualityValueAttributionSituation rdf:type owl:Class .
+
+
+###  http://purl.org/nemo/gufo#Quantity
+gufo:Quantity rdf:type owl:Class .
+
+
+###  http://purl.org/nemo/gufo#RelationshipType
+gufo:RelationshipType rdf:type owl:Class .
+
+
+###  http://purl.org/nemo/gufo#Relator
+gufo:Relator rdf:type owl:Class .
+
+
+###  http://purl.org/nemo/gufo#Situation
+gufo:Situation rdf:type owl:Class .
+
+
+###  http://purl.org/nemo/gufo#TemporaryConstitutionSituation
+gufo:TemporaryConstitutionSituation rdf:type owl:Class .
+
+
+###  http://purl.org/nemo/gufo#TemporaryInstantiationSituation
+gufo:TemporaryInstantiationSituation rdf:type owl:Class .
+
+
+###  http://purl.org/nemo/gufo#TemporaryParthoodSituation
+gufo:TemporaryParthoodSituation rdf:type owl:Class .
+
+
+###  http://purl.org/nemo/gufo#TemporaryRelationshipSituation
+gufo:TemporaryRelationshipSituation rdf:type owl:Class .
+
+
+###  http://purl.org/nemo/gufo#Type
+gufo:Type rdf:type owl:Class .
+
+
+###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi
